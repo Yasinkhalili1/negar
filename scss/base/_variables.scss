@@ -1,0 +1,56 @@
+// ============================================
+// نگار — متغیرها و توکن‌های تم
+// base/_variables.scss
+// ============================================
+
+// رنگ‌های برند
+$gold: #4fc3f7 !default;
+$gold-soft: #81d4fa !default;
+$lapis: #0288d1 !default;
+$lapis-soft: #4fc3f7 !default;
+$danger: #c0392b !default;
+
+// ── رنگ‌های نئونی ──
+$neon-cyan: #00e5ff !default;
+$neon-purple: #7c4dff !default;
+$neon-pink: #ff2ec4 !default;
+$neon-green: #00ff9d !default;
+
+// رنگ‌های پایه (حالت روشن)
+$c-paper: #f0f8ff !default;
+$c-paper-2: #e3f2fd !default;
+$c-surface: #ffffff !default;
+$c-ink: #21202c !default;
+$c-ink-soft: #4a4856 !default;
+$c-muted: #807c8c !default;
+$c-line: #bbdefb !default;
+
+// رنگ‌های حالت تاریک (نئونی)
+$d-paper: #0a0b12 !default;
+$d-paper-2: #10121c !default;
+$d-surface: #161927 !default;
+$d-ink: #eef0ff !default;
+$d-ink-soft: #b9bdd6 !default;
+$d-muted: #7e84a8 !default;
+$d-line: #232743 !default;
+$d-gold: $neon-cyan !default;
+$d-lapis: $neon-purple !default;
+
+// گلوی نئونی (شبح)
+$glow: 0 0 14px rgba(0, 229, 255, 0.25) !default;
+$glow-strong: 0 0 24px rgba(0, 229, 255, 0.45) !default;
+$glow-purple: 0 0 20px rgba(124, 77, 255, 0.35) !default;
+
+// گردی گوشه‌ها
+$radius-lg: 18px !default;
+$radius-sm: 12px !default;
+
+// تایپوگرافی
+$font-fa: "Vazirmatn", "Tahoma", "Segoe UI", sans-serif !default;
+
+// چیدمان
+$max-w: 1180px !default;
+
+// سایه‌ها
+$shadow: 0 4px 24px rgba(33, 32, 44, 0.08) !default;
+$shadow-lg: 0 18px 50px rgba(33, 32, 44, 0.14) !default;

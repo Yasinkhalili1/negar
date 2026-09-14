@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>نگار — جایی برای نوشتن و خواندن</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="node_modules/@fortawesome/fontawesome-free/css/all.min.css"
+    />
+    <link rel="stylesheet" href="assets/css/main.css?v=4" />
+    <link rel="icon" href="public/image/negar.png" />
+  </head>
+  <body>
+    <!-- ===== Reading Progress Bar ===== -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- ===== Navbar ===== -->
+    <header class="navbar-negar">
+      <div class="nav-inner">
+        <a class="logo" href="#" data-action="go-home"
+          ><img class="logo-img" src="public/image/negar.png" alt="نگار" /></a>
+        <button class="hamburger" id="hamburgerBtn" aria-label="منوی ناوبری">
+          <span class="bar"></span>
+        </button>
+        <nav class="links">
+          <a href="#" data-action="go-home">خانه</a>
+          <a href="#" data-action="go-explore">کاوش</a>
+          <a href="#" data-action="go-editor">نگارش</a>
+          <a href="#" data-action="go-lib">کتابخانه</a>
+        </nav>
+        <div class="nav-actions">
+          <div class="search">
+            <input id="searchInput" placeholder="جستجو..." />
+          </div>
+          <span id="authArea"></span>
+          <button class="btn-negar btn-primary-negar" data-action="go-editor">
+            نگارش
+          </button>
+          <button class="icon-btn" data-action="toggle-theme" title="تغییر تم">
+            <i class="fa-solid fa-moon"></i>
+          </button>
+          <div class="notif-wrap">
+            <button
+              class="icon-btn"
+              data-action="open-notifications"
+              title="اعلان‌ها"
+            >
+              <i class="fa-regular fa-bell"></i
+              ><span class="notif-badge" id="notifBadge" hidden></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- پنل اعلان‌ها (بیرون از header — موقعیت با JS تنظیم می‌شه) -->
+    <div class="notif-panel" id="notifPanel">
+      <div class="notif-head">
+        <b>اعلان‌ها</b>
+        <button class="notif-clear" data-action="clear-notifications">
+          پاک کردن
+        </button>
+      </div>
+      <div class="notif-list" id="notifList"></div>
+    </div>
+
+    <!-- منوی موبایل (بیرون از header) -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+    <div class="mobile-drawer" id="mobileDrawer">
+      <button class="drawer-close" id="drawerClose">✕</button>
+      <a href="#" data-action="go-home">خانه</a>
+      <a href="#" data-action="go-explore">کاوش</a>
+      <a href="#" data-action="go-editor">نگارش</a>
+      <a href="#" data-action="go-lib">کتابخانه</a>
+      <div class="mobile-search">
+        <input placeholder="جستجو..." id="mobileSearchInput" />
+      </div>
+      <div class="mobile-auth">
+        <span id="mobileAuthArea"
+          ><button
+            class="btn-negar btn-ghost-negar"
+            data-action="open-login"
+            style="width: 100%; justify-content: center"
+          >
+            ورود
+          </button></span
+        >
+      </div>
+    </div>
+
+    <!-- ===== Home ===== -->
+    <section id="home" class="view active">
+      <div class="hero">
+        <div>
+          <h1>
+            صدایت را <span class="hl">بنویس</span>،<br />داستانت را
+            <span class="hl">بساز</span>.
+          </h1>
+          <p>نگار خانه‌ی نویسندگان فارسی‌زبان است.</p>
+          <div class="hero-cta">
+            <button class="btn-negar btn-primary-negar" data-action="go-editor">
+              شروع به نوشتن
+            </button>
+            <button class="btn-negar btn-ghost-negar" data-action="go-explore">
+              مطالب داغ
+            </button>
+          </div>
+        </div>
+        <div class="hero-art">
+          
+          <div class="float-chip a">
+            <span class="dot"></span> جامعه‌ی نویسندگان
+          </div>
+          <div class="float-chip b">
+            <img
+              class="chip-icon"
+              src="public/svg/heart-svgrepo-com.svg"
+              alt="قلب"
+            />
+            رایگان برای همیشه
+          </div>
+        </div>
+      </div>
+      <div class="wrap">
+        <main>
+          <div class="section-head">
+            <h2>تازه‌ترین‌ها</h2>
+            <select id="sortSelect" class="sort-select" title="مرتب‌سازی">
+              <option value="newest">تازه ترین</option>
+              <option value="reads">پربازدید</option>
+              <option value="likes">پرلایک</option>
+            </select>
+          </div>
+          <div class="chips" data-filter-group>
+            <span class="chip active" data-tag="">همه</span>
+            <span class="chip" data-tag="تکنولوژی">تکنولوژی</span>
+            <span class="chip" data-tag="ادبیات">ادبیات</span>
+            <span class="chip" data-tag="سبک زندگی">سبک زندگی</span>
+            <span class="chip" data-tag="کسب‌وکار">کسب‌وکار</span>
+            <span class="chip" data-tag="سلامت">سلامت</span>
+            <span class="chip" data-tag="هنر">هنر</span>
+          </div>
+          <div class="feed" id="homeFeed"></div>
+        </main>
+        <aside>
+          <div class="box">
+            <h3>
+              <img
+                class="chip-icon"
+                src="public/svg/fire-svgrepo-com.svg"
+                alt=""
+              />
+              پرخواننده‌ترین
+            </h3>
+            <div id="trending"></div>
+          </div>
+          <div class="box">
+            <h3>دسته‌بندی‌ها</h3>
+            <div class="cat-list">
+              <span class="cat" data-tag="تکنولوژی">تکنولوژی</span
+              ><span class="cat" data-tag="ادبیات">ادبیات</span>
+              <span class="cat" data-tag="سبک زندگی">سبک زندگی</span
+              ><span class="cat" data-tag="هنر">هنر</span>
+              <span class="cat" data-tag="کسب‌وکار">کسب‌وکار</span
+              ><span class="cat" data-tag="سلامت">سلامت</span>
+            </div>
+          </div>
+          <div class="promo">
+            <h4>
+              <img
+                class="chip-icon promo-icon"
+                src="public/svg/mail-svgrepo-com.svg"
+                alt=""
+              />
+              نگار پلاس
+            </h4>
+            <p>ابزارهای نویسندگی حرفه‌ای.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ===== Explore ===== -->
+    <section id="explore" class="view">
+      <div class="wrap">
+        <main>
+          <div class="section-head"><h2>کاوش در نگار</h2></div>
+          <div class="chips" data-filter-group>
+            <span class="chip active" data-tag="">همه</span>
+            <span class="chip" data-tag="تکنولوژی">تکنولوژی</span>
+            <span class="chip" data-tag="ادبیات">ادبیات</span>
+            <span class="chip" data-tag="سبک زندگی">سبک زندگی</span>
+            <span class="chip" data-tag="کسب‌وکار">کسب‌وکار</span>
+            <span class="chip" data-tag="سلامت">سلامت</span>
+            <span class="chip" data-tag="هنر">هنر</span>
+          </div>
+          <div class="feed" id="exploreFeed"></div>
+        </main>
+        <aside>
+          <div class="box">
+            <h3>
+              <img
+                class="chip-icon"
+                src="public/svg/fire-svgrepo-com.svg"
+                alt=""
+              />
+              پرخواننده‌ترین
+            </h3>
+            <div id="trending2"></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ===== Library ===== -->
+    <section id="lib" class="view">
+      <div class="wrap">
+        <main>
+          <div class="section-head"><h2>کتابخانه‌ی من</h2></div>
+          <div class="feed" id="libFeed"></div>
+        </main>
+      </div>
+    </section>
+
+    <!-- ===== Editor ===== -->
+    <section id="editor" class="view">
+      <div class="editor">
+        <input
+          class="title-input"
+          id="artTitle"
+          placeholder="عنوان داستانت را بنویس..."
+        />
+        <div class="editor-meta">
+          <select id="artTag">
+            <option value="عمومی">عمومی</option>
+            <option value="تکنولوژی">تکنولوژی</option>
+            <option value="ادبیات">ادبیات</option>
+            <option value="سبک زندگی">سبک زندگی</option>
+            <option value="کسب‌وکار">کسب‌وکار</option>
+            <option value="سلامت">سلامت</option>
+            <option value="هنر">هنر</option>
+          </select>
+        </div>
+        <div class="toolbar">
+          <button title="تیتر" data-action="insert-h">H</button>
+          <button title="نقل‌قول" data-action="insert-quote">❝</button>
+          <button title="بولد" data-action="insert-bold"><b>B</b></button>
+          <button title="ایتالیک" data-action="insert-italic"><i>I</i></button>
+          <button title="جداکننده" data-action="insert-hr">—</button>
+          <span class="toolbar-spacer"></span>
+          <label class="preview-toggle" title="پیش‌نمایش زنده">
+            <input type="checkbox" id="previewToggle" />
+            <span>پیش‌نمایش</span>
+          </label>
+        </div>
+        <div class="editor-area" id="editorArea">
+          <textarea
+            class="editor-content"
+            id="artBody"
+            placeholder="اینجا بنویس..."
+          ></textarea>
+          <div class="editor-preview" id="editorPreview"></div>
+        </div>
+        <div class="cover-upload">
+          <label class="cover-label" for="coverInput">تصویر کاور</label>
+          <input type="file" id="coverInput" accept="image/*" hidden />
+          <div class="cover-preview" id="coverPreview"></div>
+        </div>
+        <div class="editor-foot">
+          <span style="color: var(--muted); font-size: 0.9rem"></span>
+          <div style="display: flex; gap: 10px">
+            <button class="btn-negar btn-ghost-negar" data-action="go-home">
+              انصراف
+            </button>
+            <button class="btn-negar btn-primary-negar" data-action="publish">
+              انتشار
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Article Read ===== -->
+    <section id="article" class="view">
+      <div class="article-page" id="articlePage"></div>
+    </section>
+
+    <!-- ===== Author Page ===== -->
+    <section id="author" class="view">
+      <div class="author-page" id="authorPage"></div>
+    </section>
+
+    <!-- ===== Dashboard / Profile ===== -->
+    <section id="dashboard" class="view">
+      <div class="dash-page" id="dashPage"></div>
+    </section>
+
+    <!-- ===== پروفایل ===== -->
+    <section id="profile" class="view">
+      <div class="profile-page" id="profilePage"></div>
+    </section>
+
+    <!-- ===== Footer ===== -->
+    <footer>
+      <div class="foot-inner">
+        <div class="foot-brand">
+          <a class="logo" href="#" data-action="go-home"
+            ><img class="logo-img logo-footer" src="public/image/negar.png" alt="نگار" /></a
+          >
+          <p>خانه‌ی نویسندگان فارسی‌زبان. بنویس، بخوان، تکامل بده.</p>
+          <div class="foot-social">
+            <a href="#" class="soc" title="تلگرام" aria-label="تلگرام"
+              ><span> <i class="fa-brands fa-telegram"></i> </span
+            ></a>
+            <a href="#" class="soc" title="اینستاگرام" aria-label="اینستاگرام"
+              ><span><i class="fa-brands fa-square-instagram"></i></span
+            ></a>
+            <a href="#" class="soc" title="توییتر" aria-label="توییتر"
+              ><span><i class="fa-brands fa-x-twitter"></i></span
+            ></a>
+            <a href="#" class="soc" title="گیت‌هاب" aria-label="گیت‌هاب"
+              ><span><i class="fa-brands fa-github"></i></span
+            ></a>
+          </div>
+        </div>
+        <div>
+          <h5>بخش ها</h5>
+          <a data-action="go-editor">نگارش</a>
+          <a data-action="go-explore">کاوش</a>
+          <a data-action="go-lib">کتابخانه</a>
+        </div>
+        <div>
+          <h5>شرکت</h5>
+          <a>درباره ما</a><a>تماس</a><a>وبلاگ</a>
+        </div>
+        <div>
+          <h5>قوانین</h5>
+          <a>حریم خصوصی</a><a>شرایط استفاده</a><a>امنیت</a>
+        </div>
+      </div>
+      <div class="foot-bottom">
+        <span
+          >© ۱۴۰۵ نگار — ساخته‌شده با
+          <img
+            class="chip-icon footer-heart"
+            src="public/svg/heart-svgrepo-com.svg"
+            alt=""
+            style="display: inline-block; vertical-align: middle"
+          />
+          در ایران</span
+        >
+      </div>
+    </footer>
+
+    <!-- ===== Auth Modal ===== -->
+    <div class="modal-overlay" id="authModal">
+      <div class="auth-card">
+        <button class="close-x" data-action="close-auth">✕</button>
+        <h2>به نگار خوش اومدی</h2>
+        <p class="sub">برای نوشتن وارد شو</p>
+        <div class="auth-tabs">
+          <button id="tabLogin" class="on" data-action="switch-login">
+            ورود
+          </button>
+          <button id="tabRegister" data-action="switch-register">
+            ثبت‌نام
+          </button>
+        </div>
+        <div class="field" id="fieldName" style="display: none">
+          <label>اسم نمایشی</label
+          ><input id="inpName" placeholder="مثلاً: یاسین" autocomplete="off" />
+        </div>
+        <div class="field">
+          <label>نام کاربری</label
+          ><input id="inpUser" placeholder="username" autocomplete="off" />
+        </div>
+        <div class="field">
+          <label>رمز عبور</label>
+          <div class="pass-wrap">
+            <input
+              id="inpPass"
+              type="password"
+              placeholder="••••"
+              autocomplete="new-password"
+            />
+            <button
+              type="button"
+              class="pass-toggle"
+              id="passToggle"
+              tabindex="-1"
+              aria-label="نمایش رمز عبور"
+            >
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+        </div>
+        <div class="auth-error" id="authError"></div>
+        <button
+          class="btn-negar btn-primary-negar"
+          id="authSubmit"
+          data-action="submit-auth"
+        >
+          ورود
+        </button>
+      </div>
+    </div>
+
+    <!-- پنل اشتراک‌گذاری -->
+    <div class="share-panel" id="sharePanel"></div>
+
+    <button
+      id="backToTop"
+      class="back-to-top"
+      data-action="go-top"
+      title="بازگشت به بالا"
+    >
+      ↑
+    </button>
+    <div id="toast"></div>
+    <script src="assets/js/app.js"></script>
+  </body>
+</html>

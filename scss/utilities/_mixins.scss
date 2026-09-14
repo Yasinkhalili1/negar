@@ -1,0 +1,72 @@
+// ============================================
+// نگار — میکسین‌های پرکاربرد
+// utilities/_mixins.scss
+// ============================================
+
+@mixin flex-center {
+  display: grid;
+  place-items: center;
+}
+@mixin card-surface {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: $radius-lg;
+  box-shadow: $shadow;
+}
+@mixin gradient-brand {
+  background: linear-gradient(135deg, $lapis, $gold);
+}
+
+// ── Responsive Breakpoints ──
+//  xs:   < 575px   (موبایل کوچک)
+//  sm:   576–767px (موبایل بزرگ)
+//  md:   768–991px (تبلت)
+//  lg:   992–1199px (لپ‌تاپ)
+//  xl:   ≥ 1200px  (مانیتور / لپ‌تاپ بزرگ)
+
+@mixin respond($bp) {
+  @if $bp == xs {
+    @media (max-width: 574px) {
+      @content;
+    }
+  } @else if $bp == sm {
+    @media (max-width: 767px) {
+      @content;
+    }
+  } @else if $bp == md {
+    @media (max-width: 991px) {
+      @content;
+    }
+  } @else if $bp == lg {
+    @media (max-width: 1199px) {
+      @content;
+    }
+  }
+}
+
+@mixin respond-up($bp) {
+  @if $bp == sm {
+    @media (min-width: 576px) {
+      @content;
+    }
+  } @else if $bp == md {
+    @media (min-width: 768px) {
+      @content;
+    }
+  } @else if $bp == lg {
+    @media (min-width: 992px) {
+      @content;
+    }
+  } @else if $bp == xl {
+    @media (min-width: 1200px) {
+      @content;
+    }
+  }
+}
+
+// میانبر برای مانیتور
+@mixin xl {
+  @media (min-width: 1200px) {
+    @content;
+  }
+}

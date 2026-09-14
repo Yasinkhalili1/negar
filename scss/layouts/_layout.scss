@@ -1,0 +1,296 @@
+// ============================================
+// نگار — چیدمان کلی (Layout)
+// layouts/_layout.scss
+// ============================================
+
+.wrap {
+  max-width: $max-w;
+  margin: 0 auto;
+  padding: 30px 22px 60px;
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 34px;
+  @include respond-up(xl) {
+    grid-template-columns: 1fr 340px;
+    gap: 38px;
+    padding: 40px 32px 80px;
+  }
+}
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 800;
+  }
+}
+.sort-select {
+  font-family: inherit;
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  padding: 8px 14px;
+  border-radius: 12px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  outline: none;
+  cursor: pointer;
+  transition: 0.2s;
+  &:hover {
+    border-color: $gold;
+    color: $gold;
+  }
+}
+.chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+.chip {
+  padding: 7px 16px;
+  border-radius: 30px;
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+  font-weight: 500;
+  transition: 0.2s;
+  cursor: pointer;
+  &.active {
+    background: $lapis;
+    color: #fff;
+    border-color: $lapis;
+  }
+  &:hover {
+    color: var(--ink);
+  }
+}
+
+// ═══════ Footer ═══════
+footer {
+  background: linear-gradient(180deg, var(--paper-2), var(--paper));
+  border-top: 1px solid var(--line);
+  padding: 52px 22px 30px;
+  margin-top: 40px;
+}
+.foot-inner {
+  max-width: $max-w;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1fr;
+  gap: 36px;
+}
+footer h5 {
+  font-weight: 800;
+  margin-bottom: 16px;
+  font-size: 1rem;
+  color: var(--ink);
+  letter-spacing: -0.3px;
+}
+footer a {
+  display: block;
+  color: var(--ink-soft);
+  padding: 5px 0;
+  font-size: 0.92rem;
+  transition: 0.2s;
+  cursor: pointer;
+  &:hover {
+    color: $gold;
+    padding-right: 4px;
+  }
+}
+.foot-brand {
+  p {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin: 12px 0 0;
+    max-width: 280px;
+    line-height: 1.8;
+  }
+}
+.foot-social {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+.soc {
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  display: grid;
+  place-items: center;
+  font-size: 1.1rem;
+  transition: 0.25s;
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba($lapis, 0.2);
+    border-color: $gold;
+  }
+}
+.foot-bottom {
+  max-width: $max-w;
+  margin: 38px auto 0;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .footer-heart {
+    width: 14px;
+    height: 14px;
+    margin: 0 4px;
+    vertical-align: middle;
+  }
+  gap: 6px;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+// ═══════ Views (SPA) ═══════
+.view {
+  display: none;
+}
+.view.active {
+  display: block;
+  animation: fade 0.35s ease;
+}
+@keyframes fade {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// ═══════ Reading Progress Bar ═══════
+.progress-bar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 4px;
+  z-index: 500;
+  background: transparent;
+  pointer-events: none;
+  width: 0%;
+  background: linear-gradient(90deg, $gold, $lapis);
+  transition: width 0.1s linear;
+}
+
+// ═══════ Back to Top ═══════
+.back-to-top {
+  position: fixed;
+  bottom: 80px;
+  left: 24px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: $lapis;
+  color: #fff;
+  border: none;
+  font-size: 1.4rem;
+  font-weight: 700;
+  box-shadow: $shadow-lg;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: 0.3s;
+  z-index: 50;
+  &:hover {
+    background: $lapis-soft;
+    transform: translateY(-2px);
+  }
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  @include respond(xs) {
+    width: 42px;
+    height: 42px;
+    font-size: 1.2rem;
+    bottom: 70px;
+    left: 16px;
+  }
+}
+
+// ═══════ Loading Spinner ═══════
+.spinner-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 30px 0;
+}
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 4px solid var(--line);
+  border-top-color: var(--lapis);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// ═══════ Responsive ═══════
+
+// ── تبلت (≤ 991px) ──
+@include respond(md) {
+  .wrap {
+    grid-template-columns: 1fr;
+  }
+  .foot-inner {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+// ── موبایل بزرگ (≤ 767px) ──
+@include respond(sm) {
+  footer {
+    padding: 36px 16px 24px;
+  }
+  .foot-inner {
+    gap: 24px;
+  }
+  .foot-bottom {
+    margin: 28px 16px 0;
+  }
+}
+
+// ── موبایل کوچک (≤ 574px) ──
+@include respond(xs) {
+  .wrap {
+    padding: 16px 14px 30px;
+    gap: 20px;
+  }
+  .foot-inner {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  footer {
+    padding: 28px 14px 20px;
+    margin-top: 28px;
+  }
+  .foot-brand p {
+    max-width: 100%;
+  }
+}

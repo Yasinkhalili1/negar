@@ -1,0 +1,25 @@
+{
+  "name": "negar-sass",
+  "version": "1.0.0",
+  "description": "Negar (نگار) — Persian blog platform with modular Sass architecture",
+  "scripts": {
+    "build:css": "sass --load-path=node_modules scss/main.scss assets/css/main.css --style=expanded --no-source-map",
+    "build:css:min": "sass --load-path=node_modules scss/main.scss assets/css/main.min.css --style=compressed --no-source-map",
+    "watch:css": "sass --load-path=node_modules --watch scss/main.scss assets/css/main.css --no-source-map",
+    "start": "php -S 127.0.0.1:9000 -t . index.php"
+  },
+  "keywords": [
+    "blog",
+    "persian",
+    "rtl",
+    "bootstrap",
+    "sass"
+  ],
+  "author": "Yasin",
+  "license": "ISC",
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^7.3.1",
+    "bootstrap": "^5.3.8",
+    "sass": "^1.103.1"
+  }
+}

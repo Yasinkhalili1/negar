@@ -1,0 +1,466 @@
+// ============================================
+// نگار — کامپوننت‌های اصلی (Header/Footer/Sidebar)
+// components/_navbar.scss
+// ============================================
+
+.navbar-negar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--paper-2);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--line);
+  @include respond(md) {
+    background: rgba(var(--paper), 0.92);
+  }
+
+  .nav-inner {
+    max-width: $max-w;
+    margin: 0 auto;
+    padding: 14px 22px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    @include respond(md) {
+      gap: 12px;
+      padding: 12px 16px;
+    }
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 800;
+    font-size: 1.5rem;
+    letter-spacing: -0.5px;
+    text-decoration: none;
+    .logo-img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+      border-radius: 11px;
+      display: block;
+    }
+    .logo-footer {
+      width: 44px;
+      height: 44px;
+    }
+    .mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      background: linear-gradient(135deg, $gold, $lapis);
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-size: 1.2rem;
+      box-shadow:
+        0 4px 14px rgba(2, 136, 209, 0.35),
+        $glow;
+    }
+    .name {
+      background: linear-gradient(90deg, $gold, $lapis);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.35));
+    }
+    @include respond(xs) {
+      font-size: 1.2rem;
+      gap: 8px;
+      .logo-img {
+        width: 34px;
+        height: 34px;
+      }
+      .mark {
+        width: 32px;
+        height: 32px;
+        font-size: 1rem;
+        border-radius: 9px;
+      }
+    }
+  }
+
+  // ── لینک‌های نویگیشن ──
+  nav.links {
+    display: flex;
+    gap: 6px;
+    margin-right: auto;
+    a {
+      padding: 8px 14px;
+      border-radius: 10px;
+      color: var(--ink-soft);
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: 0.2s;
+      &:hover {
+        background: var(--paper-2);
+        color: var(--ink);
+      }
+    }
+  }
+
+  // ── سرچ ──
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+    .search {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--paper-2);
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      padding: 8px 14px;
+      color: var(--muted);
+      min-width: 180px;
+      input {
+        background: none;
+        border: none;
+        outline: none;
+        color: var(--ink);
+        font-family: inherit;
+        width: 100%;
+      }
+    }
+  }
+
+  .icon-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 11px;
+    @include flex-center;
+    background: var(--paper-2);
+    color: var(--ink-soft);
+    border: 1px solid var(--line);
+    transition: 0.2s;
+    &:hover {
+      background: $gold;
+      color: #fff;
+      border-color: $gold;
+    }
+    @include respond(xs) {
+      width: 36px;
+      height: 36px;
+      font-size: 0.9rem;
+    }
+  }
+
+  .user-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 12px 5px 8px;
+    background: var(--paper-2);
+    border: 1px solid var(--line);
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    @include gradient-brand;
+    @include flex-center;
+    color: #fff;
+    font-weight: 700;
+    overflow: hidden;
+    .nav-avatar-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+  }
+
+  // ── منوی حساب کاربری ──
+  .account-menu-wrap {
+    position: relative;
+  }
+
+  .account-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    min-width: 200px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: $radius-sm;
+    box-shadow: $shadow;
+    padding: 6px;
+    display: none;
+    z-index: 100;
+    &.open {
+      display: block;
+    }
+  }
+  .account-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px 12px;
+    border: none;
+    background: none;
+    border-radius: $radius-sm;
+    font-family: inherit;
+    font-size: 0.9rem;
+    color: var(--ink);
+    cursor: pointer;
+    transition: background 0.15s;
+    &:hover {
+      background: var(--paper-2);
+    }
+    &.danger {
+      color: var(--danger, #e74c3c);
+    }
+    i {
+      width: 18px;
+      text-align: center;
+      color: var(--muted);
+    }
+  }
+
+  // ── دکمه‌های سفارشی Negar ──
+  .btn-negar {
+    padding: 10px 20px;
+    border-radius: 11px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    &.btn-primary-negar {
+      @include card-surface;
+      background: $lapis;
+      color: #fff;
+      box-shadow:
+        0 4px 14px rgba(31, 78, 121, 0.35),
+        $glow;
+      &:hover {
+        background: $lapis;
+        filter: brightness(1.15);
+        transform: translateY(-1px);
+        box-shadow:
+          0 4px 20px rgba(31, 78, 121, 0.4),
+          $glow-strong;
+      }
+    }
+    &.btn-gold-negar {
+      background: $gold;
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(0, 229, 255, 0.25);
+      &:hover {
+        background: $gold-soft;
+        box-shadow: 0 4px 20px rgba(0, 229, 255, 0.45);
+      }
+    }
+    &.btn-ghost-negar {
+      background: var(--paper-2);
+      color: var(--ink);
+      border: 1px solid var(--line);
+      &:hover {
+        border-color: $gold;
+        color: $gold;
+      }
+    }
+    &.btn-danger-negar {
+      background: $danger;
+      color: #fff;
+    }
+    @include respond(xs) {
+      padding: 8px 14px;
+      font-size: 0.85rem;
+    }
+  }
+
+  // ── منوی همبرگر ──
+  .hamburger {
+    display: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 11px;
+    background: var(--paper-2);
+    border: 1px solid var(--line);
+    place-items: center;
+    cursor: pointer;
+    transition: 0.2s;
+    flex-shrink: 0;
+    .bar {
+      display: block;
+      width: 18px;
+      height: 2px;
+      background: var(--ink);
+      border-radius: 2px;
+      position: relative;
+      transition: 0.3s;
+      &::before,
+      &::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: var(--ink);
+        border-radius: 2px;
+        transition: 0.3s;
+      }
+      &::before {
+        top: -6px;
+      }
+      &::after {
+        top: 6px;
+      }
+    }
+    &:hover {
+      border-color: $gold;
+    }
+    &.open .bar {
+      background: transparent;
+    }
+    &.open .bar::before {
+      top: 0;
+      transform: rotate(45deg);
+    }
+    &.open .bar::after {
+      top: 0;
+      transform: rotate(-45deg);
+    }
+  }
+
+  // ═══════ تبلت (≤ 991px) ═══════
+  // لینک‌ها و سرچ مخفی — همبرگر راست — ورود چسبیده سمت چپ
+  @include respond(md) {
+    nav.links {
+      display: none;
+    }
+    .nav-actions .search {
+      display: none;
+    }
+    .nav-actions .btn-primary-negar {
+      display: none;
+    }
+    .hamburger {
+      display: grid;
+    }
+    .nav-actions {
+      margin-left: auto;
+    }
+  }
+
+  // ═══════ موبایل (≤ 574px) ═══════
+  @include respond(xs) {
+    .nav-inner {
+      gap: 10px;
+      padding: 10px 14px;
+    }
+    .nav-actions {
+      gap: 8px;
+    }
+  }
+}
+
+// ═══════ منوی موبایل (بیرون از header — position: fixed) ═══════
+#mobileOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 202;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  &.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+.mobile-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: min(300px, 85vw);
+  height: 100vh;
+  background: var(--paper);
+  z-index: 201;
+  padding: 70px 24px 30px;
+  box-shadow: -4px 0 30px rgba(0, 0, 0, 0.2);
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-y: auto;
+  &.open {
+    transform: translateX(0);
+  }
+
+  .drawer-close {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    color: var(--muted);
+    font-size: 1.2rem;
+    cursor: pointer;
+    background: var(--paper-2);
+    border: 1px solid var(--line);
+    transition: 0.2s;
+    &:hover {
+      background: $danger;
+      color: #fff;
+      border-color: $danger;
+    }
+  }
+
+  a {
+    display: block;
+    padding: 12px 16px;
+    border-radius: 10px;
+    color: var(--ink);
+    font-weight: 500;
+    font-size: 1rem;
+    transition: 0.2s;
+    &:hover,
+    &:active {
+      background: var(--paper-2);
+      color: $gold;
+    }
+  }
+  .mobile-search {
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--paper-2);
+    border: 1px solid var(--line);
+    border-radius: 11px;
+    padding: 10px 14px;
+    color: var(--muted);
+    input {
+      background: none;
+      border: none;
+      outline: none;
+      color: var(--ink);
+      font-family: inherit;
+      width: 100%;
+    }
+  }
+  .mobile-auth {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+}
