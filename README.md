@@ -1,49 +1,107 @@
 # نگار (Negar) — پلتفرم وبلاگ فارسی
 
-سایت مقاله‌نویسی شبیه ویرگول — PHP + SQLite + Bootstrap 5 + Sass.
+> A lightweight Persian blogging platform that runs entirely in the browser.
 
-## راه‌اندازی سریع
+پلتفرم وبلاگ‌نویسی فارسی، سبک و سریع، که **بدون سرور** در مرورگر اجرا می‌شود.
+مقالات، کاربران و نظرات همگی در `localStorage` ذخیره می‌شوند — نیازی به دیتابیس نیست.
 
-```
-دابل‌کلیک روی start-negar.bat
-→ مرورگر باز می‌شود: http://127.0.0.1:9000
-```
+---
 
-یا دستی:
+## ✨ امکانات / Features
+
+### فارسی
+- **راست‌چین و فارسی‌محور** — چیدمان کامل RTL با اعداد فارسی
+- **ویرایشگر مارک‌داون** — پیش‌نمایش زنده، تولبار و شورت‌کات صفحه‌کلید (Ctrl+B / Ctrl+I / Ctrl+K)
+- **حالت تاریک** — تم نئونی و مدرن، با یک کلیک قابل تغییر
+- **حساب کاربری** — ثبت‌نام، ورود و صفحه پروفایل با عکس آواتار
+- **داشبورد نویسنده** — نمودار بازدید/لایک و آمار کامل مقالات
+- **ذخیره و لایک** — بوکمارک مقاله‌های موردعلاقه، مختص هر کاربر
+- **کامنت و پاسخ** — گفتگو با سایر خوانندگان
+- **اعلان‌ها** — اطلاع از اتفاقات جدید
+- **کاملاً واکنش‌گرا** — موبایل، تبلت و دسکتاپ
+
+### English
+- **RTL & Persian-first** — full right-to-left layout with Persian digits
+- **Markdown editor** — live preview, toolbar, keyboard shortcuts (Ctrl+B / Ctrl+I / Ctrl+K)
+- **Dark mode** — sleek neon theme, toggle anytime
+- **User accounts** — register, login, profile page with avatar
+- **Dashboard** — article stats with a views/likes chart
+- **Save & Like** — bookmark articles, per-user storage
+- **Comments & replies** — engage with other readers
+- **Notifications** — see what's new at a glance
+- **Fully responsive** — mobile, tablet, and desktop
+
+---
+
+## 🚀 راه‌اندازی / Getting Started
+
+### فارسی
 ```bash
-npm run start        # سرور PHP روی پورت 9000
+# ۱. کامپایل CSS (بعد از هر تغییر در SCSS)
+npm run build:css
+
+# ۲. اجرای سرور محلی
+python -m http.server 9000
+# یا در ویندوز: دابل‌کلیک روی start-negar.bat
+
+# ۳. باز کردن در مرورگر
+http://localhost:9000
 ```
 
-حساب آزمایشی: `yasin` / `admin123`
-
-## ساختار پروژه
-
-| مسیر | توضیح |
-|---|---|
-| `index.html` | فرانت‌اند (تمام صفحات SPA) |
-| `index.php` | بک‌اند API + سرو فایل استاتیک |
-| `negar.sqlite` | دیتابیس (خودکار ساخته می‌شود) |
-| `scss/_variables.scss` | متغیرها و میکسین‌های تم نگار |
-| `scss/main.scss` | استایل اصلی (Bootstrap + تم سفارشی) |
-| `assets/css/main.css` | خروجی کامپایل‌شده Sass |
-| `sessions/` | فایل‌های نشست PHP |
-
-## کار با Sass
-
+### English
 ```bash
-npm install          # فقط بار اول
-npm run build:css    # کامپایل یک‌باره scss → css
-npm run watch:css    # حالت نظارت خودکار هنگام طراحی
+# 1. Build the CSS (once, after changing SCSS files)
+npm run build:css
+
+# 2. Run a local server
+python -m http.server 9000
+# or double-click start-negar.bat (Windows)
+
+# 3. Open in your browser
+http://localhost:9000
 ```
 
-ساختار Sass:
-- `_variables.scss` — رنگ برند، میکسین (`@include card-surface`, `gradient-brand`, `respond(md)`)
-- Bootstrap به‌صورت انتخابی import شده (فقط type/buttons/forms/grid/utilities)
-- تم روشن/تاریک با CSS Variables (`--paper`, `--ink`, ...)
+---
 
-## نکته‌های مهم
+## 🗂 ساختار پروژه / Project Structure
 
-- **پورت ۸۰۰۰ ویندوز رزرو شده** — از ۹۰۰۰ استفاده می‌کنیم.
-- کلاس‌های اختصاصی پسوند `-negar` دارند تا با Bootstrap تداخل نکنند (`card-negar`, `btn-negar`).
-- بعد از تغییر SCSS حتماً `npm run build:css` بزن ( یا watch رو روشن نگه دار).
-a
+```
+negar/
+├── index.html              # صفحه اصلی SPA
+├── start-negar.bat         # راه‌انداز ویندوز
+├── package.json            # اسکریپت‌های npm
+├── assets/
+│   ├── css/main.css        # خروجی کامپایل‌شده Sass
+│   └── js/app.js           # تمام منطق برنامه (کلاس‌های OOP)
+├── scss/
+│   ├── base/               # متغیرها و توکن‌های تم
+│   ├── components/         # نوبار، کارت‌ها، ادیتور...
+│   ├── layouts/            # فوتر، گرید
+│   └── utilities/          # میکسین‌های واکنش‌گرا
+└── public/
+    ├── image/              # لوگو
+    └── svg/                # آیکون‌ها
+```
+
+---
+
+## 🧠 معماری / Architecture
+
+### فارسی
+- **معماری شیءگرا** — ۱۰ کلاس کوچک (`Article`, `AuthManager`, `FeedRenderer`, `EditorManager`, `CommentStore` و...) هرکدام با یک مسئولیت مشخص
+- **localStorage** — مقالات، کاربران، لایک‌ها، ذخیره‌ها، نظرات و تم همگی در مرورگر ذخیره می‌شوند
+- **Sass → CSS** — استایل‌ها به‌صورت ماژولار در SCSS نوشته شده و با `npm run build:css` کامپایل می‌شوند
+
+### English
+- **OOP architecture** — 10 small classes (Article, AuthManager, FeedRenderer, EditorManager, CommentStore...) each with one clear job
+- **localStorage** — articles, users, likes, saves, comments, and theme all persist in the browser
+- **Sass → CSS** — modular SCSS compiled with `npm run build:css`
+
+---
+
+## 🛠 تکنولوژی‌ها / Tech Stack
+
+- Vanilla JavaScript (ES6+) — بدون فریمورک
+- Sass / SCSS
+- Font Awesome icons
+- Vazirmatn Persian font
