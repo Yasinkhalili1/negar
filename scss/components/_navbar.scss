@@ -36,15 +36,15 @@
     letter-spacing: -0.5px;
     text-decoration: none;
     .logo-img {
-      width: 40px;
-      height: 40px;
+          width: 56px;
+          height: 56px;
       object-fit: contain;
       border-radius: 11px;
       display: block;
     }
     .logo-footer {
-      width: 44px;
-      height: 44px;
+      width: 30px;
+      height: 30px;
     }
     .mark {
       width: 38px;
@@ -70,8 +70,8 @@
       font-size: 1.2rem;
       gap: 8px;
       .logo-img {
-        width: 34px;
-        height: 34px;
+              width: 44px;
+              height: 44px;
       }
       .mark {
         width: 32px;
@@ -387,7 +387,7 @@
   width: min(300px, 85vw);
   height: 100vh;
   background: var(--paper);
-  z-index: 201;
+  z-index: 203;
   padding: 70px 24px 30px;
   box-shadow: -4px 0 30px rgba(0, 0, 0, 0.2);
   transform: translateX(100%);
@@ -462,5 +462,13 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+  }
+}
+
+// ═══════ دسکتاپ (≥ 992px) — منوی موبایل کاملاً مخفی ═══════
+@include respond-up(lg) {
+  #mobileOverlay,
+  .mobile-drawer {
+    display: none !important;
   }
 }

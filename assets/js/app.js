@@ -2214,12 +2214,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // بستن منو با کلیک روی لینک‌ها
   if (drawer) {
-    drawer
-      .querySelectorAll('a[data-action], button[data-action="open-login"]')
-      .forEach((a) => {
-        a.addEventListener("click", closeDrawer);
-      });
-  }
+      drawer
+        .querySelectorAll('a[data-action], button[data-action="open-login"]')
+        .forEach((a) => {
+          a.addEventListener("click", closeDrawer);
+        });
+    }
+
+    // بستن منو وقتی صفحه به دسکتاپ بزرگ می‌شه
+    window.addEventListener("resize", () => {
+      if (window.innerWidth >= 992) closeDrawer();
+    });
 
   // سرچ موبایل ↔ سرچ اصلی
   const mobileSearch = document.getElementById("mobileSearchInput");

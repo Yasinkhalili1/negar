@@ -3095,15 +3095,15 @@ img {
   text-decoration: none;
 }
 .navbar-negar .logo .logo-img {
-  width: 40px;
-  height: 40px;
+  width: 56px;
+  height: 56px;
   object-fit: contain;
   border-radius: 11px;
   display: block;
 }
 .navbar-negar .logo .logo-footer {
-  width: 44px;
-  height: 44px;
+  width: 30px;
+  height: 30px;
 }
 .navbar-negar .logo .mark {
   width: 38px;
@@ -3129,8 +3129,8 @@ img {
     gap: 8px;
   }
   .navbar-negar .logo .logo-img {
-    width: 34px;
-    height: 34px;
+    width: 44px;
+    height: 44px;
   }
   .navbar-negar .logo .mark {
     width: 32px;
@@ -3429,7 +3429,7 @@ img {
   width: min(300px, 85vw);
   height: 100vh;
   background: var(--paper);
-  z-index: 201;
+  z-index: 203;
   padding: 70px 24px 30px;
   box-shadow: -4px 0 30px rgba(0, 0, 0, 0.2);
   transform: translateX(100%);
@@ -3504,6 +3504,12 @@ img {
   gap: 10px;
 }
 
+@media (min-width: 992px) {
+  #mobileOverlay,
+  .mobile-drawer {
+    display: none !important;
+  }
+}
 .hero {
   max-width: 1180px;
   margin: 0 auto;
