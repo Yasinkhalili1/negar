@@ -3220,7 +3220,7 @@ img {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #0288d1, #4fc3f7);
+  background: linear-gradient(135deg, var(--lapis), var(--gold));
   display: grid;
   place-items: center;
   color: #fff;
@@ -3620,7 +3620,7 @@ img {
   border-color: #4fc3f7;
 }
 .card-negar .cover {
-  background: linear-gradient(135deg, #0288d1, #4fc3f7);
+  background: linear-gradient(135deg, var(--lapis), var(--gold));
   min-height: 160px;
   display: grid;
   place-items: center;
@@ -3717,7 +3717,7 @@ img {
   width: 26px;
   height: 26px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #0288d1, #4fc3f7);
+  background: linear-gradient(135deg, var(--lapis), var(--gold));
   display: grid;
   place-items: center;
   color: #fff;
@@ -3802,7 +3802,7 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
 }
 
 .promo {
-  background: linear-gradient(135deg, #0288d1, #4fc3f7);
+  background: linear-gradient(135deg, var(--lapis), var(--gold));
   color: #fff;
   border-radius: 18px;
   padding: 22px;
@@ -4099,7 +4099,7 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #0288d1, #4fc3f7);
+  background: linear-gradient(135deg, var(--lapis), var(--gold));
   display: grid;
   place-items: center;
   color: #fff;
@@ -4114,7 +4114,7 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
   width: 100%;
   height: 320px;
   border-radius: 18px;
-  background: linear-gradient(135deg, #0288d1, #4fc3f7);
+  background: linear-gradient(135deg, var(--lapis), var(--gold));
   display: grid;
   place-items: center;
   font-size: 5rem;
@@ -4324,7 +4324,7 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
   width: 68px;
   height: 68px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #0288d1, #4fc3f7);
+  background: linear-gradient(135deg, var(--lapis), var(--gold));
   display: grid;
   place-items: center;
   color: #fff;
@@ -4592,7 +4592,7 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
   width: 72px;
   height: 72px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #0288d1, #4fc3f7);
+  background: linear-gradient(135deg, var(--lapis), var(--gold));
   display: grid;
   place-items: center;
   color: #fff;
@@ -4895,7 +4895,7 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #0288d1, #4fc3f7);
+  background: linear-gradient(135deg, var(--lapis), var(--gold));
   display: grid;
   place-items: center;
   color: #fff;
@@ -5724,14 +5724,14 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
 }
 
 .challenge-card {
-  background: linear-gradient(135deg, var(--surface, #f8f9fb), #eef3ff);
+  background: linear-gradient(135deg, var(--surface, #f8f9fb), var(--paper-2, #eef3ff));
   border: 1px solid var(--line, #e2e8f0);
   border-radius: 14px;
   padding: 16px;
 }
 .challenge-card .challenge-badge {
   display: inline-block;
-  background: var(--accent, #0288d1);
+  background: linear-gradient(135deg, var(--lapis, #0288d1), var(--gold, #4fc3f7));
   color: #fff;
   font-size: 0.72rem;
   font-weight: 700;
@@ -5761,8 +5761,30 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
 }
 
 .streak-card {
-  background: linear-gradient(135deg, #fff7ed, #ffedd5);
-  border-color: #fed7aa;
+  background: linear-gradient(135deg, var(--surface, #fff7ed), var(--paper-2, #ffedd5));
+  border-color: var(--gold, #fed7aa);
+}
+.streak-card .dash-num {
+  color: var(--gold);
+}
+
+[data-theme=dark] .challenge-card {
+  background: linear-gradient(135deg, var(--surface), var(--paper-2));
+  border-color: var(--line);
+  box-shadow: 0 0 18px rgba(0, 229, 255, 0.07);
+}
+[data-theme=dark] .challenge-badge {
+  box-shadow: 0 0 12px rgba(0, 229, 255, 0.35);
+}
+[data-theme=dark] .challenge-done {
+  color: #00ff9d;
+}
+[data-theme=dark] .streak-card {
+  background: linear-gradient(135deg, var(--surface), var(--paper-2));
+  border-color: var(--line);
+}
+[data-theme=dark] .promo {
+  box-shadow: 0 0 22px rgba(124, 77, 255, 0.25);
 }
 
 .month-author {
