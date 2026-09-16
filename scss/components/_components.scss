@@ -2189,3 +2189,50 @@ aside {
     }
   }
 }
+
+// ═══════ انیمیشن اسکرول ═══════
+.card-negar {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  &.reveal { opacity: 1; transform: none; }
+}
+
+// ═══════ ناوبری قبلی/بعدی مقاله ═══════
+.post-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 28px 0;
+  .post-nav-link {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 14px 16px;
+    background: $c-surface;
+    border: 1px solid $c-line;
+    border-radius: $radius-sm;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    &:hover { border-color: $gold; transform: translateY(-2px); }
+    &.next { align-items: flex-end; text-align: left; }
+    .post-nav-dir { font-size: 0.75rem; color: $c-muted; }
+    .post-nav-title { font-weight: 700; color: $c-ink; font-size: 0.95rem; }
+  }
+}
+
+// ═══════ چاپ / PDF ═══════
+@media print {
+  nav, .sidebar, .hamburger, .reading-progress, .toast,
+  .a-actions, .comments-section, .comment-form,
+  .foot, .related, .dark-toggle, #printablePage,
+  .btn-negar { display: none !important; }
+  body { background: #fff !important; color: #000 !important; }
+  .article-page { max-width: 100%; padding: 0; }
+  .a-title { font-size: 2rem; color: #000; }
+  .a-body { font-size: 14px; line-height: 1.8; color: #000; }
+  .a-body * { color: #000 !important; }
+  .article-page { break-inside: avoid; }
+}

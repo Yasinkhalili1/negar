@@ -48,6 +48,23 @@ python -m http.server 9000
 http://localhost:9000
 ```
 
+### ⭐ اجرا از گیت‌هاب (برای استاد)
+```bash
+# ۱. کلون کردن پروژه
+git clone https://github.com/Yasinkhalili1/negar.git
+cd negar
+
+# ۲. نصب وابستگی‌ها (یک بار)
+npm install
+
+# ۳. اجرا
+python -m http.server 9000
+# یا با PHP:  npm start
+
+# ۴. باز کردن
+http://localhost:9000
+```
+
 ### English
 ```bash
 # 1. Build the CSS (once, after changing SCSS files)

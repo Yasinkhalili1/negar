@@ -247,7 +247,8 @@ class Article {
         <button class="btn-negar btn-gold-negar" data-action="like" data-id="${this.id}">${this.isLikedByMe() ? '<i class="fa-solid fa-heart"></i>' : '<i class="fa-regular fa-heart"></i>'} ${this.likes}</button>
         <button class="btn-negar btn-ghost-negar" data-action="save" data-id="${this.id}">${this.isSavedByMe() ? '<i class="fa-solid fa-bookmark"></i> ذخیره شده' : '<i class="fa-regular fa-bookmark"></i> ذخیره'}</button>
         <button class="btn-negar btn-ghost-negar" data-action="share"><i class="fa-solid fa-share-nodes"></i> اشتراک</button>
-        ${manage}
+                <button class="btn-negar btn-ghost-negar" data-action="print" data-id="${this.id}"><i class="fa-solid fa-print"></i> چاپ / PDF</button>
+                ${manage}
       </div>
       <div class="comments-section">
         <h2 class="comments-title"> نظرات (<span id="commentCount">0</span>)</h2>
@@ -505,6 +506,13 @@ class FeedRenderer {
     if (hasMore)
       html += '<div class="spinner-wrap"><div class="spinner"></div></div>';
     this.container.innerHTML = html;
+    this._observeCards();
+  }
+  _observeCards() {
+    if (!window.IntersectionObserver) return;
+    const cards = this.container.querySelectorAll(".card-negar");
+    if (!cards.length) return;
+    cards.forEach((c) => c.classList.add("reveal"));
   }
   renderTrending(articles, selector) {
     const el = document.querySelector(selector);
@@ -926,6 +934,22 @@ class NegarApp {
     }
   }
 
+  /**
+   * بارگذاری مقالات نمونه — وقتی کاربر دکمه «مقالات نمونه» رو می‌زنه
+   * فقط اگه مقاله‌ای نباشه اجرا می‌شه تا داده‌ها خراب نشن
+   */
+  _loadSampleArticles() {
+    if (this.articles.length > 0) {
+      this.toast.show("از قبل مقاله داری — چیزی اضافه نشد");
+      return;
+    }
+    this.articles = this._seedArticles();
+    this._persistArticles();
+    this.nextId = Math.max(0, ...this.articles.map((a) => a.id)) + 1;
+    this._render();
+    this.toast.show("مقالات نمونه بارگذاری شد");
+  }
+
   _seedArticles() {
     return [
       new Article({
@@ -1301,8 +1325,14 @@ class NegarApp {
         this.auth.logout();
         break;
       case "publish":
-        this._publish();
-        break;
+              this._publish();
+              break;
+            case "load-sample":
+                          this._loadSampleArticles();
+                          break;
+                        case "print":
+                          this._printArticle(id);
+                          break;
       case "like":
         this._like(id);
         break;
@@ -1460,12 +1490,16 @@ class NegarApp {
   }
 
   _getFiltered() {
-    const q = (document.getElementById("searchInput") || {}).value || "";
-    let list = this.articles;
-    if (q.trim())
-      list = list.filter((a) =>
-        (a.title + a.tag + a.author).includes(q.trim()),
-      );
+      const q = (document.getElementById("searchInput") || {}).value || "";
+      let list = this.articles;
+      if (q.trim()) {
+        const term = q.trim().toLowerCase();
+        list = list.filter((a) =>
+          (a.title + " " + a.tag + " " + a.author + " " + a.body)
+            .toLowerCase()
+            .includes(term),
+        );
+      }
     // فقط چیپ active توی گروهی که صفحه‌ش فعاله رو بخون
     const activeView = document.querySelector(".view.active");
     const activeGroup = activeView
@@ -1502,9 +1536,12 @@ class NegarApp {
         if (savedList.length) {
           this.feeds.lib.render(savedList);
         } else {
-          this.feeds.lib.container.innerHTML =
-            '<p style="text-align:center;color:var(--muted);padding:40px 0">هنوز مقاله‌ای ذخیره نکردی</p>';
-        }
+                  this.feeds.lib.container.innerHTML =
+                    '<div style="text-align:center;color:var(--muted);padding:40px 0">' +
+                    '<p>هنوز مقاله‌ای ذخیره نکردی</p>' +
+                    '<button class="btn-negar btn-primary-negar" data-action="load-sample" style="margin-top:12px">بارگذاری مقالات نمونه</button>' +
+                    '</div>';
+                }
       }
     }
     this.feeds.home.renderTrending(this.articles, "#trending");
@@ -1540,7 +1577,16 @@ class NegarApp {
         </div>
       </div>`
       : "";
-    document.getElementById("articlePage").innerHTML = a.toFull() + relatedHtml;
+    // ناوبری قبلی/بعدی
+    const idx = this.articles.findIndex((x) => x.id === id);
+    const prev = idx > 0 ? this.articles[idx - 1] : null;
+    const next = idx < this.articles.length - 1 ? this.articles[idx + 1] : null;
+    const navHtml = `
+      <div class="post-nav">
+        ${prev ? `<a class="post-nav-link" data-action="open-article" data-id="${prev.id}"><span class="post-nav-dir">→ مقاله قبلی</span><span class="post-nav-title">${esc(prev.title)}</span></a>` : '<span></span>'}
+        ${next ? `<a class="post-nav-link next" data-action="open-article" data-id="${next.id}"><span class="post-nav-dir">مقاله بعدی ←</span><span class="post-nav-title">${esc(next.title)}</span></a>` : '<span></span>'}
+      </div>`;
+    document.getElementById("articlePage").innerHTML = a.toFull() + navHtml + relatedHtml;
     this.comments.render(a.id, "commentList");
     const cc = document.getElementById("commentCount");
     if (cc) cc.textContent = this.comments.count(a.id);
@@ -1615,6 +1661,23 @@ class NegarApp {
         : '<i class="fa-regular fa-bookmark"></i> ذخیره';
     }
     this._render(); // رفرش کتابخانه
+  }
+
+  /** باز کردن صفحه چاپ/PDF مرورگر */
+  _printArticle(id) {
+    // مخفی کردن همه بخش‌ها به جز مقاله
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById('article').classList.add('active');
+    document.getElementById('printablePage') && document.getElementById('printablePage').remove();
+    // اضافه کردن label نویسنده به صورت text-only
+    const a = this.articles.find(a => a.id == id);
+    if (a) {
+      const authorLabel = document.createElement('div');
+      authorLabel.id = 'printablePage';
+      authorLabel.innerHTML = `<div class="a-actions"><button class="btn-negar btn-ghost-negar" onclick="this.remove();print()">بازگشت و چاپ</button></div>`;
+      document.getElementById('articlePage').prepend(authorLabel);
+    }
+    window.print();
   }
 
   _shareArticle() {
@@ -1823,7 +1886,7 @@ class NegarApp {
           </table>
         </div>
       `
-          : '<p style="text-align:center;color:var(--muted);padding:40px 0">هنوز مقاله‌ای ننوشتی</p>'
+          : '<div style="text-align:center;color:var(--muted);padding:40px 0"><p>هنوز مقاله‌ای ننوشتی</p><button class="btn-negar btn-primary-negar" data-action="load-sample" style="margin-top:12px">بارگذاری مقالات نمونه</button></div>'
       }
       <div class="section-head" style="margin-top:30px"><h2>مقالات من</h2></div>
       <div class="feed">${myArticles.length ? myArticles.map((a) => a.toCard()).join("") : ""}</div>`;

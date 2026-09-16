@@ -43,8 +43,9 @@
       display: block;
     }
     .logo-footer {
-      width: 30px;
-      height: 30px;
+      width: auto;
+      height: auto;
+      max-width: 50%;
     }
     .mark {
       width: 38px;
