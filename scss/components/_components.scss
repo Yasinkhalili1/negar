@@ -2190,15 +2190,15 @@ aside {
   }
 }
 
-// ═══════ انیمیشن اسکرول ═══════
+// ═══════ چالش هفته + نویسنده ماه ═══════
 .challenge-card {
-  background: linear-gradient(135deg, var(--surface, #f8f9fb), #eef3ff);
+  background: linear-gradient(135deg, var(--surface, #f8f9fb), var(--paper-2, #eef3ff));
   border: 1px solid var(--line, #e2e8f0);
   border-radius: 14px;
   padding: 16px;
   .challenge-badge {
     display: inline-block;
-    background: var(--accent, #0288d1);
+    background: linear-gradient(135deg, var(--lapis, #0288d1), var(--gold, #4fc3f7));
     color: #fff;
     font-size: 0.72rem;
     font-weight: 700;
@@ -2211,7 +2211,31 @@ aside {
   .challenge-done { color: #16a34a; font-weight: 700; font-size: 0.85rem; }
 }
 .plus-badge { font-size: 0.85rem; margin-inline-start: 4px; }
-.streak-card { background: linear-gradient(135deg, #fff7ed, #ffedd5); border-color: #fed7aa; }
+.streak-card {
+  background: linear-gradient(135deg, var(--surface, #fff7ed), var(--paper-2, #ffedd5));
+  border-color: var(--gold, #fed7aa);
+  .dash-num { color: var(--gold); }
+}
+
+// ── تم تاریک: تنظیم چالش و کارت‌های رنگی ──
+[data-theme="dark"] {
+  .challenge-card {
+    background: linear-gradient(135deg, var(--surface), var(--paper-2));
+    border-color: var(--line);
+    box-shadow: 0 0 18px rgba(0, 229, 255, 0.07);
+  }
+  .challenge-badge {
+    box-shadow: 0 0 12px rgba(0, 229, 255, 0.35);
+  }
+  .challenge-done { color: #00ff9d; }
+  .streak-card {
+    background: linear-gradient(135deg, var(--surface), var(--paper-2));
+    border-color: var(--line);
+  }
+  .promo {
+    box-shadow: 0 0 22px rgba(124, 77, 255, 0.25);
+  }
+}
 .month-author {
   display: flex;
   align-items: center;

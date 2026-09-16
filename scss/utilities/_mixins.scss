@@ -14,7 +14,7 @@
   box-shadow: $shadow;
 }
 @mixin gradient-brand {
-  background: linear-gradient(135deg, $lapis, $gold);
+  background: linear-gradient(135deg, var(--lapis), var(--gold));
 }
 
 // ── Responsive Breakpoints ──
