@@ -179,6 +179,23 @@ class CommunityManager {
     return { author: best[0], ...best[1] };
   }
 
+  /** HTML نویسنده ماه — توی سایدبار */
+  authorOfMonthHtml() {
+    const best = this.authorOfMonth();
+    if (!best) return "";
+    return `<div class="box">
+      <h3><img class="chip-icon" src="public/svg/fire-svgrepo-com.svg" alt="" /> نویسنده ماه</h3>
+      <div class="month-author">
+        <span class="author-avatar">${esc(best.author.charAt(0))}</span>
+        <div>
+          <div class="month-author-name">${esc(best.author)}</div>
+          <div class="month-author-stats">${best.count} مقاله · ${best.reads.toLocaleString("fa-IR")} بازدید · ${best.likes} لایک</div>
+        </div>
+        <span class="month-crown">🏆</span>
+      </div>
+    </div>`;
+  }
+
   // ── ۵) نگار پلاس ──
   /** فعال‌سازی دموی پلاس */
   togglePlus() {
@@ -207,8 +224,17 @@ class CommunityManager {
     if (!u) return;
     u.profileTheme = theme;
     this.app.auth._save();
+    // اعمال تم روی پروفایل
+    document.documentElement.setAttribute("data-profile-theme", theme);
     this.app.toast.show("تم پروفایل ذخیره شد");
-    this.app._render();
+    this.app._openProfile();
+  }
+  /** اعمال تم ذخیره‌شده هنگام لود */
+  initProfileTheme() {
+    const u = this.app.auth && this.app.auth.user;
+    if (u && u.profileTheme) {
+      document.documentElement.setAttribute("data-profile-theme", u.profileTheme);
+    }
   }
 
   // ── ۷) حالت مطالعه شب ──
@@ -244,6 +270,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!window.app) return setTimeout(boot, 100);
     window.app.community = new CommunityManager(window.app);
     window.app.community.initReadingMode();
+    window.app.community.initProfileTheme();
   };
   boot();
 });

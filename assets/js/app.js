@@ -1564,11 +1564,11 @@ class NegarApp {
     }
     this.feeds.home.renderTrending(this.articles, "#trending");
         this.feeds.explore.renderTrending(this.articles, "#trending2");
-        // چالش هفته توی سایدبار
-        if (this.community) {
-          const cb = document.getElementById("challengeBox");
-          if (cb) cb.innerHTML = this.community.challengeHtml();
-        }
+        // چالش هفته + نویسنده ماه توی سایدبار
+            if (this.community) {
+              const cb = document.getElementById("challengeBox");
+              if (cb) cb.innerHTML = this.community.challengeHtml() + this.community.authorOfMonthHtml();
+            }
       }
 
   _openArticle(id) {
@@ -2072,7 +2072,17 @@ class NegarApp {
           <div class="profile-field"><label>اسم نمایشی</label><input id="profName" value="${esc(u.display_name)}" /></div>
           <div class="profile-field"><label>نام کاربری</label><input id="profUsername" value="${esc(u.username)}" disabled style="opacity:.6" /></div>
           <div class="profile-field"><label>بایو</label><textarea id="profBio" class="profile-textarea" placeholder="درباره خودت بنویس...">${esc(u.bio || "")}</textarea></div>
-          <div class="profile-actions">
+                    ${
+                      this.community && this.community.isPlus
+                        ? `<div class="profile-field">
+                            <label>تم پروفایل <span class="plus-badge" title="نگار پلاس">💎</span></label>
+                            <div class="theme-picker">
+                              ${["default", "ocean", "sunset", "forest"].map((t) => `<button class="theme-dot theme-${t} ${(u.profileTheme || "default") === t ? "active" : ""}" data-action="save-profile-theme" data-id="${t}" title="${t}"></button>`).join("")}
+                            </div>
+                          </div>`
+                        : ""
+                    }
+                    <div class="profile-actions">
             <button class="btn-negar btn-ghost-negar" data-action="go-dashboard">بازگشت</button>
             <button class="btn-negar btn-primary-negar" data-action="save-profile"> ذخیره</button>
           </div>

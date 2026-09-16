@@ -2212,6 +2212,34 @@ aside {
 }
 .plus-badge { font-size: 0.85rem; margin-inline-start: 4px; }
 .streak-card { background: linear-gradient(135deg, #fff7ed, #ffedd5); border-color: #fed7aa; }
+.month-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  .author-avatar { font-size: 1.2rem; width: 44px; height: 44px; }
+  .month-author-name { font-weight: 700; margin-bottom: 4px; }
+  .month-author-stats { font-size: 0.78rem; color: var(--muted, #64748b); }
+  .month-crown { margin-inline-start: auto; font-size: 1.5rem; }
+}
+
+// تم پروفایل — دکمه‌های انتخاب
+.theme-picker { display: flex; gap: 10px; }
+.theme-dot {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 3px solid transparent; cursor: pointer;
+  transition: transform 0.2s, border-color 0.2s;
+  &.active { border-color: #0288d1; transform: scale(1.15); }
+  &.theme-default { background: linear-gradient(135deg, #0288d1, #7c4dff); }
+  &.theme-ocean { background: linear-gradient(135deg, #00b4d8, #0077b6); }
+  &.theme-sunset { background: linear-gradient(135deg, #f72585, #ff9e00); }
+  &.theme-forest { background: linear-gradient(135deg, #2d6a4f, #95d5b2); }
+}
+// اعمال تم روی هدر پروفایل
+html[data-profile-theme="ocean"] .profile-head { background: linear-gradient(135deg, #00b4d8, #0077b6); }
+html[data-profile-theme="sunset"] .profile-head { background: linear-gradient(135deg, #f72585, #ff9e00); }
+html[data-profile-theme="forest"] .profile-head { background: linear-gradient(135deg, #2d6a4f, #95d5b2); }
+html[data-profile-theme="ocean"] .author-avatar, html[data-profile-theme="sunset"] .author-avatar, html[data-profile-theme="forest"] .author-avatar { border-color: #fff; }
 
 // حالت مطالعه شب — همه متن‌ها کرم روشن و بزرگ‌تر، پس‌زمینه تیره گرم
 html.reading-mode {

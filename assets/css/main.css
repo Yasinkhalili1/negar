@@ -5765,6 +5765,76 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
   border-color: #fed7aa;
 }
 
+.month-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+}
+.month-author .author-avatar {
+  font-size: 1.2rem;
+  width: 44px;
+  height: 44px;
+}
+.month-author .month-author-name {
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.month-author .month-author-stats {
+  font-size: 0.78rem;
+  color: var(--muted, #64748b);
+}
+.month-author .month-crown {
+  margin-inline-start: auto;
+  font-size: 1.5rem;
+}
+
+.theme-picker {
+  display: flex;
+  gap: 10px;
+}
+
+.theme-dot {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  cursor: pointer;
+  transition: transform 0.2s, border-color 0.2s;
+}
+.theme-dot.active {
+  border-color: #0288d1;
+  transform: scale(1.15);
+}
+.theme-dot.theme-default {
+  background: linear-gradient(135deg, #0288d1, #7c4dff);
+}
+.theme-dot.theme-ocean {
+  background: linear-gradient(135deg, #00b4d8, #0077b6);
+}
+.theme-dot.theme-sunset {
+  background: linear-gradient(135deg, #f72585, #ff9e00);
+}
+.theme-dot.theme-forest {
+  background: linear-gradient(135deg, #2d6a4f, #95d5b2);
+}
+
+html[data-profile-theme=ocean] .profile-head {
+  background: linear-gradient(135deg, #00b4d8, #0077b6);
+}
+
+html[data-profile-theme=sunset] .profile-head {
+  background: linear-gradient(135deg, #f72585, #ff9e00);
+}
+
+html[data-profile-theme=forest] .profile-head {
+  background: linear-gradient(135deg, #2d6a4f, #95d5b2);
+}
+
+html[data-profile-theme=ocean] .author-avatar, html[data-profile-theme=sunset] .author-avatar, html[data-profile-theme=forest] .author-avatar {
+  border-color: #fff;
+}
+
 html.reading-mode body {
   background: #1c1917 !important;
   color: #f5e6c8 !important;
