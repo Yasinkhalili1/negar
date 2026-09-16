@@ -1858,10 +1858,13 @@ class NegarApp {
       return;
     }
     const user = this.auth.user;
-    // فقط مقالاتی که خود کاربر نوشته
-    const myArticles = this.articles.filter(
-      (a) => a.author === user.display_name,
-    );
+        // مقالات خودم — مقایسه انعطاف‌پذیر: هم اسم نمایشی، هم نام کاربری (با نرمال‌سازی ی/ک)
+        const norm = (s) => (s || "").toLowerCase().replace(/[يى]/g, "ی").replace(/ك/g, "ک");
+        const myArticles = this.articles.filter(
+          (a) =>
+            norm(a.author) === norm(user.display_name) ||
+            norm(a.author) === norm(user.username),
+        );
     const totalReads = myArticles.reduce((s, a) => s + a.reads, 0);
     const totalLikes = myArticles.reduce((s, a) => s + a.likes, 0);
     const myComments = Object.values(this.comments.data)
