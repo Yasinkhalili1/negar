@@ -109,7 +109,7 @@ class CommunityManager {
   streakHtml() {
     // مقاوم در برابر داده خراب — همیشه عدد سالم نشون بده
     const c = Number.isFinite(this.streak.count) && this.streak.count > 0 ? this.streak.count : 0;
-    const flame = c >= 7 ? "🔥" : c >= 3 ? "⭐" : "✏️";
+    const flame = c >= 7 ? "" : c >= 3 ? "" : "";
     return `<div class="dash-card streak-card">
       <span class="dash-num">${flame} ${c}</span>
       <span class="dash-label">${c > 0 ? "روز پیاپی نویسندگی" : "هنوز شروع نکردی"}</span>
@@ -199,7 +199,7 @@ class CommunityManager {
           <div class="month-author-name">${esc(best.author)}</div>
           <div class="month-author-stats">${best.count} مقاله · ${best.reads.toLocaleString("fa-IR")} بازدید · ${best.likes} لایک</div>
         </div>
-        <span class="month-crown">🏆</span>
+        <span class="month-crown"><img class="chip-icon" src="public/svg/cup-svgrepo-com.svg" alt="نویسنده ماه" /></span>
       </div>
     </div>`;
   }

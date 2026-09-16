@@ -2228,6 +2228,19 @@ class NegarApp {
   }
 }
 document.addEventListener("DOMContentLoaded", () => {
+  // ── ریست کامل داده‌ها: اگه URL شامل ?reset=1 باشه همه localStorage پاک میشه ──
+  if (new URLSearchParams(location.search).get("reset") === "1") {
+    try {
+      Object.keys(localStorage)
+        .filter((k) => k.startsWith("negar_"))
+        .forEach((k) => localStorage.removeItem(k));
+      // حذف پارامتر از آدرس تا دوباره اجرا نشه
+      history.replaceState(null, "", location.pathname + location.hash);
+      console.log("✅ همه داده‌های نگار پاک شد");
+    } catch (e) {
+      console.warn("خطا در ریست", e);
+    }
+  }
   window.app = new NegarApp();
 
   // ── بازگرداندن صفحه از روی hash (برای رفرش در مقاله/داشبورد و...) ──

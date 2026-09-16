@@ -5788,6 +5788,10 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
   margin-inline-start: auto;
   font-size: 1.5rem;
 }
+.month-author .month-crown img {
+  width: 28px;
+  height: 28px;
+}
 
 .theme-picker {
   display: flex;
