@@ -453,9 +453,11 @@ class AuthManager {
         ? `<img src="${this.user.avatar}" alt="" class="nav-avatar-img" />`
         : `${esc(this.user.display_name.charAt(0))}`;
       this.area.innerHTML = `
-                  <span class="user-chip">
-                    <span class="avatar">${avatarHtml}</span>${esc(this.user.display_name)}
-                    <span class="account-menu-wrap">
+                        <span class="user-chip">
+                          ${this.community && this.community.isPlus ? '<span class="plus-badge" title="نگار پلاس">💎</span>' : ""}
+                          <span class="avatar">${avatarHtml}</span>${esc(this.user.display_name)}
+                          <button class="icon-btn" style="width:28px;height:28px;border:none;flex-shrink:0" data-action="toggle-reading" title="حالت مطالعه شب"><i class="fa-solid fa-moon"></i></button>
+                          <span class="account-menu-wrap">
                       <button class="icon-btn" style="width:28px;height:28px;border:none;flex-shrink:0" data-action="toggle-account-menu" title="حساب کاربری"><i class="fa-solid fa-gear"></i></button>
                       <div class="account-menu" id="accountMenu">
                         <button class="account-item" data-action="go-dashboard"><i class="fa-solid fa-sliders"></i> داشبورد</button>
@@ -1301,8 +1303,24 @@ class NegarApp {
         this._openProfile();
         break;
       case "save-profile":
-        this._saveProfile();
-        break;
+              this._saveProfile();
+              break;
+            case "join-challenge":
+              if (this.community) this.community.joinChallenge();
+              break;
+            case "toggle-follow":
+              if (this.community) this.community.toggleFollow(id);
+              this._render();
+              break;
+            case "toggle-plus":
+              if (this.community) this.community.togglePlus();
+              break;
+            case "toggle-reading":
+              if (this.community) this.community.toggleReadingMode();
+              break;
+            case "save-profile-theme":
+              if (this.community) this.community.saveProfileTheme(id);
+              break;
       case "toggle-edit-profile":
         this._toggleEditProfile();
         break;
@@ -1545,8 +1563,13 @@ class NegarApp {
       }
     }
     this.feeds.home.renderTrending(this.articles, "#trending");
-    this.feeds.explore.renderTrending(this.articles, "#trending2");
-  }
+        this.feeds.explore.renderTrending(this.articles, "#trending2");
+        // چالش هفته توی سایدبار
+        if (this.community) {
+          const cb = document.getElementById("challengeBox");
+          if (cb) cb.innerHTML = this.community.challengeHtml();
+        }
+      }
 
   _openArticle(id) {
     const a = this.articles.find((x) => x.id === id);
@@ -1799,27 +1822,35 @@ class NegarApp {
 
   // ── صفحه نویسنده ──
   _openAuthor(authorName) {
-    const authorArticles = this.articles.filter((a) => a.author === authorName);
-    const hasCover = authorArticles[0] ? authorArticles[0].cover : null;
-    const totalReads = authorArticles.reduce((s, a) => s + a.reads, 0);
-    const totalLikes = authorArticles.reduce((s, a) => s + a.likes, 0);
-    const el = document.getElementById("authorPage");
-    el.innerHTML = `
-      <div class="author-head">
-        <span class="author-avatar">${esc((authorName || "?").charAt(0))}</span>
-        <div>
-          <h1>${esc(authorName)}</h1>
-          <div class="author-stats">
-            <span> ${authorArticles.length} مقاله</span>
-            <span><i class="fa-regular fa-eye"></i> ${totalReads.toLocaleString("fa-IR")} بازدید</span>
-            <span><i class="fa-solid fa-heart"></i> ${totalLikes} لایک</span>
+      const authorArticles = this.articles.filter((a) => a.author === authorName);
+      const hasCover = authorArticles[0] ? authorArticles[0].cover : null;
+      const totalReads = authorArticles.reduce((s, a) => s + a.reads, 0);
+      const totalLikes = authorArticles.reduce((s, a) => s + a.likes, 0);
+      const el = document.getElementById("authorPage");
+      // دکمه دنبال کردن — فقط وقتی لاگین باشی
+      const isFollowing = this.community ? this.community.isFollowing(authorName) : false;
+      const followBtn = this.auth.isLoggedIn()
+        ? `<button class="btn-negar ${isFollowing ? "btn-gold-negar" : "btn-ghost-negar"}" data-action="toggle-follow" data-id="${esc(authorName)}" style="margin-top:8px">
+            ${isFollowing ? '<i class="fa-solid fa-user-check"></i> دنبال می‌کنی' : '<i class="fa-regular fa-user"></i> دنبال کن'}
+          </button>`
+        : "";
+      el.innerHTML = `
+        <div class="author-head">
+          <span class="author-avatar">${esc((authorName || "?").charAt(0))}</span>
+          <div>
+            <h1>${esc(authorName)}</h1>
+            <div class="author-stats">
+              <span> ${authorArticles.length} مقاله</span>
+              <span><i class="fa-regular fa-eye"></i> ${totalReads.toLocaleString("fa-IR")} بازدید</span>
+              <span><i class="fa-solid fa-heart"></i> ${totalLikes} لایک</span>
+            </div>
+            ${followBtn}
           </div>
         </div>
-      </div>
-      <div class="section-head"><h2>مقالات ${esc(authorName)}</h2></div>
-      <div class="feed">${authorArticles.map((a) => a.toCard()).join("") || '<p style="text-align:center;color:var(--muted);padding:40px 0">مقاله‌ای یافت نشد</p>'}</div>`;
-    this._go("author");
-  }
+        <div class="section-head"><h2>مقالات ${esc(authorName)}</h2></div>
+        <div class="feed">${authorArticles.map((a) => a.toCard()).join("") || '<p style="text-align:center;color:var(--muted);padding:40px 0">مقاله‌ای یافت نشد</p>'}</div>`;
+      this._go("author");
+    }
 
   _openDashboard() {
     if (!this.auth.isLoggedIn()) {
@@ -1861,7 +1892,8 @@ class NegarApp {
         <div class="dash-card"><span class="dash-num">${totalLikes.toLocaleString("fa-IR")}</span><span class="dash-label"> کل لایک</span></div>
         <div class="dash-card"><span class="dash-num">${commentsOnMine.toLocaleString("fa-IR")}</span><span class="dash-label">نظر روی مقالاتم</span></div>
         <div class="dash-card"><span class="dash-num">${myComments.toLocaleString("fa-IR")}</span><span class="dash-label">نظرات من</span></div>
-      </div>
+                ${this.community ? this.community.streakHtml() : ""}
+              </div>
       ${myArticles.length ? this._chartHtml(myArticles) : ""}
       ${
         myArticles.length
@@ -2097,17 +2129,25 @@ class NegarApp {
   }
 
   /** اعتبارسنجی عنوان و متن مقاله */
-  _validate(data) {
-    if (!data.title) {
-      this.toast.show("عنوان بنویس ");
-      return false;
+    _validate(data) {
+      if (!data.title) {
+        this.toast.show("عنوان بنویس ");
+        return false;
+      }
+      if (data.body.length < 10) {
+        this.toast.show("متن کوتاهه");
+        return false;
+      }
+      // چک‌لیست نگارشی — هشدارهای مفید (اما جلوی انتشار رو نمی‌گیره)
+      if (this.community) {
+        const tips = this.community.checkWriting(data.title, data.body);
+        if (tips.length && !this._editorWarned) {
+          this._editorWarned = true;
+          this.toast.show("نکته: " + tips[0]);
+        }
+      }
+      return true;
     }
-    if (data.body.length < 10) {
-      this.toast.show("متن کوتاهه");
-      return false;
-    }
-    return true;
-  }
 
   /** به‌روزرسانی مقاله موجود (حالت ویرایش) */
   _updateArticle(data, cover) {
@@ -2123,19 +2163,27 @@ class NegarApp {
   }
 
   /** ایجاد مقاله جدید */
-  _createArticle(data, cover) {
-    this.articles.unshift(
-      new Article({
-        id: this.nextId++,
-        ...data,
-        author: this.auth.user.display_name,
-        reads: 0,
-        likes: 0,
-        cover,
-      }),
-    );
-    this.toast.show("منتشر شد!");
-  }
+    _createArticle(data, cover) {
+      this.articles.unshift(
+        new Article({
+          id: this.nextId++,
+          ...data,
+          author: this.auth.user.display_name,
+          reads: 0,
+          likes: 0,
+          cover,
+        }),
+      );
+      // ثبت رگه نویسندگی + تگ چالش (اگه ادیتور با چالش باز شده بود)
+      if (this.community) {
+        const streak = this.community.registerWrite();
+        this.community.markChallenge(this.articles[0]);
+        this.toast.show(`منتشر شد! رگه نویسندگیت: ${streak} روز 🔥`);
+      } else {
+        this.toast.show("منتشر شد!");
+      }
+      this._persistArticles();
+    }
 
   /** پاک‌سازی فرم ادیتور و کاور بعد از انتشار */
   _resetEditor() {

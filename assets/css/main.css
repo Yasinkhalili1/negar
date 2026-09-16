@@ -5723,6 +5723,72 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
   transform: translateY(-1px);
 }
 
+.challenge-card {
+  background: linear-gradient(135deg, var(--surface, #f8f9fb), #eef3ff);
+  border: 1px solid var(--line, #e2e8f0);
+  border-radius: 14px;
+  padding: 16px;
+}
+.challenge-card .challenge-badge {
+  display: inline-block;
+  background: var(--accent, #0288d1);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  border-radius: 20px;
+  padding: 3px 12px;
+  margin-bottom: 8px;
+}
+.challenge-card .challenge-title {
+  font-size: 1.15rem;
+  margin-bottom: 6px;
+}
+.challenge-card .challenge-prompt {
+  font-size: 0.85rem;
+  color: var(--muted, #64748b);
+  line-height: 1.7;
+  margin-bottom: 12px;
+}
+.challenge-card .challenge-done {
+  color: #16a34a;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.plus-badge {
+  font-size: 0.85rem;
+  margin-inline-start: 4px;
+}
+
+.streak-card {
+  background: linear-gradient(135deg, #fff7ed, #ffedd5);
+  border-color: #fed7aa;
+}
+
+html.reading-mode body {
+  background: #1c1917 !important;
+  color: #f5e6c8 !important;
+}
+html.reading-mode .card-negar, html.reading-mode .article-page, html.reading-mode .box, html.reading-mode .dash-page, html.reading-mode .editor {
+  background: #292524 !important;
+  color: #f5e6c8 !important;
+  border-color: #44403c !important;
+}
+html.reading-mode .card-negar h3, html.reading-mode .card-negar .h3, html.reading-mode .article-page h1, html.reading-mode .article-page .h1, html.reading-mode .a-body, html.reading-mode .editor-content,
+html.reading-mode .title-input {
+  color: #f5e6c8 !important;
+}
+html.reading-mode .a-body {
+  font-size: 1.25rem !important;
+  line-height: 2.2 !important;
+}
+html.reading-mode .c-muted, html.reading-mode .a-meta, html.reading-mode .related-meta, html.reading-mode .dash-label {
+  color: #a8a29e !important;
+}
+html.reading-mode img {
+  opacity: 0.9;
+}
+
 .card-negar {
   opacity: 0;
   transform: translateY(24px);
