@@ -1588,12 +1588,22 @@ class NegarApp {
                         cb.innerHTML = this.community.challengeHtml() + this.community.authorOfMonthHtml();
                       }
                     } else {
-                      const cb = document.getElementById("challengeBox");
-                      if (cb) {
-                        cb.innerHTML = "";
-                        cb.style.display = "none";
-                      }
-                    }
+                                          const cb = document.getElementById("challengeBox");
+                                          if (cb) {
+                                            cb.innerHTML = "";
+                                            cb.style.display = "none";
+                                          }
+                                        }
+                            // آپدیت متن دکمه دموی پلاس — فعال/غیرفعال
+                                        const plusBtn = document.querySelector('[data-action="toggle-plus"]');
+                                        if (plusBtn) {
+                                          const plusOn = this.community && this.community.isPlus;
+                                          plusBtn.textContent = plusOn
+                                            ? "غیرفعال‌سازی دموی پلاس"
+                                            : "فعال‌سازی دموی پلاس";
+                                          plusBtn.classList.toggle("btn-ghost-negar", !plusOn);
+                                          plusBtn.classList.toggle("btn-danger-negar", plusOn);
+                                        }
       }
 
   _openArticle(id) {
