@@ -1580,11 +1580,20 @@ class NegarApp {
     }
     this.feeds.home.renderTrending(this.articles, "#trending");
         this.feeds.explore.renderTrending(this.articles, "#trending2");
-        // چالش هفته + نویسنده ماه توی سایدبار
-            if (this.community) {
-              const cb = document.getElementById("challengeBox");
-              if (cb) cb.innerHTML = this.community.challengeHtml() + this.community.authorOfMonthHtml();
-            }
+        // چالش هفته + نویسنده ماه توی سایدبار — فقط وقتی نگار پلاس فعال باشه
+                    if (this.community && this.community.isPlus) {
+                      const cb = document.getElementById("challengeBox");
+                      if (cb) {
+                        cb.style.display = "";
+                        cb.innerHTML = this.community.challengeHtml() + this.community.authorOfMonthHtml();
+                      }
+                    } else {
+                      const cb = document.getElementById("challengeBox");
+                      if (cb) {
+                        cb.innerHTML = "";
+                        cb.style.display = "none";
+                      }
+                    }
       }
 
   _openArticle(id) {
