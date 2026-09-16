@@ -937,20 +937,36 @@ class NegarApp {
   }
 
   /**
-   * بارگذاری مقالات نمونه — وقتی کاربر دکمه «مقالات نمونه» رو می‌زنه
-   * فقط اگه مقاله‌ای نباشه اجرا می‌شه تا داده‌ها خراب نشن
-   */
-  _loadSampleArticles() {
-    if (this.articles.length > 0) {
-      this.toast.show("از قبل مقاله داری — چیزی اضافه نشد");
-      return;
+     * بارگذاری مقالات نمونه — وقتی کاربر دکمه «مقالات نمونه» رو می‌زنه
+     * مقالات به نام خود کاربر ساخته می‌شن تا توی داشبوردش دیده بشن
+     */
+    _loadSampleArticles() {
+      if (this.articles.length > 0) {
+        this.toast.show("از قبل مقاله داری — چیزی اضافه نشد");
+        return;
+      }
+      const author = this.auth.isLoggedIn()
+        ? this.auth.user.display_name
+        : "مهمان";
+      this.articles = this._seedArticlesFor(author);
+      this._persistArticles();
+      this.nextId = Math.max(0, ...this.articles.map((a) => a.id)) + 1;
+      this._render();
+      this.toast.show("مقالات نمونه برای " + author + " بارگذاری شد");
     }
-    this.articles = this._seedArticles();
-    this._persistArticles();
-    this.nextId = Math.max(0, ...this.articles.map((a) => a.id)) + 1;
-    this._render();
-    this.toast.show("مقالات نمونه بارگذاری شد");
-  }
+
+    /**
+     * مقالات نمونه با نویسنده مشخص
+     * @param {string} author - اسم نویسنده که روی همه مقالات می‌نشینه
+     */
+    _seedArticlesFor(author) {
+        const seed = this._seedArticles();
+        return seed.map((a) => {
+          a.author = author;
+          if (this.auth.isLoggedIn()) a.ownerId = this.auth.user.id;
+          return a;
+        });
+      }
 
   _seedArticles() {
     return [
@@ -1858,10 +1874,11 @@ class NegarApp {
       return;
     }
     const user = this.auth.user;
-        // مقالات خودم — مقایسه انعطاف‌پذیر: هم اسم نمایشی، هم نام کاربری (با نرمال‌سازی ی/ک)
+        // مقالات خودم — با شناسه عددی (ownerId) یا نام (نرمال‌شده) — هر دو
         const norm = (s) => (s || "").toLowerCase().replace(/[يى]/g, "ی").replace(/ك/g, "ک");
         const myArticles = this.articles.filter(
           (a) =>
+            (a.ownerId && a.ownerId === user.id) ||
             norm(a.author) === norm(user.display_name) ||
             norm(a.author) === norm(user.username),
         );
@@ -2178,15 +2195,16 @@ class NegarApp {
   /** ایجاد مقاله جدید */
     _createArticle(data, cover) {
       this.articles.unshift(
-        new Article({
-          id: this.nextId++,
-          ...data,
-          author: this.auth.user.display_name,
-          reads: 0,
-          likes: 0,
-          cover,
-        }),
-      );
+              new Article({
+                id: this.nextId++,
+                ...data,
+                author: this.auth.user.display_name,
+                ownerId: this.auth.user.id,
+                reads: 0,
+                likes: 0,
+                cover,
+              }),
+            );
       // ثبت رگه نویسندگی + تگ چالش (اگه ادیتور با چالش باز شده بود)
       if (this.community) {
         const streak = this.community.registerWrite();
