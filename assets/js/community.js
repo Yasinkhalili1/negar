@@ -50,12 +50,19 @@ class CommunityManager {
   _loadStreak() {
     try {
       const data = JSON.parse(localStorage.getItem(C_STORE.STREAK) || "{}");
-      // اگه آخرین نوشتن دیروز یا امروز بوده، رگه ادامه داره
-      const last = new Date(data.last);
-      const today = new Date();
-      const diff = Math.floor((today - last) / (24 * 3600 * 1000));
-      if (diff > 1) return { count: 0, last: null };
-      return data;
+      // شکل داده رو نرمال کن — اگه count عدد نیست یا last نامعتبره، صفر برگردون
+      const count = Number.isFinite(data.count) && data.count > 0 ? data.count : 0;
+      const lastStr = typeof data.last === "string" ? data.last : null;
+      // اگه تاریخ نامعتبر باشه، رگه رو ریست کن
+      if (lastStr) {
+        const last = new Date(lastStr);
+        if (isNaN(last.getTime())) return { count: 0, last: null };
+        // اگه آخرین نوشتن بیشتر از ۱ روز پیش بوده، رگه شکسته
+        const today = new Date();
+        const diff = Math.floor((today - last) / (24 * 3600 * 1000));
+        if (diff > 1) return { count: 0, last: null };
+      }
+      return { count, last: lastStr };
     } catch { return { count: 0, last: null }; }
   }
   _saveStreak() {
@@ -100,7 +107,8 @@ class CommunityManager {
 
   /** نمایش رگه توی داشبورد — به عنوان کارت اضافی */
   streakHtml() {
-    const c = this.streak.count;
+    // مقاوم در برابر داده خراب — همیشه عدد سالم نشون بده
+    const c = Number.isFinite(this.streak.count) && this.streak.count > 0 ? this.streak.count : 0;
     const flame = c >= 7 ? "🔥" : c >= 3 ? "⭐" : "✏️";
     return `<div class="dash-card streak-card">
       <span class="dash-num">${flame} ${c}</span>
