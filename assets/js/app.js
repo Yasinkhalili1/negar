@@ -45,6 +45,23 @@ const TAG_COLORS = {
 
 /** برگرداندن آیکون FA برای یک دسته (پیش‌فرض: feather) */
 
+/** مسیر کاور هر مقاله — فرمت واقعی فایل */
+function getCoverPath(id) {
+  const dir = "public/image";
+  if (window.__coverFiles) {
+    const ext = window.__coverFiles[id];
+    if (ext) return `${dir}/${id}${ext}`;
+  }
+  return null;
+}
+function coverExists(id, ext) {
+  return window.__coverFiles && window.__coverFiles[id] === ext;
+}
+/** راه‌حل کاور: مسیر تصویر کاور برای مقاله */
+function resolveCover(article) {
+  return getCoverPath(article.id);
+}
+
 // ═══════════════════════════════════════════════════
 //  ۱) Toast — سیستم اعلان کوتاه‌مدت
 // ═══════════════════════════════════════════════════
@@ -921,7 +938,7 @@ class NegarApp {
       const raw = localStorage.getItem(this.STORAGE_KEY);
       if (!raw) return [];
       const arr = JSON.parse(raw);
-      return arr.map((a) => new Article(a));
+      return arr.map((a) => { const art = new Article(a); art.cover = resolveCover(art); return art; });
     } catch (e) {
       console.warn("خطا در بارگذاری مقالات", e);
       return [];
@@ -937,259 +954,47 @@ class NegarApp {
   }
 
   /**
-     * بارگذاری مقالات نمونه — وقتی کاربر دکمه «مقالات نمونه» رو می‌زنه
-     * مقالات به نام خود کاربر ساخته می‌شن تا توی داشبوردش دیده بشن
-     */
-    _loadSampleArticles() {
-      if (this.articles.length > 0) {
-        this.toast.show("از قبل مقاله داری — چیزی اضافه نشد");
-        return;
-      }
-      const author = this.auth.isLoggedIn()
-        ? this.auth.user.display_name
-        : "مهمان";
-      this.articles = this._seedArticlesFor(author);
-      this._persistArticles();
-      this.nextId = Math.max(0, ...this.articles.map((a) => a.id)) + 1;
-      this._render();
-      this.toast.show("مقالات نمونه برای " + author + " بارگذاری شد");
+   * بارگذاری مقالات نمونه — وقتی کاربر دکمه «مقالات نمونه» رو می‌زنه
+   * مقالات به نام خود کاربر ساخته می‌شن تا توی داشبوردش دیده بشن
+   */
+  _loadSampleArticles() {
+    if (this.articles.length > 0) {
+      this.toast.show("از قبل مقاله داری — چیزی اضافه نشد");
+      return;
     }
-
-    /**
-     * مقالات نمونه با نویسنده مشخص
-     * @param {string} author - اسم نویسنده که روی همه مقالات می‌نشینه
-     */
-    _seedArticlesFor(author) {
-        const seed = this._seedArticles();
-        return seed.map((a) => {
-          a.author = author;
-          if (this.auth.isLoggedIn()) a.ownerId = this.auth.user.id;
-          return a;
-        });
-      }
-
-  _seedArticles() {
-    return [
-      new Article({
-        id: 7,
-        tag: "تکنولوژی",
-        title: "بلاکچین چیست؟",
-        body: "فناوری دفتر کل توزیع شده.",
-        author: "محمد",
-        reads: 3100,
-        likes: 41,
-      }),
-      new Article({
-        id: 8,
-        tag: "ادبیات",
-        title: "شعر معاصر ایران",
-        body: "از نیما تا فروغ.",
-        author: "لیلا",
-        reads: 4500,
-        likes: 56,
-      }),
-      new Article({
-        id: 9,
-        tag: "سبک زندگی",
-        title: "مدیتیشن برای مبتدیان",
-        body: "تمرکز روی تنفس.",
-        author: "نیما",
-        reads: 7200,
-        likes: 89,
-      }),
-      new Article({
-        id: 10,
-        tag: "کسب‌وکار",
-        title: "بازاریابی محتوا",
-        body: "محتوای خوب مشتری جذب می‌کند.",
-        author: "رضا",
-        reads: 2900,
-        likes: 33,
-      }),
-      new Article({
-        id: 11,
-        tag: "سلامت",
-        title: "ورزش صبحگاهی",
-        body: "۱۰ حرکت ساده.",
-        author: "مریم",
-        reads: 5400,
-        likes: 62,
-      }),
-      new Article({
-        id: 12,
-        tag: "هنر",
-        title: "عکاسی با موبایل",
-        body: "قانون یک‌سوم.",
-        author: "امیر",
-        reads: 3800,
-        likes: 47,
-      }),
-      new Article({
-        id: 13,
-        tag: "تکنولوژی",
-        title: "AI در پزشکی",
-        body: "تشخیص بیماری با هوش مصنوعی.",
-        author: "دکتر راد",
-        reads: 6300,
-        likes: 74,
-      }),
-      new Article({
-        id: 14,
-        tag: "ادبیات",
-        title: "داستان‌نویسی خلاق",
-        body: "هر داستان با شخصیت شروع می‌شود.",
-        author: "زهرا",
-        reads: 2100,
-        likes: 28,
-      }),
-      new Article({
-        id: 15,
-        tag: "سبک زندگی",
-        title: "ساده زیستن",
-        body: "مالکیت کمتر، آزادی بیشتر.",
-        author: "سارا",
-        reads: 4800,
-        likes: 58,
-      }),
-      new Article({
-        id: 16,
-        tag: "کسب‌وکار",
-        title: "کارآفرینی از صفر",
-        body: "نیاز به جسارت.",
-        author: "علی",
-        reads: 3600,
-        likes: 44,
-      }),
-      new Article({
-        id: 17,
-        tag: "سلامت",
-        title: "تغذیه سالم",
-        body: "سبزیجات، پروتئین، آب.",
-        author: "دکتر ناز",
-        reads: 5100,
-        likes: 67,
-      }),
-      new Article({
-        id: 18,
-        tag: "هنر",
-        title: "اصول رنگ‌بندی",
-        body: "رنگ‌های مکمل و مشابه.",
-        author: "نگار",
-        reads: 2700,
-        likes: 35,
-      }),
-      new Article({
-        id: 19,
-        tag: "تکنولوژی",
-        title: "خانه‌های هوشمند",
-        body: "اینترنت اشیا آینده را می‌سازد.",
-        author: "حسین",
-        reads: 2400,
-        likes: 30,
-      }),
-      new Article({
-        id: 20,
-        tag: "ادبیات",
-        title: "کتاب‌خوانی عادت کنید",
-        body: "هر روز ۲۰ صفحه بخوانید.",
-        author: "فاطمه",
-        reads: 5600,
-        likes: 71,
-      }),
-      new Article({
-        id: 21,
-        tag: "سبک زندگی",
-        title: "سفر ارزان",
-        body: "اسکان رایگان، غذای محلی.",
-        author: "کامران",
-        reads: 4200,
-        likes: 53,
-      }),
-      new Article({
-        id: 22,
-        tag: "کسب‌وکار",
-        title: "فریلنسری",
-        body: "رئیس خودت باش.",
-        author: "پریسا",
-        reads: 3300,
-        likes: 40,
-      }),
-      new Article({
-        id: 23,
-        tag: "سلامت",
-        title: "خواب سالم",
-        body: "۸ ساعت، اتاق تاریک.",
-        author: "دکتر شایان",
-        reads: 6100,
-        likes: 76,
-      }),
-      new Article({
-        id: 24,
-        tag: "هنر",
-        title: "موسیقی و سلامت روان",
-        body: "کاهش استرس با موسیقی.",
-        author: "آرمین",
-        reads: 3900,
-        likes: 48,
-      }),
-      new Article({
-        id: 1,
-        tag: "تکنولوژی",
-        title: "هوش مصنوعی و آینده‌ی نوشتن",
-        body: "در یک دهه‌ی گذشته، هوش مصنوعی از یک رؤیای آزمایشگاهی به همراهی روزمره تبدیل شده است.\n\n## قلمِ انسان\n\nنوشتن تنها انتقال اطلاعات نیست.\n\n> «قلمی که از دل تجربه برآید، هرگز با الگوریتم ساخته نمی‌شود.»",
-        author: "یاسین",
-        reads: 4200,
-        likes: 45,
-      }),
-      new Article({
-        id: 2,
-        tag: "ادبیات",
-        title: "چرا داستان‌های کوتاه بیشتر خوانده می‌شوند",
-        body: "عصر حواس‌پرتی، دشمن رمان‌های هزارصفحه‌ای است.\n\n## هنرِ فشردگی\n\nهر کلمه وزنی دارد.",
-        author: "سارا",
-        reads: 2800,
-        likes: 32,
-      }),
-      new Article({
-        id: 3,
-        tag: "سبک زندگی",
-        title: "صبح آرام: ۵ عادت برای شروع روز",
-        body: "بیشتر ما روز را با هجوم نوتیفیکیشن شروع می‌کنیم.\n\n## قدم اول\n\nیک لیوان آب و دو دقیقه سکوت.",
-        author: "مینا",
-        reads: 6100,
-        likes: 78,
-      }),
-      new Article({
-        id: 4,
-        tag: "کسب‌وکار",
-        title: "از ایده تا درآمد: ۳ اشتباه استارتاپ‌ها",
-        body: "بیشتر استارتاپ‌ها به خاطر فرضیات غلط می‌میرند.\n\n> «مشتریِ فرضی، کیف پولِ واقعی ندارد.»",
-        author: "آریا",
-        reads: 3500,
-        likes: 28,
-      }),
-      new Article({
-        id: 5,
-        tag: "سلامت",
-        title: "خوابِ عمیق: چرا مغزت تمیزکاری می‌کند",
-        body: "سیستم گلیمفاتیک مغز، شب‌ها فعال می‌شود.\n\n## چطور خواب عمیق‌تری داشته باشیم؟\n\nاتاق خنک، نور کم.",
-        author: "دکتر کیان",
-        reads: 5900,
-        likes: 65,
-      }),
-      new Article({
-        id: 6,
-        tag: "هنر",
-        title: "نگارگری ایرانی: وقتی نقاشی حکمِ شعر دارد",
-        body: "در نگارگریِ ایرانی، فضا رؤیایی‌ست.\n\n## هنرِ بی‌منظره\n\nنگارگر فضای سومی می‌سازد.",
-        author: "الناز",
-        reads: 2200,
-        likes: 19,
-      }),
-    ];
+    const author = this.auth.isLoggedIn()
+      ? this.auth.user.display_name
+      : "مهمان";
+    this.articles = this._seedArticlesFor(author);
+    this._persistArticles();
+    this.nextId = Math.max(0, ...this.articles.map((a) => a.id)) + 1;
+    this._render();
+    this.toast.show("مقالات نمونه برای " + author + " بارگذاری شد");
   }
 
-  _setupInfiniteScroll() {
+  /**
+   * مقالات نمونه با نویسنده مشخص
+   * @param {string} author - اسم نویسنده که روی همه مقالات می‌نشینه
+   */
+  _seedArticlesFor(author) {
+    const seed = this._seedArticles();
+    return seed.map((a) => {
+      a.author = author;
+      if (this.auth.isLoggedIn()) a.ownerId = this.auth.user.id;
+      return a;
+    });
+  }
+
+    _seedArticles() {
+        // مقالات نمونه از فایل articlesData.js بارگذاری می‌شوند
+        if (typeof SEED_ARTICLES !== "undefined") {
+          return SEED_ARTICLES.map(a => { const art = new Article(a); art.cover = resolveCover(art); return art; });
+        }
+        // fallback خالی
+        return [];
+      }
+
+      _setupInfiniteScroll() {
     const sentinel = document.createElement("div");
     sentinel.id = "scrollSentinel";
     sentinel.style.height = "1px";
@@ -1319,24 +1124,24 @@ class NegarApp {
         this._openProfile();
         break;
       case "save-profile":
-              this._saveProfile();
-              break;
-            case "join-challenge":
-              if (this.community) this.community.joinChallenge();
-              break;
-            case "toggle-follow":
-              if (this.community) this.community.toggleFollow(id);
-              this._render();
-              break;
-            case "toggle-plus":
-              if (this.community) this.community.togglePlus();
-              break;
-            case "toggle-reading":
-              if (this.community) this.community.toggleReadingMode();
-              break;
-            case "save-profile-theme":
-              if (this.community) this.community.saveProfileTheme(id);
-              break;
+        this._saveProfile();
+        break;
+      case "join-challenge":
+        if (this.community) this.community.joinChallenge();
+        break;
+      case "toggle-follow":
+        if (this.community) this.community.toggleFollow(id);
+        this._render();
+        break;
+      case "toggle-plus":
+        if (this.community) this.community.togglePlus();
+        break;
+      case "toggle-reading":
+        if (this.community) this.community.toggleReadingMode();
+        break;
+      case "save-profile-theme":
+        if (this.community) this.community.saveProfileTheme(id);
+        break;
       case "toggle-edit-profile":
         this._toggleEditProfile();
         break;
@@ -1359,14 +1164,14 @@ class NegarApp {
         this.auth.logout();
         break;
       case "publish":
-              this._publish();
-              break;
-            case "load-sample":
-                          this._loadSampleArticles();
-                          break;
-                        case "print":
-                          this._printArticle(id);
-                          break;
+        this._publish();
+        break;
+      case "load-sample":
+        this._loadSampleArticles();
+        break;
+      case "print":
+        this._printArticle(id);
+        break;
       case "like":
         this._like(id);
         break;
@@ -1524,16 +1329,16 @@ class NegarApp {
   }
 
   _getFiltered() {
-      const q = (document.getElementById("searchInput") || {}).value || "";
-      let list = this.articles;
-      if (q.trim()) {
-        const term = q.trim().toLowerCase();
-        list = list.filter((a) =>
-          (a.title + " " + a.tag + " " + a.author + " " + a.body)
-            .toLowerCase()
-            .includes(term),
-        );
-      }
+    const q = (document.getElementById("searchInput") || {}).value || "";
+    let list = this.articles;
+    if (q.trim()) {
+      const term = q.trim().toLowerCase();
+      list = list.filter((a) =>
+        (a.title + " " + a.tag + " " + a.author + " " + a.body)
+          .toLowerCase()
+          .includes(term),
+      );
+    }
     // فقط چیپ active توی گروهی که صفحه‌ش فعاله رو بخون
     const activeView = document.querySelector(".view.active");
     const activeGroup = activeView
@@ -1570,41 +1375,42 @@ class NegarApp {
         if (savedList.length) {
           this.feeds.lib.render(savedList);
         } else {
-                  this.feeds.lib.container.innerHTML =
-                    '<div style="text-align:center;color:var(--muted);padding:40px 0">' +
-                    '<p>هنوز مقاله‌ای ذخیره نکردی</p>' +
-                    '<button class="btn-negar btn-primary-negar" data-action="load-sample" style="margin-top:12px">بارگذاری مقالات نمونه</button>' +
-                    '</div>';
-                }
+          this.feeds.lib.container.innerHTML =
+            '<div style="text-align:center;color:var(--muted);padding:40px 0">' +
+            "<p>هنوز مقاله‌ای ذخیره نکردی</p>" +
+            '<button class="btn-negar btn-primary-negar" data-action="load-sample" style="margin-top:12px">بارگذاری مقالات نمونه</button>' +
+            "</div>";
+        }
       }
     }
     this.feeds.home.renderTrending(this.articles, "#trending");
-        this.feeds.explore.renderTrending(this.articles, "#trending2");
-        // چالش هفته + نویسنده ماه توی سایدبار — فقط وقتی نگار پلاس فعال باشه
-                    if (this.community && this.community.isPlus) {
-                      const cb = document.getElementById("challengeBox");
-                      if (cb) {
-                        cb.style.display = "";
-                        cb.innerHTML = this.community.challengeHtml() + this.community.authorOfMonthHtml();
-                      }
-                    } else {
-                                          const cb = document.getElementById("challengeBox");
-                                          if (cb) {
-                                            cb.innerHTML = "";
-                                            cb.style.display = "none";
-                                          }
-                                        }
-                            // آپدیت متن دکمه دموی پلاس — فعال/غیرفعال
-                                        const plusBtn = document.querySelector('[data-action="toggle-plus"]');
-                                        if (plusBtn) {
-                                          const plusOn = this.community && this.community.isPlus;
-                                          plusBtn.textContent = plusOn
-                                            ? "غیرفعال‌سازی دموی پلاس"
-                                            : "فعال‌سازی دموی پلاس";
-                                          plusBtn.classList.toggle("btn-ghost-negar", !plusOn);
-                                          plusBtn.classList.toggle("btn-danger-negar", plusOn);
-                                        }
+    this.feeds.explore.renderTrending(this.articles, "#trending2");
+    // چالش هفته + نویسنده ماه توی سایدبار — فقط وقتی نگار پلاس فعال باشه
+    if (this.community && this.community.isPlus) {
+      const cb = document.getElementById("challengeBox");
+      if (cb) {
+        cb.style.display = "";
+        cb.innerHTML =
+          this.community.challengeHtml() + this.community.authorOfMonthHtml();
       }
+    } else {
+      const cb = document.getElementById("challengeBox");
+      if (cb) {
+        cb.innerHTML = "";
+        cb.style.display = "none";
+      }
+    }
+    // آپدیت متن دکمه دموی پلاس — فعال/غیرفعال
+    const plusBtn = document.querySelector('[data-action="toggle-plus"]');
+    if (plusBtn) {
+      const plusOn = this.community && this.community.isPlus;
+      plusBtn.textContent = plusOn
+        ? "غیرفعال‌سازی دموی پلاس"
+        : "فعال‌سازی دموی پلاس";
+      plusBtn.classList.toggle("btn-ghost-negar", !plusOn);
+      plusBtn.classList.toggle("btn-danger-negar", plusOn);
+    }
+  }
 
   _openArticle(id) {
     const a = this.articles.find((x) => x.id === id);
@@ -1641,10 +1447,11 @@ class NegarApp {
     const next = idx < this.articles.length - 1 ? this.articles[idx + 1] : null;
     const navHtml = `
       <div class="post-nav">
-        ${prev ? `<a class="post-nav-link" data-action="open-article" data-id="${prev.id}"><span class="post-nav-dir">→ مقاله قبلی</span><span class="post-nav-title">${esc(prev.title)}</span></a>` : '<span></span>'}
-        ${next ? `<a class="post-nav-link next" data-action="open-article" data-id="${next.id}"><span class="post-nav-dir">مقاله بعدی ←</span><span class="post-nav-title">${esc(next.title)}</span></a>` : '<span></span>'}
+        ${prev ? `<a class="post-nav-link" data-action="open-article" data-id="${prev.id}"><span class="post-nav-dir">→ مقاله قبلی</span><span class="post-nav-title">${esc(prev.title)}</span></a>` : "<span></span>"}
+        ${next ? `<a class="post-nav-link next" data-action="open-article" data-id="${next.id}"><span class="post-nav-dir">مقاله بعدی ←</span><span class="post-nav-title">${esc(next.title)}</span></a>` : "<span></span>"}
       </div>`;
-    document.getElementById("articlePage").innerHTML = a.toFull() + navHtml + relatedHtml;
+    document.getElementById("articlePage").innerHTML =
+      a.toFull() + navHtml + relatedHtml;
     this.comments.render(a.id, "commentList");
     const cc = document.getElementById("commentCount");
     if (cc) cc.textContent = this.comments.count(a.id);
@@ -1724,16 +1531,19 @@ class NegarApp {
   /** باز کردن صفحه چاپ/PDF مرورگر */
   _printArticle(id) {
     // مخفی کردن همه بخش‌ها به جز مقاله
-    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-    document.getElementById('article').classList.add('active');
-    document.getElementById('printablePage') && document.getElementById('printablePage').remove();
+    document
+      .querySelectorAll(".view")
+      .forEach((v) => v.classList.remove("active"));
+    document.getElementById("article").classList.add("active");
+    document.getElementById("printablePage") &&
+      document.getElementById("printablePage").remove();
     // اضافه کردن label نویسنده به صورت text-only
-    const a = this.articles.find(a => a.id == id);
+    const a = this.articles.find((a) => a.id == id);
     if (a) {
-      const authorLabel = document.createElement('div');
-      authorLabel.id = 'printablePage';
+      const authorLabel = document.createElement("div");
+      authorLabel.id = "printablePage";
       authorLabel.innerHTML = `<div class="a-actions"><button class="btn-negar btn-ghost-negar" onclick="this.remove();print()">بازگشت و چاپ</button></div>`;
-      document.getElementById('articlePage').prepend(authorLabel);
+      document.getElementById("articlePage").prepend(authorLabel);
     }
     window.print();
   }
@@ -1857,19 +1667,21 @@ class NegarApp {
 
   // ── صفحه نویسنده ──
   _openAuthor(authorName) {
-      const authorArticles = this.articles.filter((a) => a.author === authorName);
-      const hasCover = authorArticles[0] ? authorArticles[0].cover : null;
-      const totalReads = authorArticles.reduce((s, a) => s + a.reads, 0);
-      const totalLikes = authorArticles.reduce((s, a) => s + a.likes, 0);
-      const el = document.getElementById("authorPage");
-      // دکمه دنبال کردن — فقط وقتی لاگین باشی
-      const isFollowing = this.community ? this.community.isFollowing(authorName) : false;
-      const followBtn = this.auth.isLoggedIn()
-        ? `<button class="btn-negar ${isFollowing ? "btn-gold-negar" : "btn-ghost-negar"}" data-action="toggle-follow" data-id="${esc(authorName)}" style="margin-top:8px">
+    const authorArticles = this.articles.filter((a) => a.author === authorName);
+    const hasCover = authorArticles[0] ? authorArticles[0].cover : null;
+    const totalReads = authorArticles.reduce((s, a) => s + a.reads, 0);
+    const totalLikes = authorArticles.reduce((s, a) => s + a.likes, 0);
+    const el = document.getElementById("authorPage");
+    // دکمه دنبال کردن — فقط وقتی لاگین باشی
+    const isFollowing = this.community
+      ? this.community.isFollowing(authorName)
+      : false;
+    const followBtn = this.auth.isLoggedIn()
+      ? `<button class="btn-negar ${isFollowing ? "btn-gold-negar" : "btn-ghost-negar"}" data-action="toggle-follow" data-id="${esc(authorName)}" style="margin-top:8px">
             ${isFollowing ? '<i class="fa-solid fa-user-check"></i> دنبال می‌کنی' : '<i class="fa-regular fa-user"></i> دنبال کن'}
           </button>`
-        : "";
-      el.innerHTML = `
+      : "";
+    el.innerHTML = `
         <div class="author-head">
           <span class="author-avatar">${esc((authorName || "?").charAt(0))}</span>
           <div>
@@ -1884,8 +1696,8 @@ class NegarApp {
         </div>
         <div class="section-head"><h2>مقالات ${esc(authorName)}</h2></div>
         <div class="feed">${authorArticles.map((a) => a.toCard()).join("") || '<p style="text-align:center;color:var(--muted);padding:40px 0">مقاله‌ای یافت نشد</p>'}</div>`;
-      this._go("author");
-    }
+    this._go("author");
+  }
 
   _openDashboard() {
     if (!this.auth.isLoggedIn()) {
@@ -1893,14 +1705,15 @@ class NegarApp {
       return;
     }
     const user = this.auth.user;
-        // مقالات خودم — با شناسه عددی (ownerId) یا نام (نرمال‌شده) — هر دو
-        const norm = (s) => (s || "").toLowerCase().replace(/[يى]/g, "ی").replace(/ك/g, "ک");
-        const myArticles = this.articles.filter(
-          (a) =>
-            (a.ownerId && a.ownerId === user.id) ||
-            norm(a.author) === norm(user.display_name) ||
-            norm(a.author) === norm(user.username),
-        );
+    // مقالات خودم — با شناسه عددی (ownerId) یا نام (نرمال‌شده) — هر دو
+    const norm = (s) =>
+      (s || "").toLowerCase().replace(/[يى]/g, "ی").replace(/ك/g, "ک");
+    const myArticles = this.articles.filter(
+      (a) =>
+        (a.ownerId && a.ownerId === user.id) ||
+        norm(a.author) === norm(user.display_name) ||
+        norm(a.author) === norm(user.username),
+    );
     const totalReads = myArticles.reduce((s, a) => s + a.reads, 0);
     const totalLikes = myArticles.reduce((s, a) => s + a.likes, 0);
     const myComments = Object.values(this.comments.data)
@@ -2031,47 +1844,47 @@ class NegarApp {
   }
 
   /** ذخیره اطلاعات پروفایل */
-    _saveProfile() {
-      if (!this.auth.isLoggedIn()) return;
-      const name = document.getElementById("profName").value.trim();
-      const bio = document.getElementById("profBio").value.trim();
-      if (!name) {
-        this.toast.show("اسم نمی‌تونه خالی باشه");
-        return;
-      }
-      const oldName = this.auth.user.display_name;
-      this.auth.user.display_name = name;
-      this.auth.user.bio = bio;
-      // ذخیره آواتار جدید اگه انتخاب شده
-      if (this._newAvatar) {
-        this.auth.user.avatar = this._newAvatar;
-        this._newAvatar = null;
-      }
-      this.auth._save();
-      // ⬇️ آپدیت لیست کاربران (negar_users) — تا بعد از خروج و ورود دوباره،
-      // اسم، بایو و آواتار جدید حفظ بشن ⬇️
-      try {
-        const users = JSON.parse(localStorage.getItem("negar_users")) || [];
-        const idx = users.findIndex(
-          (u) => u.username === this.auth.user.username,
-        );
-        if (idx >= 0) {
-          users[idx] = { ...users[idx], ...this.auth.user };
-          localStorage.setItem("negar_users", JSON.stringify(users));
-        }
-      } catch (e) {
-        /* ignore */
-      }
-      if (oldName !== name) {
-        this.articles.forEach((a) => {
-          if (a.author === oldName) a.author = name;
-        });
-        this._persistArticles();
-      }
-      this.auth.renderArea();
-      this.toast.show("پروفایل ذخیره شد");
-      this._openDashboard();
+  _saveProfile() {
+    if (!this.auth.isLoggedIn()) return;
+    const name = document.getElementById("profName").value.trim();
+    const bio = document.getElementById("profBio").value.trim();
+    if (!name) {
+      this.toast.show("اسم نمی‌تونه خالی باشه");
+      return;
     }
+    const oldName = this.auth.user.display_name;
+    this.auth.user.display_name = name;
+    this.auth.user.bio = bio;
+    // ذخیره آواتار جدید اگه انتخاب شده
+    if (this._newAvatar) {
+      this.auth.user.avatar = this._newAvatar;
+      this._newAvatar = null;
+    }
+    this.auth._save();
+    // ⬇️ آپدیت لیست کاربران (negar_users) — تا بعد از خروج و ورود دوباره،
+    // اسم، بایو و آواتار جدید حفظ بشن ⬇️
+    try {
+      const users = JSON.parse(localStorage.getItem("negar_users")) || [];
+      const idx = users.findIndex(
+        (u) => u.username === this.auth.user.username,
+      );
+      if (idx >= 0) {
+        users[idx] = { ...users[idx], ...this.auth.user };
+        localStorage.setItem("negar_users", JSON.stringify(users));
+      }
+    } catch (e) {
+      /* ignore */
+    }
+    if (oldName !== name) {
+      this.articles.forEach((a) => {
+        if (a.author === oldName) a.author = name;
+      });
+      this._persistArticles();
+    }
+    this.auth.renderArea();
+    this.toast.show("پروفایل ذخیره شد");
+    this._openDashboard();
+  }
 
   /** باز و بسته کردن منوی حساب کاربری — وقتی بیرون کلیک بشه بسته می‌شه */
   _toggleAccountMenu(e) {
@@ -2178,25 +1991,25 @@ class NegarApp {
   }
 
   /** اعتبارسنجی عنوان و متن مقاله */
-    _validate(data) {
-      if (!data.title) {
-        this.toast.show("عنوان بنویس ");
-        return false;
-      }
-      if (data.body.length < 10) {
-        this.toast.show("متن کوتاهه");
-        return false;
-      }
-      // چک‌لیست نگارشی — هشدارهای مفید (اما جلوی انتشار رو نمی‌گیره)
-      if (this.community) {
-        const tips = this.community.checkWriting(data.title, data.body);
-        if (tips.length && !this._editorWarned) {
-          this._editorWarned = true;
-          this.toast.show("نکته: " + tips[0]);
-        }
-      }
-      return true;
+  _validate(data) {
+    if (!data.title) {
+      this.toast.show("عنوان بنویس ");
+      return false;
     }
+    if (data.body.length < 10) {
+      this.toast.show("متن کوتاهه");
+      return false;
+    }
+    // چک‌لیست نگارشی — هشدارهای مفید (اما جلوی انتشار رو نمی‌گیره)
+    if (this.community) {
+      const tips = this.community.checkWriting(data.title, data.body);
+      if (tips.length && !this._editorWarned) {
+        this._editorWarned = true;
+        this.toast.show("نکته: " + tips[0]);
+      }
+    }
+    return true;
+  }
 
   /** به‌روزرسانی مقاله موجود (حالت ویرایش) */
   _updateArticle(data, cover) {
@@ -2212,28 +2025,28 @@ class NegarApp {
   }
 
   /** ایجاد مقاله جدید */
-    _createArticle(data, cover) {
-      this.articles.unshift(
-              new Article({
-                id: this.nextId++,
-                ...data,
-                author: this.auth.user.display_name,
-                ownerId: this.auth.user.id,
-                reads: 0,
-                likes: 0,
-                cover,
-              }),
-            );
-      // ثبت رگه نویسندگی + تگ چالش (اگه ادیتور با چالش باز شده بود)
-      if (this.community) {
-        const streak = this.community.registerWrite();
-        this.community.markChallenge(this.articles[0]);
-        this.toast.show(`منتشر شد! رگه نویسندگیت: ${streak} روز 🔥`);
-      } else {
-        this.toast.show("منتشر شد!");
-      }
-      this._persistArticles();
+  _createArticle(data, cover) {
+    this.articles.unshift(
+      new Article({
+        id: this.nextId++,
+        ...data,
+        author: this.auth.user.display_name,
+        ownerId: this.auth.user.id,
+        reads: 0,
+        likes: 0,
+        cover,
+      }),
+    );
+    // ثبت رگه نویسندگی + تگ چالش (اگه ادیتور با چالش باز شده بود)
+    if (this.community) {
+      const streak = this.community.registerWrite();
+      this.community.markChallenge(this.articles[0]);
+      this.toast.show(`منتشر شد! رگه نویسندگیت: ${streak} روز 🔥`);
+    } else {
+      this.toast.show("منتشر شد!");
     }
+    this._persistArticles();
+  }
 
   /** پاک‌سازی فرم ادیتور و کاور بعد از انتشار */
   _resetEditor() {
@@ -2388,17 +2201,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // بستن منو با کلیک روی لینک‌ها
   if (drawer) {
-      drawer
-        .querySelectorAll('a[data-action], button[data-action="open-login"]')
-        .forEach((a) => {
-          a.addEventListener("click", closeDrawer);
-        });
-    }
+    drawer
+      .querySelectorAll('a[data-action], button[data-action="open-login"]')
+      .forEach((a) => {
+        a.addEventListener("click", closeDrawer);
+      });
+  }
 
-    // بستن منو وقتی صفحه به دسکتاپ بزرگ می‌شه
-    window.addEventListener("resize", () => {
-      if (window.innerWidth >= 992) closeDrawer();
-    });
+  // بستن منو وقتی صفحه به دسکتاپ بزرگ می‌شه
+  window.addEventListener("resize", () => {
+    if (window.innerWidth >= 992) closeDrawer();
+  });
 
   // سرچ موبایل ↔ سرچ اصلی
   const mobileSearch = document.getElementById("mobileSearchInput");
