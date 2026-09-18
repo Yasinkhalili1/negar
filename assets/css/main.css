@@ -4118,8 +4118,18 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
   display: grid;
   place-items: center;
   font-size: 5rem;
-  margin-bottom: 28px;
+  margin-bottom: 48px;
   box-shadow: 0 18px 50px rgba(33, 32, 44, 0.14);
+  overflow: hidden;
+  box-sizing: border-box;
+  border-bottom: 2px solid var(--line);
+}
+.article-page .a-cover img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
 }
 @media (min-width: 1200px) {
   .article-page .a-cover {
@@ -4127,11 +4137,18 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
     font-size: 6rem;
   }
 }
+.article-page {
+  /* Spacing after cover image */
+}
+.article-page .a-cover + * {
+  margin-top: 16px;
+}
 .article-page p {
   font-size: 1.12rem;
   line-height: 2.05;
   color: var(--ink-soft);
   margin-bottom: 20px;
+  margin-top: 8px !important;
 }
 @media (min-width: 1200px) {
   .article-page p {
@@ -4661,12 +4678,13 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
   border-color: #4fc3f7;
 }
 .related-card .related-cover {
-  height: 90px;
+  height: 140px;
   display: grid;
   place-items: center;
   font-size: 2.2rem;
   background: linear-gradient(135deg, var(--paper-2), var(--surface));
   border-bottom: 1px solid var(--line);
+  margin-bottom: 12px;
 }
 .related-card .related-cover img {
   width: 100%;
@@ -4674,7 +4692,7 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
   object-fit: cover;
 }
 .related-card .related-body {
-  padding: 12px 14px;
+  padding: 0 16px 16px;
 }
 .related-card .related-tag {
   font-size: 0.72rem;
@@ -5907,15 +5925,15 @@ html.reading-mode img {
   flex-direction: column;
   gap: 4px;
   padding: 14px 16px;
-  background: #ffffff;
-  border: 1px solid #bbdefb;
+  background: var(--surface);
+  border: 1px solid var(--line);
   border-radius: 12px;
   text-decoration: none;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 .post-nav .post-nav-link:hover {
-  border-color: #4fc3f7;
+  border-color: var(--gold);
   transform: translateY(-2px);
 }
 .post-nav .post-nav-link.next {
@@ -5924,11 +5942,11 @@ html.reading-mode img {
 }
 .post-nav .post-nav-link .post-nav-dir {
   font-size: 0.75rem;
-  color: #807c8c;
+  color: var(--muted);
 }
 .post-nav .post-nav-link .post-nav-title {
   font-weight: 700;
-  color: #21202c;
+  color: var(--ink);
   font-size: 0.95rem;
 }
 
