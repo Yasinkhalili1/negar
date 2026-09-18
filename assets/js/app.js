@@ -119,8 +119,9 @@ class Article {
     emoji = "",
     date = null,
     cover = null,
+    description = "",
   }) {
-    Object.assign(this, {
+  Object.assign(this, {
       id,
       tag,
       title,
@@ -131,7 +132,8 @@ class Article {
       emoji,
       date: date || new Date().toISOString(),
       cover,
-    });
+      description,
+  });
   }
   /** تبدیل تاریخ میلادی به شمسی فارسی */
   getDateLabel() {
@@ -216,12 +218,15 @@ class Article {
     const coverHtml = this.cover
       ? `<div class="cover"><img src="${this.cover}" alt="${esc(this.title)}" /></div>`
       : `<div class="cover"><span class="cover-tag">${esc(this.tag)}</span></div>`;
+    const descHtml = this.description
+      ? `<p class="excerpt">${esc(this.description)}</p>`
+      : `<p class="excerpt">${esc(this.excerpt())}</p>`;
     return `<article class="card-negar" data-action="open-article" data-id="${this.id}">
       ${coverHtml}
       <div class="body">
         <span class="tag ${tagClass}">${esc(this.tag)}</span>
         <h3>${esc(this.title)}</h3>
-        <p class="excerpt">${esc(this.excerpt())}</p>
+        ${descHtml}
         <div class="meta">
           <span class="author" data-action="open-author"><span class="a-ava">${esc(this.author[0])}</span>${esc(this.author)}</span>
           <span class="sep"></span><span><i class="fa-regular fa-eye"></i> ${this.reads.toLocaleString("fa-IR")}</span>
@@ -554,17 +559,20 @@ class EditorManager {
   open() {
     document.getElementById("artTitle").value = "";
     document.getElementById("artBody").value = "";
+    document.getElementById("artDescription").value = "";
   }
   load(article) {
     document.getElementById("artTitle").value = article.title;
     document.getElementById("artBody").value = article.body;
     document.getElementById("artTag").value = article.tag;
+    document.getElementById("artDescription").value = article.description || "";
   }
   getData() {
     return {
       title: document.getElementById("artTitle").value.trim(),
       body: document.getElementById("artBody").value.trim(),
       tag: document.getElementById("artTag").value,
+      description: document.getElementById("artDescription").value.trim(),
     };
   }
   insertAround(pre, post) {
@@ -2018,6 +2026,7 @@ class NegarApp {
       existing.title = data.title;
       existing.body = data.body;
       existing.tag = data.tag;
+      existing.description = data.description;
       if (cover) existing.cover = cover;
       this.toast.show("ویرایش ذخیره شد");
     }
