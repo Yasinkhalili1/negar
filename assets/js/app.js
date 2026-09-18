@@ -1232,6 +1232,10 @@ class NegarApp {
       case "insert-hr":
         this.editor.insertAtCursor("\n\n---\n\n");
         break;
+      case "close-publish-panel":
+        const pp = document.getElementById("publishPanel");
+        if (pp) pp.classList.remove("open");
+        break;
     }
   }
 
@@ -1988,6 +1992,9 @@ class NegarApp {
     if (!this._validate(data)) return;
     const cover = this._coverData || null;
 
+    // نمایش پنل اعتبارسنجی قبل از انتشار
+    if (!this._showPublishValidation(data, cover)) return;
+
     this._editingId
       ? this._updateArticle(data, cover)
       : this._createArticle(data, cover);
@@ -2017,6 +2024,45 @@ class NegarApp {
       }
     }
     return true;
+  }
+
+  /** نمایش پنل اعتبارسنجی قبل از انتشار */
+  _showPublishValidation(data, cover) {
+    const issues = [];
+    if (!cover) issues.push({ name: "آپلود تصویر کاور", ok: false });
+    else issues.push({ name: "آپلود تصویر کاور", ok: true });
+    if (!data.title) issues.push({ name: "عنوان مقاله", ok: false });
+    else issues.push({ name: "عنوان مقاله", ok: true });
+    if (!data.description) issues.push({ name: "توضیحات پست", ok: false });
+    else issues.push({ name: "توضیحات پست", ok: true });
+    if (!data.tag || data.tag === "عمومی") issues.push({ name: "افزودن دسته‌بندی", ok: false });
+    else issues.push({ name: "افزودن دسته‌بندی", ok: true });
+
+    const hasIssues = issues.some(i => !i.ok);
+    if (hasIssues) {
+      this.toast.show("لطفاً موارد مشکل‌دار را بررسی کنید");
+      this._showValidationPanel(issues);
+      return false;
+    }
+    return true;
+  }
+
+  _showValidationPanel(issues) {
+    let html = '<div class="publish-panel">';
+    html += '<h3>بررسی قبل از انتشار</h3>';
+    html += '<div class="publish-checks">';
+    issues.forEach(i => {
+      const icon = i.ok
+        ? '<i class="fa-solid fa-check" style="color:#00ff9d"></i>'
+        : '<i class="fa-solid fa-xmark" style="color:#ff4444"></i>';
+      html += '<div class="publish-check ' + (i.ok ? '' : 'publish-check-fail') + '">'
+        + icon + '<span>' + i.name + '</span></div>';
+    });
+    html += '</div>';
+    html += '<div class="publish-actions"><button class="btn-negar btn-ghost-negar" data-action="close-publish-panel">بازگشت</button></div>';
+    html += '</div>';
+    const panel = document.getElementById("publishPanel");
+    if (panel) { panel.innerHTML = html; panel.classList.add("open"); }
   }
 
   /** به‌روزرسانی مقاله موجود (حالت ویرایش) */
