@@ -237,30 +237,59 @@
     <!-- ===== Editor ===== -->
     <section id="editor" class="view">
       <div class="editor">
-        <input
-          class="title-input"
-          id="artTitle"
-          placeholder="عنوان داستانت را بنویس..."
-        />
-        <div class="editor-meta">
-          <select id="artTag">
-            <option value="عمومی">عمومی</option>
-            <option value="تکنولوژی">تکنولوژی</option>
-            <option value="ادبیات">ادبیات</option>
-            <option value="سبک زندگی">سبک زندگی</option>
-            <option value="کسب‌وکار">کسب‌وکار</option>
-            <option value="سلامت">سلامت</option>
-            <option value="هنر">هنر</option>
-          </select>
+        <!-- آپلود تصویر کاور -->
+        <div class="cover-upload" id="coverUploadArea">
+          <label class="cover-label">تصویر کاور</label>
+          <input type="file" id="coverInput" accept="image/*" hidden />
+          <div class="cover-zone" id="coverZone" data-action="upload-cover">
+            <div class="cover-zone-placeholder" id="coverPlaceholder">
+              <i class="fa-solid fa-image" style="font-size: 2rem; color: var(--muted)"></i>
+              <p class="color-gray-700 mt-2">شما هنوز تصویری آپلود نکرده‌اید.</p>
+              <a href="https://help.virgool.io/books/writing/page/insert-photo" target="_blank" class="cover-help-link">آموزش آپلود تصویر</a>
+            </div>
+            <div class="cover-preview" id="coverPreview" style="display: none;">
+              <img id="coverPreviewImg" alt="کاور" />
+              <button class="cover-remove-btn" data-action="remove-cover">حذف</button>
+            </div>
+          </div>
         </div>
-        <textarea
-          class="desc-input"
-          id="artDescription"
-          placeholder="توضیحات کوتاه مقاله (نمایش داده می‌شود در کارت‌ها)..."
-          rows="1"
-          maxlength="200"
-          style="margin-top: 8px; width: 100%; box-sizing: border-box;"
-        ></textarea>
+
+        <!-- عنوان -->
+        <section>
+          <div class="input-section-header">
+            <span>عنوان پست</span>
+            <span class="char-counter" id="titleCounter">0/120</span>
+          </div>
+          <div class="input-wrapper">
+            <input class="title-input" id="artTitle" placeholder="عنوان را اینجا وارد کنید" maxlength="120" type="text" autocomplete="off" />
+            <div class="char-progress" id="titleProgress"><div class="char-progress-bar" id="titleProgressBar"></div></div>
+          </div>
+        </section>
+
+        <!-- توضیحات -->
+        <section>
+          <div class="input-section-header">
+            <span>توضیحات پست</span>
+            <span class="char-counter" id="descCounter">0/140</span>
+          </div>
+          <div class="input-wrapper">
+            <textarea class="desc-input" id="artDescription" placeholder="توضیحات را اینجا وارد کنید" dir="auto" rows="3" maxlength="140"></textarea>
+            <div class="char-progress" id="descProgress"><div class="char-progress-bar" id="descProgressBar"></div></div>
+          </div>
+        </section>
+
+        <!-- تگ‌ها -->
+        <section>
+          <div class="input-section-header">
+            <span>تگ‌ها<span class="color-gray-700 fs-2"> (حداکثر ۵ تگ)</span></span>
+          </div>
+          <div class="input-wrapper">
+            <input class="tag-input" id="artTagInput" placeholder="افزودن تگ..." dir="auto" autocomplete="off" maxlength="50" type="text" />
+            <div class="tag-list" id="tagList"></div>
+          </div>
+        </section>
+
+        <!-- ابزار -->
         <div class="toolbar">
           <button title="تیتر" data-action="insert-h">H</button>
           <button title="نقل‌قول" data-action="insert-quote">❝</button>
@@ -273,28 +302,30 @@
             <span>پیش‌نمایش</span>
           </label>
         </div>
+
+        <!-- محتوا -->
         <div class="editor-area" id="editorArea">
-          <textarea
-            class="editor-content"
-            id="artBody"
-            placeholder="اینجا بنویس..."
-          ></textarea>
+          <textarea class="editor-content" id="artBody" placeholder="اینجا بنویس..."></textarea>
           <div class="editor-preview" id="editorPreview"></div>
         </div>
-        <div class="cover-upload">
-          <label class="cover-label" for="coverInput">تصویر کاور</label>
-          <input type="file" id="coverInput" accept="image/*" hidden />
-          <div class="cover-preview" id="coverPreview"></div>
+
+        <!-- آدرس سفارشی -->
+        <div class="slug-section">
+          <button class="btn-negar btn-ghost-negar" data-action="toggle-slug" style="width:100%;justify-content:center;font-size:0.85rem;padding:8px 14px;">
+            <i class="fa-solid fa-link"></i> شخصی‌سازی آدرس
+          </button>
+          <div class="slug-input-wrap" id="slugWrap" style="display:none;">
+            <div class="slug-url">https://virgool.io/@yasinkhalili1/</div>
+            <input class="slug-input" id="artSlug" placeholder="آدرس سفارشی پست" dir="auto" maxlength="240" type="text" />
+          </div>
         </div>
+
+        <!-- انتشار -->
         <div class="editor-foot">
           <span style="color: var(--muted); font-size: 0.9rem"></span>
           <div style="display: flex; gap: 10px">
-            <button class="btn-negar btn-ghost-negar" data-action="go-home">
-              انصراف
-            </button>
-            <button class="btn-negar btn-primary-negar" data-action="publish">
-              انتشار
-            </button>
+            <button class="btn-negar btn-ghost-negar" data-action="go-home">انصراف</button>
+            <button class="btn-negar btn-primary-negar" data-action="publish">انتشار</button>
           </div>
         </div>
       </div>

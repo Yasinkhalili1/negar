@@ -555,25 +555,87 @@ class FeedRenderer {
 class EditorManager {
   constructor(toast) {
     this.toast = toast;
+    this.tags = [];
   }
   open() {
     document.getElementById("artTitle").value = "";
     document.getElementById("artBody").value = "";
     document.getElementById("artDescription").value = "";
+    document.getElementById("artTagInput").value = "";
+    document.getElementById("artSlug").value = "";
+    this.tags = [];
+    this._updateTagList();
+    document.getElementById("coverPreview").style.display = "none";
+    document.getElementById("coverPlaceholder").style.display = "";
   }
   load(article) {
     document.getElementById("artTitle").value = article.title;
     document.getElementById("artBody").value = article.body;
-    document.getElementById("artTag").value = article.tag;
     document.getElementById("artDescription").value = article.description || "";
+    this.tags = article.tags || [];
+    if (article.slug) document.getElementById("artSlug").value = article.slug;
+    this._updateTagList();
+    this._updateCharCounters();
+    if (article.cover) {
+      document.getElementById("coverPreviewImg").src = article.cover;
+      document.getElementById("coverPreview").style.display = "";
+      document.getElementById("coverPlaceholder").style.display = "none";
+    }
   }
   getData() {
     return {
       title: document.getElementById("artTitle").value.trim(),
       body: document.getElementById("artBody").value.trim(),
-      tag: document.getElementById("artTag").value,
+      tag: document.tags && this.tags.length > 0 ? this.tags[0] : document.getElementById("artTagInput").value.trim(),
       description: document.getElementById("artDescription").value.trim(),
+      tags: this.tags,
+      slug: document.getElementById("artSlug").value.trim(),
     };
+  }
+  addTag(tag) {
+    tag = tag.trim();
+    if (!tag || this.tags.includes(tag)) return;
+    if (this.tags.length >= 5) {
+      this.toast.show("حداکثر ۵ تگ مجاز است");
+      return;
+    }
+    this.tags.push(tag);
+    this._updateTagList();
+  }
+  removeTag(index) {
+    this.tags.splice(index, 1);
+    this._updateTagList();
+  }
+  _updateTagList() {
+    const list = document.getElementById("tagList");
+    if (!list) return;
+    list.innerHTML = this.tags.map((t, i) =>
+      '<span class="tag-chip">' + t + ' <span class="tag-chip-remove" data-tag-remove="' + i + '">×</span></span>'
+    ).join("");
+  }
+  _updateCharCounters() {
+    const title = document.getElementById("artTitle").value.length;
+    const desc = document.getElementById("artDescription").value.length;
+    const tc = document.getElementById("titleCounter");
+    const dc = document.getElementById("descCounter");
+    const tp = document.getElementById("titleProgressBar");
+    const dp = document.getElementById("descProgressBar");
+    if (tc) tc.textContent = title + "/120";
+    if (dc) dc.textContent = desc + "/140";
+    if (tp) tp.style.width = Math.min((title / 120) * 100, 100) + "%";
+    if (dp) dp.style.width = Math.min((desc / 140) * 100, 100) + "%";
+    // Change color when near limit
+    if (tp) tp.style.background = title > 100 ? "#ff4444" : "var(--gold)";
+    if (dp) dp.style.background = desc > 110 ? "#ff4444" : "var(--gold)";
+  }
+  setCover(src) {
+    document.getElementById("coverPreviewImg").src = src;
+    document.getElementById("coverPreview").style.display = "";
+    document.getElementById("coverPlaceholder").style.display = "none";
+  }
+  removeCover() {
+    document.getElementById("coverPreview").style.display = "none";
+    document.getElementById("coverPlaceholder").style.display = "";
   }
   insertAround(pre, post) {
     const ta = document.getElementById("artBody");
@@ -596,6 +658,61 @@ class EditorManager {
     ta.focus();
     ta.selectionStart = ta.selectionEnd = s + txt.length;
     ta.dispatchEvent(new Event("input"));
+  }
+  _bindCharCounters() {
+    document.getElementById("artTitle").addEventListener("input", () => this._updateCharCounters());
+    document.getElementById("artDescription").addEventListener("input", () => this._updateCharCounters());
+  }
+  _bindTagInput() {
+    const inp = document.getElementById("artTagInput");
+    if (!inp) return;
+    inp.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === ",") {
+        e.preventDefault();
+        const tag = inp.value.replace(",", "").trim();
+        if (tag) this.addTag(tag);
+        inp.value = "";
+      }
+    });
+    // Delegate tag chip remove clicks
+    const list = document.getElementById("tagList");
+    if (list) {
+      list.addEventListener("click", (e) => {
+        const btn = e.target.closest("[data-tag-remove]");
+        if (btn) {
+          const idx = parseInt(btn.dataset.tagRemove);
+          this.removeTag(idx);
+        }
+      });
+    }
+  }
+  _bindCoverZone() {
+    const zone = document.getElementById("coverZone");
+    if (!zone) return;
+    zone.addEventListener("click", (e) => {
+      if (e.target.closest("[data-action='remove-cover']")) return;
+      document.getElementById("coverInput").click();
+    });
+    const inp = document.getElementById("coverInput");
+    if (!inp) return;
+    inp.addEventListener("change", () => {
+      const file = inp.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        this.setCover(ev.target.result);
+        this._coverData = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+  _bindSlugToggle() {
+    const btn = document.querySelector('[data-action="toggle-slug"]');
+    if (!btn) return;
+    btn.addEventListener("click", () => {
+      const wrap = document.getElementById("slugWrap");
+      if (wrap) wrap.style.display = wrap.style.display === "none" ? "" : "none";
+    });
   }
 }
 
@@ -1052,7 +1169,44 @@ class NegarApp {
     this._bindFilters();
     this._bindSearchSort();
     this._bindPreview();
-    this._bindCoverUpload();
+    // cover handled by _bindEditorInteractions
+    this._bindEditorInteractions();
+  }
+
+  /** تعامل‌های ویرایشگر (کاراکتر کانتور، تگ، کاور، اسلگ) */
+  _bindEditorInteractions() {
+    if (!this.editor) return;
+    // کاراکتر کانتور
+    if (this.editor._bindCharCounters) this.editor._bindCharCounters();
+    // ورودی تگ
+    if (this.editor._bindTagInput) this.editor._bindTagInput();
+    // منطقه کاور
+    if (this.editor._bindCoverZone) this.editor._bindCoverZone();
+    // تگل اسلگ
+    if (this.editor._bindSlugToggle) this.editor._bindSlugToggle();
+    // دکمه حذف کاور
+    const removeBtn = document.querySelector('[data-action="remove-cover"]');
+    if (removeBtn) {
+      removeBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        this.editor.removeCover();
+        this._coverData = null;
+      });
+    }
+    // آپلود کاور
+    const coverInput = document.getElementById("coverInput");
+    if (coverInput) {
+      coverInput.addEventListener("change", () => {
+        const file = coverInput.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          this._coverData = ev.target.result;
+          this.editor.setCover(ev.target.result);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
   }
 
   /** کلیک‌های سراسری (delegation روی body) + ناوبری + اکشن‌ها */
