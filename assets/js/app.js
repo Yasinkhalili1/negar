@@ -478,7 +478,7 @@ class AuthManager {
                         <span class="user-chip">
                           ${this.community && this.community.isPlus ? '<span class="plus-badge" title="نگار پلاس">💎</span>' : ""}
                           <span class="avatar">${avatarHtml}</span>${esc(this.user.display_name)}
-                          <button class="icon-btn" style="width:28px;height:28px;border:none;flex-shrink:0" data-action="toggle-reading" title="حالت مطالعه شب"><i class="fa-solid fa-moon"></i></button>
+                          <button class="icon-btn" style="width:28px;height:28px;border:none;flex-shrink:0" data-action="toggle-reading" title="حالت مطالعه شب"><i class="${this.community && this.community.readingMode ? 'fa-solid fa-sun' : 'fa-solid fa-moon'}"></i></button>
                           <span class="account-menu-wrap">
                       <button class="icon-btn" style="width:28px;height:28px;border:none;flex-shrink:0" data-action="toggle-account-menu" title="حساب کاربری"><i class="fa-solid fa-gear"></i></button>
                       <div class="account-menu" id="accountMenu">
@@ -1328,6 +1328,9 @@ class NegarApp {
       case "publish":
         this._publish();
         break;
+      case "confirm-publish":
+        this._confirmPublish();
+        break;
       case "load-sample":
         this._loadSampleArticles();
         break;
@@ -1760,9 +1763,10 @@ class NegarApp {
     }
     const btn = document.querySelector('[data-action="toggle-theme"]');
     if (btn)
-      btn.innerHTML = isDark
-        ? '<i class="fa-solid fa-moon"></i>'
-        : '<i class="fa-regular fa-moon"></i>';
+      btn.innerHTML =
+        html.getAttribute("data-theme") === "dark"
+          ? '<i class="fa-solid fa-sun"></i>'
+          : '<i class="fa-solid fa-moon"></i>';
     this.toast.show(isDark ? "حالت روشن" : "حالت تاریک");
   }
 
@@ -2146,17 +2150,10 @@ class NegarApp {
     if (!this._validate(data)) return;
     const cover = this._coverData || null;
 
-    // نمایش پنل اعتبارسنجی قبل از انتشار
-    if (!this._showPublishValidation(data, cover)) return;
+    // نمایش پنل تأیید انتشار — متوقف می‌شه و منتظر تأیید می‌مونه
+    if (!this._showPublishPanel(data, cover)) return;
 
-    this._editingId
-      ? this._updateArticle(data, cover)
-      : this._createArticle(data, cover);
-
-    this._persistArticles();
-    this._resetEditor();
-    this._render();
-    this._go("home");
+    // ادامه publicación در _confirmPublish بعد از تأیید
   }
 
   /** اعتبارسنجی عنوان و متن مقاله */
@@ -2180,46 +2177,73 @@ class NegarApp {
     return true;
   }
 
-  /** نمایش پنل اعتبارسنجی قبل از انتشار */
-  _showPublishValidation(data, cover) {
-    const issues = [];
-    if (!cover) issues.push({ name: "آپلود تصویر کاور", ok: false });
-    else issues.push({ name: "آپلود تصویر کاور", ok: true });
-    if (!data.title) issues.push({ name: "عنوان مقاله", ok: false });
-    else issues.push({ name: "عنوان مقاله", ok: true });
-    if (!data.description) issues.push({ name: "توضیحات پست", ok: false });
-    else issues.push({ name: "توضیحات پست", ok: true });
-    if (!data.tag || data.tag === "عمومی") issues.push({ name: "افزودن دسته‌بندی", ok: false });
-    else issues.push({ name: "افزودن دسته‌بندی", ok: true });
+  /** نمایش پنل تأیید انتشار (مثل مودال ورود) */
+  _showPublishPanel(data, cover) {
+    const panel = document.getElementById("publishPanel");
+    if (!panel) return false;
 
-    const hasIssues = issues.some(i => !i.ok);
-    if (hasIssues) {
-      this.toast.show("لطفاً موارد مشکل‌دار را بررسی کنید");
-      this._showValidationPanel(issues);
-      return false;
+    // پر کردن اطلاعات در پنل
+    const coverEl = document.getElementById("pcCover");
+    const titleEl = document.getElementById("pcTitle");
+    const descEl = document.getElementById("pcDesc");
+    const tagsEl = document.getElementById("pcTags");
+    const slugEl = document.getElementById("pcSlug");
+
+    if (coverEl) {
+      if (cover) {
+        coverEl.innerHTML = '<img src="' + cover + '" style="max-height:60px;border-radius:4px" alt="cover" /> <span style="color:#00ff9d;font-size:0.85rem">✓ آپلود شده</span>';
+      } else {
+        coverEl.innerHTML = '<span style="color:#ff4444;font-size:0.85rem">✕ تصویری آپلود نشده</span>';
+      }
     }
+    if (titleEl) titleEl.textContent = data.title || "—";
+    if (descEl) descEl.textContent = data.description || "—";
+    if (tagsEl) tagsEl.textContent = (data.tags && data.tags.length > 0) ? data.tags.join(", ") : "—";
+    if (slugEl) slugEl.textContent = data.slug || "—";
+
+    // ذخیره داده برای تأیید
+    this._pendingPublishData = data;
+    this._pendingPublishCover = cover;
+
+    panel.classList.add("open");
     return true;
   }
 
-  _showValidationPanel(issues) {
-    let html = '<div class="publish-panel">';
-    html += '<h3>بررسی قبل از انتشار</h3>';
-    html += '<div class="publish-checks">';
-    issues.forEach(i => {
-      const icon = i.ok
-        ? '<i class="fa-solid fa-check" style="color:#00ff9d"></i>'
-        : '<i class="fa-solid fa-xmark" style="color:#ff4444"></i>';
-      html += '<div class="publish-check ' + (i.ok ? '' : 'publish-check-fail') + '">'
-        + icon + '<span>' + i.name + '</span></div>';
-    });
-    html += '</div>';
-    html += '<div class="publish-actions"><button class="btn-negar btn-ghost-negar" data-action="close-publish-panel">بازگشت</button></div>';
-    html += '</div>';
+  /** تأیید انتشار از پنل */
+  _confirmPublish() {
+    const data = this._pendingPublishData;
+    const cover = this._pendingPublishCover;
+    if (!data) return;
+
     const panel = document.getElementById("publishPanel");
-    if (panel) { panel.innerHTML = html; panel.classList.add("open"); }
+    if (panel) panel.classList.remove("open");
+
+    this._editingId
+      ? this._updateArticle(data, cover)
+      : this._createArticle(data, cover);
+
+    this._persistArticles();
+    this._resetEditor();
+    this._render();
+    this._go("home");
+    this.toast.show("منتشر شد!");
   }
 
-  /** به‌روزرسانی مقاله موجود (حالت ویرایش) */
+  /** باز و بسته کردن منوی حساب کاربری — وقتی بیرون کلیک بشه بسته می‌شه */
+  _toggleAccountMenu(e) {
+    const menu = document.getElementById("accountMenu");
+    if (!menu) return;
+    const wrap = menu.closest(".account-menu-wrap");
+    // اگه کلیک روی دکمه gear یا داخل منو بود → toggle
+    if (e && wrap === e.target.closest(".account-menu-wrap")) {
+      menu.classList.toggle("open");
+      return;
+    }
+    // اگه کلیک بیرون بود → ببند
+    menu.classList.remove("open");
+  }
+
+  /** نمایش صفحه پروفایل */
   _updateArticle(data, cover) {
     const existing = this.articles.find((x) => x.id === this._editingId);
     if (existing) {
