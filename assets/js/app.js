@@ -2197,13 +2197,18 @@ class NegarApp {
 
     // پر کردن کاور
     if (coverZone) {
+      // Clear old listeners by cloning
+      const newCoverInput = coverInput.cloneNode(true);
+      coverInput.parentNode.replaceChild(newCoverInput, coverInput);
+      const input = newCoverInput;
+      
       if (cover) {
         coverZone.innerHTML = '<img src="' + cover + '" style="max-height:80px;border-radius:4px" alt="cover" /><br><span style="color:#00ff9d;font-size:0.75rem">✓ آپلود شده</span>';
       } else {
         coverZone.innerHTML = '<p style="color:var(--muted);font-size:0.85rem">بدون تصویر</p><br><span style="color:#00ff9d;font-size:0.75rem">برای تغییر کلیک کن</span>';
-        coverZone.addEventListener("click", () => coverInput.click(), { once: true });
-        coverInput.addEventListener("change", () => {
-          const file = coverInput.files[0];
+        coverZone.addEventListener("click", () => input.click());
+        input.addEventListener("change", () => {
+          const file = input.files[0];
           if (!file) return;
           const reader = new FileReader();
           reader.onload = (ev) => {
@@ -2211,7 +2216,7 @@ class NegarApp {
             coverZone.innerHTML = '<img src="' + ev.target.result + '" style="max-height:80px;border-radius:4px" alt="cover" /><br><span style="color:#00ff9d;font-size:0.75rem">✓ آپلود شده</span>';
           };
           reader.readAsDataURL(file);
-        }, { once: true });
+        });
       }
     }
 
