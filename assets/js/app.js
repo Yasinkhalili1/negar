@@ -2177,33 +2177,48 @@ class NegarApp {
     return true;
   }
 
-  /** نمایش پنل تأیید انتشار (مثل مودال ورود) */
+  /** نمایش پنل ویرایش انتشار (مثل مودال ورود) */
   _showPublishPanel(data, cover) {
     const panel = document.getElementById("publishPanel");
     if (!panel) return false;
 
-    // پر کردن اطلاعات در پنل
-    const coverEl = document.getElementById("pcCover");
+    // پر کردن فیلدهای ویرایش‌پذیر
     const titleEl = document.getElementById("pcTitle");
     const descEl = document.getElementById("pcDesc");
     const tagsEl = document.getElementById("pcTags");
     const slugEl = document.getElementById("pcSlug");
+    const coverZone = document.getElementById("pcCoverZone");
+    const coverInput = document.getElementById("pcCoverInput");
 
-    if (coverEl) {
+    if (titleEl) titleEl.value = data.title || "";
+    if (descEl) descEl.value = data.description || "";
+    if (tagsEl) tagsEl.value = (data.tags && data.tags.length > 0) ? data.tags.join(", ") : "";
+    if (slugEl) slugEl.value = data.slug || "";
+
+    // پر کردن کاور
+    if (coverZone) {
       if (cover) {
-        coverEl.innerHTML = '<img src="' + cover + '" style="max-height:60px;border-radius:4px" alt="cover" /> <span style="color:#00ff9d;font-size:0.85rem">✓ آپلود شده</span>';
+        coverZone.innerHTML = '<img src="' + cover + '" style="max-height:80px;border-radius:4px" alt="cover" /><br><span style="color:#00ff9d;font-size:0.75rem">✓ آپلود شده</span>';
       } else {
-        coverEl.innerHTML = '<span style="color:#ff4444;font-size:0.85rem">✕ تصویری آپلود نشده</span>';
+        coverZone.innerHTML = '<p style="color:var(--muted);font-size:0.85rem">بدون تصویر</p><br><span style="color:#00ff9d;font-size:0.75rem">برای تغییر کلیک کن</span>';
+        coverZone.addEventListener("click", () => coverInput.click(), { once: true });
+        coverInput.addEventListener("change", () => {
+          const file = coverInput.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+            this._pendingPublishCover = ev.target.result;
+            coverZone.innerHTML = '<img src="' + ev.target.result + '" style="max-height:80px;border-radius:4px" alt="cover" /><br><span style="color:#00ff9d;font-size:0.75rem">✓ آپلود شده</span>';
+          };
+          reader.readAsDataURL(file);
+        }, { once: true });
       }
     }
-    if (titleEl) titleEl.textContent = data.title || "—";
-    if (descEl) descEl.textContent = data.description || "—";
-    if (tagsEl) tagsEl.textContent = (data.tags && data.tags.length > 0) ? data.tags.join(", ") : "—";
-    if (slugEl) slugEl.textContent = data.slug || "—";
 
-    // ذخیره داده برای تأیید
+    // ذخیره داده اصلی برای تأیید
     this._pendingPublishData = data;
     this._pendingPublishCover = cover;
+    this._pendingPublishOriginalCover = cover;
 
     panel.classList.add("open");
     return true;
@@ -2211,12 +2226,34 @@ class NegarApp {
 
   /** تأیید انتشار از پنل */
   _confirmPublish() {
-    const data = this._pendingPublishData;
-    const cover = this._pendingPublishCover;
-    if (!data) return;
-
     const panel = document.getElementById("publishPanel");
-    if (panel) panel.classList.remove("open");
+    if (!panel) return;
+    panel.classList.remove("open");
+
+    // خواندن داده‌های ویرایش‌شده از پنل
+    const titleEl = document.getElementById("pcTitle");
+    const descEl = document.getElementById("pcDesc");
+    const tagsEl = document.getElementById("pcTags");
+    const slugEl = document.getElementById("pcSlug");
+
+    const title = titleEl ? titleEl.value.trim() : "";
+    const description = descEl ? descEl.value.trim() : "";
+    const tagStr = tagsEl ? tagsEl.value.trim() : "";
+    const slug = slugEl ? slugEl.value.trim() : "";
+
+    // تبدیل تگ‌ها از رشته به آرایه
+    const tags = tagStr ? tagStr.split(",").map(t => t.trim()).filter(t => t) : [];
+
+    const data = {
+      title: this._pendingPublishData.title || title,
+      body: this._pendingPublishData.body || "",
+      tag: tags.length > 0 ? tags[0] : (this._pendingPublishData.tag || "عمومی"),
+      tags: tags.length > 0 ? tags : (this._pendingPublishData.tags || []),
+      description: description || this._pendingPublishData.description || "",
+      slug: slug || this._pendingPublishData.slug || "",
+    };
+
+    const cover = this._pendingPublishCover || this._pendingPublishOriginalCover || null;
 
     this._editingId
       ? this._updateArticle(data, cover)
