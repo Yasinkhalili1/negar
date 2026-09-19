@@ -707,6 +707,18 @@ class EditorManager {
     });
   }
   _bindSlugToggle() {
+    const slugInput = document.getElementById("artSlug");
+    const slugUrl = document.querySelector(".slug-url");
+    const updatePreview = () => {
+      if (!slugUrl) return;
+      const val = slugInput ? slugInput.value.trim() : "";
+      const username = (this.auth && this.auth.user && this.auth.user.display_name) ? this.auth.user.display_name : "yasinkhalili1";
+      slugUrl.textContent = "https://virgool.io/@" + username + "/" + (val ? val : "");
+    };
+    if (slugInput) {
+      slugInput.addEventListener("input", updatePreview);
+      updatePreview();
+    }
     const btn = document.querySelector('[data-action="toggle-slug"]');
     if (!btn) return;
     btn.addEventListener("click", () => {
