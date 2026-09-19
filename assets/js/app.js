@@ -1028,6 +1028,7 @@ class NegarApp {
     this.likes = new LikeManager();
     this.comments = new CommentStore();
     this.editor = new EditorManager(this.toast, this);
+    console.log("NEGAR_APP: initialized, editor.app=" + (this.editor.app ? "set" : "NULL"));
     this.notif = new NotificationManager();
     this.feeds = {
       home: new FeedRenderer("homeFeed"),
@@ -2171,6 +2172,7 @@ class NegarApp {
 
   /** نمایش پنل ویرایش انتشار (مثل مودال ورود) */
   _showPublishPanel(data, cover) {
+    console.log("PANEL: called, panel=" + (document.getElementById("publishPanel") ? "exists" : "NULL"));
     const panel = document.getElementById("publishPanel");
     if (!panel) return false;
 
