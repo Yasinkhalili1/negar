@@ -1204,6 +1204,7 @@ class NegarApp {
 
   /** کلیک‌های سراسری (delegation روی body) + ناوبری + اکشن‌ها */
   _bindGlobalClicks() {
+    console.log("GLOBAL_CLICK: bound to document.body");
     document.body.addEventListener("click", (e) => {
       if (this._handleTrendClick(e)) return;
       if (this._handleReplyClick(e)) return;
