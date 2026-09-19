@@ -1256,7 +1256,8 @@ class NegarApp {
     const action = btn.dataset.action;
     const id = parseInt(btn.dataset.id);
 
-    switch (action) {
+    console.log("ACTION: " + action);
+      switch (action) {
       case "go-home":
         this._go("home");
         break;
@@ -2133,6 +2134,7 @@ class NegarApp {
 
   /** انتشار مقاله — اعتبارسنجی، ذخیره، پاک‌سازی فرم */
   _publish() {
+    console.log("PUB: _publish called, loggedIn=" + this.auth.isLoggedIn() + ", editorData=" + (this.editor ? "ok" : "null"));
     if (!this.auth.isLoggedIn()) {
       this.toast.show("برای انتشار وارد شوید");
       return;
