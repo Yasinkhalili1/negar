@@ -18,11 +18,31 @@ const C_STORE = {
 
 /** چالش‌های هفتگی چرخشی */
 const CHALLENGES = [
-  { id: 1, title: "یک اتفاق کوچک", prompt: "درباره یه اتفاق کوچیک که زندگیت رو عوض کرد بنویس" },
-  { id: 2, title: "نامه به آینده", prompt: "نامه‌ای به خودت توی ۱۰ سال بعد بنویس" },
-  { id: 3, title: "جایی که دوست داری", prompt: "مکانی که آرزوی سفر بهش داری رو توصیف کن" },
-  { id: 4, title: "یک جمله شروع", prompt: "مقاله‌ات رو با جمله «هیچ‌کس نمی‌دونه...» شروع کن" },
-  { id: 5, title: "جادوی روزمره", prompt: "لحظه‌ای ساده که جادویی بود رو بنویس" },
+  {
+    id: 1,
+    title: "یک اتفاق کوچک",
+    prompt: "درباره یه اتفاق کوچیک که زندگیت رو عوض کرد بنویس",
+  },
+  {
+    id: 2,
+    title: "نامه به آینده",
+    prompt: "نامه‌ای به خودت توی ۱۰ سال بعد بنویس",
+  },
+  {
+    id: 3,
+    title: "جایی که دوست داری",
+    prompt: "مکانی که آرزوی سفر بهش داری رو توصیف کن",
+  },
+  {
+    id: 4,
+    title: "یک جمله شروع",
+    prompt: "مقاله‌ات رو با جمله «هیچ‌کس نمی‌دونه...» شروع کن",
+  },
+  {
+    id: 5,
+    title: "جادوی روزمره",
+    prompt: "لحظه‌ای ساده که جادویی بود رو بنویس",
+  },
 ];
 
 /** تعیین چالش هفته فعلی بر اساس شماره هفته سال */
@@ -51,7 +71,8 @@ class CommunityManager {
     try {
       const data = JSON.parse(localStorage.getItem(C_STORE.STREAK) || "{}");
       // شکل داده رو نرمال کن — اگه count عدد نیست یا last نامعتبره، صفر برگردون
-      const count = Number.isFinite(data.count) && data.count > 0 ? data.count : 0;
+      const count =
+        Number.isFinite(data.count) && data.count > 0 ? data.count : 0;
       const lastStr = typeof data.last === "string" ? data.last : null;
       // اگه تاریخ نامعتبر باشه، رگه رو ریست کن
       if (lastStr) {
@@ -63,14 +84,19 @@ class CommunityManager {
         if (diff > 1) return { count: 0, last: null };
       }
       return { count, last: lastStr };
-    } catch { return { count: 0, last: null }; }
+    } catch {
+      return { count: 0, last: null };
+    }
   }
   _saveStreak() {
     localStorage.setItem(C_STORE.STREAK, JSON.stringify(this.streak));
   }
   _loadFollows() {
-    try { return JSON.parse(localStorage.getItem(C_STORE.FOLLOWS) || "[]"); }
-    catch { return []; }
+    try {
+      return JSON.parse(localStorage.getItem(C_STORE.FOLLOWS) || "[]");
+    } catch {
+      return [];
+    }
   }
   _saveFollows() {
     localStorage.setItem(C_STORE.FOLLOWS, JSON.stringify(this.follows));
@@ -108,7 +134,10 @@ class CommunityManager {
   /** نمایش رگه توی داشبورد — به عنوان کارت اضافی */
   streakHtml() {
     // مقاوم در برابر داده خراب — همیشه عدد سالم نشون بده
-    const c = Number.isFinite(this.streak.count) && this.streak.count > 0 ? this.streak.count : 0;
+    const c =
+      Number.isFinite(this.streak.count) && this.streak.count > 0
+        ? this.streak.count
+        : 0;
     const flame = c >= 7 ? "" : c >= 3 ? "" : "";
     return `<div class="dash-card streak-card">
       <span class="dash-num">${flame} ${c}</span>
@@ -121,15 +150,19 @@ class CommunityManager {
   challengeHtml() {
     const ch = currentChallenge();
     const entered = this.app.articles.some(
-      (a) => a.challengeId === ch.id || (a.challengeTitle && a.challengeTitle === ch.title),
+      (a) =>
+        a.challengeId === ch.id ||
+        (a.challengeTitle && a.challengeTitle === ch.title),
     );
     return `<div class="challenge-card">
       <div class="challenge-badge">چالش هفته</div>
       <h4 class="challenge-title">${esc(ch.title)}</h4>
       <p class="challenge-prompt">${esc(ch.prompt)}</p>
-      ${entered
-        ? `<span class="challenge-done">✓ شرکت کردی</span>`
-        : `<button class="btn-negar btn-primary-negar" data-action="join-challenge" style="width:100%">شرکت در چالش</button>`}
+      ${
+        entered
+          ? `<span class="challenge-done">✓ شرکت کردی</span>`
+          : `<button class="btn-negar btn-primary-negar" data-action="join-challenge" style="width:100%">شرکت در چالش</button>`
+      }
     </div>`;
   }
 
@@ -181,7 +214,7 @@ class CommunityManager {
       map[a.author].count++;
     });
     const best = Object.entries(map).sort(
-      (x, y) => (y[1].reads + y[1].likes * 2) - (x[1].reads + x[1].likes * 2),
+      (x, y) => y[1].reads + y[1].likes * 2 - (x[1].reads + x[1].likes * 2),
     )[0];
     if (!best) return null;
     return { author: best[0], ...best[1] };
@@ -210,7 +243,9 @@ class CommunityManager {
     this.isPlus = !this.isPlus;
     this._savePlus();
     this.app.toast.show(
-      this.isPlus ? "نگار پلاس فعال شد — همه امکانات بازه! 💎" : "پلاس غیرفعال شد",
+      this.isPlus
+        ? "نگار پلاس فعال شد — همه امکانات بازه! 💎"
+        : "پلاس غیرفعال شد",
     );
     this.app._render();
   }
@@ -241,7 +276,10 @@ class CommunityManager {
   initProfileTheme() {
     const u = this.app.auth && this.app.auth.user;
     if (u && u.profileTheme) {
-      document.documentElement.setAttribute("data-profile-theme", u.profileTheme);
+      document.documentElement.setAttribute(
+        "data-profile-theme",
+        u.profileTheme,
+      );
     }
   }
 
@@ -250,7 +288,9 @@ class CommunityManager {
     this.readingMode = !this.readingMode;
     this._saveReading();
     document.documentElement.classList.toggle("reading-mode", this.readingMode);
-    this.app.toast.show(this.readingMode ? "حالت مطالعه شب فعال شد 🌙" : "حالت مطالعه غیرفعال شد");
+    this.app.toast.show(
+      this.readingMode ? "حالت مطالعه شب فعال شد 🌙" : "حالت مطالعه غیرفعال شد",
+    );
   }
   initReadingMode() {
     this.readingMode = localStorage.getItem(C_STORE.READING) === "1";
@@ -265,7 +305,8 @@ class CommunityManager {
     if (body.length < 100) tips.push("متن کوتاهه — حداقل ۱۰۰ حرف بنویس");
     const sentences = body.split(/[.!؟]\s/).filter((s) => s.length > 0);
     const long = sentences.filter((s) => s.length > 80);
-    if (long.length > 0) tips.push(`${long.length} جمله خیلی طولانی داره — بهتره بشکنه`);
+    if (long.length > 0)
+      tips.push(`${long.length} جمله خیلی طولانی داره — بهتره بشکنه`);
     const emojiCount = (body.match(/[\u{1F300}-\u{1FAFF}]/gu) || []).length;
     if (emojiCount > 5) tips.push("ایموجی زیادیه — حداکثر ۵ تا");
     return tips;
