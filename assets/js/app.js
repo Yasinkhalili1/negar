@@ -706,26 +706,6 @@ class EditorManager {
       reader.readAsDataURL(file);
     });
   }
-  _bindSlugToggle() {
-    const slugInput = document.getElementById("artSlug");
-    const slugUrl = document.querySelector(".slug-url");
-    const updatePreview = () => {
-      if (!slugUrl) return;
-      const val = slugInput ? slugInput.value.trim() : "";
-      const username = (this.auth && this.auth.user && this.auth.user.display_name) ? this.auth.user.display_name : "yasinkhalili1";
-      slugUrl.textContent = "https://virgool.io/@" + username + "/" + (val ? val : "");
-    };
-    if (slugInput) {
-      slugInput.addEventListener("input", updatePreview);
-      updatePreview();
-    }
-    const btn = document.querySelector('[data-action="toggle-slug"]');
-    if (!btn) return;
-    btn.addEventListener("click", () => {
-      const wrap = document.getElementById("slugWrap");
-      if (wrap) wrap.style.display = wrap.style.display === "none" ? "" : "none";
-    });
-  }
 }
 
 // ===== Markdown Parser =====
@@ -1195,7 +1175,6 @@ class NegarApp {
     // منطقه کاور
     if (this.editor._bindCoverZone) this.editor._bindCoverZone();
     // تگل اسلگ
-    if (this.editor._bindSlugToggle) this.editor._bindSlugToggle();
     // دکمه حذف کاور
     const removeBtn = document.querySelector('[data-action="remove-cover"]');
     if (removeBtn) {
