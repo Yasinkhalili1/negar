@@ -553,8 +553,9 @@ class FeedRenderer {
 
 // ===== Editor Manager =====
 class EditorManager {
-  constructor(toast) {
+  constructor(toast, app) {
     this.toast = toast;
+    this.app = app;
     this.tags = [];
   }
   open() {
@@ -1026,7 +1027,7 @@ class NegarApp {
     this.saves = new SaveManager();
     this.likes = new LikeManager();
     this.comments = new CommentStore();
-    this.editor = new EditorManager(this.toast);
+    this.editor = new EditorManager(this.toast, this);
     this.notif = new NotificationManager();
     this.feeds = {
       home: new FeedRenderer("homeFeed"),
@@ -1256,8 +1257,7 @@ class NegarApp {
     const action = btn.dataset.action;
     const id = parseInt(btn.dataset.id);
 
-    console.log("ACTION: " + action);
-      switch (action) {
+          switch (action) {
       case "go-home":
         this._go("home");
         break;
@@ -1318,7 +1318,7 @@ class NegarApp {
         this.auth.logout();
         break;
       case "publish":
-        this._publish();
+        this.app._publish();
         break;
       case "confirm-publish":
         this._confirmPublish();
@@ -2134,8 +2134,7 @@ class NegarApp {
 
   /** انتشار مقاله — اعتبارسنجی، ذخیره، پاک‌سازی فرم */
   _publish() {
-    console.log("PUB: _publish called, loggedIn=" + this.auth.isLoggedIn() + ", editorData=" + (this.editor ? "ok" : "null"));
-    if (!this.auth.isLoggedIn()) {
+        if (!this.auth.isLoggedIn()) {
       this.toast.show("برای انتشار وارد شوید");
       return;
     }
