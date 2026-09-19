@@ -2133,6 +2133,7 @@ class NegarApp {
 
   /** انتشار مقاله — اعتبارسنجی، ذخیره، پاک‌سازی فرم */
   _publish() {
+    console.log("DEBUG: _publish called, loggedIn=" + this.auth.isLoggedIn());
     if (!this.auth.isLoggedIn()) {
       this.toast.show("برای انتشار وارد شوید");
       return;
@@ -2142,6 +2143,7 @@ class NegarApp {
     const cover = this._coverData || null;
 
     // نمایش پنل تأیید انتشار — متوقف می‌شه و منتظر تأیید می‌مونه
+    console.log("DEBUG: _showPublishPanel called");
     if (!this._showPublishPanel(data, cover)) return;
 
     // ادامه publicación در _confirmPublish بعد از تأیید
