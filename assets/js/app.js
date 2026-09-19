@@ -2156,17 +2156,17 @@ class NegarApp {
     // ادامه publicación در _confirmPublish بعد از تأیید
   }
 
-  /** اعتبارسنجی عنوان و متن مقاله */
+  /** اعتبارسنجی — فقط هشدار میده، panel خودش بررسی میکنه */
   _validate(data) {
     if (!data.title) {
       this.toast.show("عنوان بنویس ");
-      return false;
+      // return false; // panel باز میشه و کاربر اینجا تغییر میده
     }
     if (data.body.length < 10) {
       this.toast.show("متن کوتاهه");
-      return false;
+      // return false;
     }
-    // چک‌لیست نگارشی — هشدارهای مفید (اما جلوی انتشار رو نمی‌گیره)
+    // چک‌لیست نگارشی — هشدارهای مفید
     if (this.community) {
       const tips = this.community.checkWriting(data.title, data.body);
       if (tips.length && !this._editorWarned) {
