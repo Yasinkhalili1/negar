@@ -2230,26 +2230,27 @@ class NegarApp {
     if (!panel) return;
     panel.classList.remove("open");
 
-    // خواندن داده‌های ویرایش‌شده از پنل
     const titleEl = document.getElementById("pcTitle");
-    const descEl = document.getElementById("pcDesc");
-    const tagsEl = document.getElementById("pcTags");
-    const slugEl = document.getElementById("pcSlug");
-
     const title = titleEl ? titleEl.value.trim() : "";
-    const description = descEl ? descEl.value.trim() : "";
-    const tagStr = tagsEl ? tagsEl.value.trim() : "";
-    const slug = slugEl ? slugEl.value.trim() : "";
+    if (!title) { this.toast.show("عنوان مقاله را وارد کنید"); return; }
+    const descEl = document.getElementById("pcDesc");
+    const desc = descEl ? descEl.value.trim() : "";
+    if (!desc) { this.toast.show("توضیحات پست را وارد کنید"); return; }
 
-    // تبدیل تگ‌ها از رشته به آرایه
+    const tagsEl = document.getElementById("pcTags");
+    const tagStr = tagsEl ? tagsEl.value.trim() : "";
     const tags = tagStr ? tagStr.split(",").map(t => t.trim()).filter(t => t) : [];
+    if (tags.length === 0) { this.toast.show("حداقل یک تگ اضافه کنید"); return; }
+
+    const slugEl = document.getElementById("pcSlug");
+    const slug = slugEl ? slugEl.value.trim() : "";
 
     const data = {
       title: this._pendingPublishData.title || title,
       body: this._pendingPublishData.body || "",
       tag: tags.length > 0 ? tags[0] : (this._pendingPublishData.tag || "عمومی"),
       tags: tags.length > 0 ? tags : (this._pendingPublishData.tags || []),
-      description: description || this._pendingPublishData.description || "",
+      description: desc || this._pendingPublishData.description || "",
       slug: slug || this._pendingPublishData.slug || "",
     };
 
