@@ -2175,11 +2175,12 @@ class NegarApp {
             const coverInput = document.getElementById("pcCoverInput");
             const coverContent = coverZone ? coverZone.querySelector(".cover-zone-content") || coverZone : null;
             if (coverZone && coverInput && coverContent) {
-              // Remove any previous preview
-              const prevPreview = coverContent.querySelector(".cover-preview-img");
-              if (prevPreview) prevPreview.remove();
+                          // Clear all preview elements after the label
+                          const label = coverContent.querySelector("label");
+                          while (coverContent.firstChild) coverContent.removeChild(coverContent.firstChild);
+                          if (label) coverContent.appendChild(label);
 
-              if (cover) {
+                          if (cover) {
                 const img = document.createElement("img");
                                 img.src = cover;
                                 img.style.cssText = "max-width:100%;max-height:80px;object-fit:cover;border-radius:4px;display:block";
@@ -2208,8 +2209,10 @@ class NegarApp {
                 const reader = new FileReader();
                 reader.onload = (ev) => {
                   this._pendingPublishCover = ev.target.result;
-                  const pImg = coverContent.querySelector(".cover-preview-img");
-                  if (pImg) pImg.remove();
+                  // Remove all preview elements (img + spans) after the label
+                  const label = coverContent.querySelector("label");
+                  while (coverContent.firstChild) coverContent.removeChild(coverContent.firstChild);
+                  if (label) coverContent.appendChild(label);
                   const img = document.createElement("img");
                   img.src = ev.target.result;
                   img.style.cssText = "max-width:100%;max-height:80px;object-fit:cover;border-radius:4px;display:block";
