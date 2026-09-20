@@ -675,12 +675,18 @@ class EditorManager {
   }
   _bindCoverZone() {
     const zone = document.getElementById("coverZone");
-    if (!zone) { console.log('_bindCoverZone: zone null'); return; }
-    console.log('_bindCoverZone: zone found');
+    console.log('_bindCoverZone: zone =', !!zone);
+    if (!zone) return;
+    console.log('_bindCoverZone: zone found, adding listener');
     zone.addEventListener("click", (e) => {
-      if (e.target.closest("[data-action='remove-cover']")) return;
-      console.log('_bindCoverZone: click triggered, calling coverInput.click()');
-      document.getElementById("coverInput").click();
+      console.log('_bindCoverZone: zone clicked, target =', e.target.tagName, e.target.className);
+      if (e.target.closest("[data-action='remove-cover']")) { console.log('  -> remove-cover'); return; }
+      const inp = document.getElementById("coverInput");
+      console.log('  -> coverInput =', !!inp, inp ? inp.getAttribute('hidden') : 'N/A');
+      if (inp) {
+        const result = inp.click();
+        console.log('  -> click() returned:', result);
+      }
     });
     const inp = document.getElementById("coverInput");
     if (!inp) return;
