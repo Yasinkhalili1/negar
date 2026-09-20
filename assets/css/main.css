@@ -4512,7 +4512,7 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 130px;
+  height: 160px;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
@@ -4530,7 +4530,7 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
 .cover-zone-small img {
   width: 100%;
   max-width: 100%;
-  max-height: 90px;
+  max-height: 80px;
   height: auto;
   object-fit: cover;
   border-radius: 6px;
@@ -4695,7 +4695,7 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
   display: flex;
   align-items: flex-end;
   gap: 4px;
-  height: 130px;
+  height: 160px;
   width: 100%;
   justify-content: center;
 }
@@ -5923,7 +5923,7 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
     font-size: 1.45rem;
   }
   .card-negar .cover {
-    min-height: 150px;
+    min-height: 160px;
   }
 }
 .btn-negar {

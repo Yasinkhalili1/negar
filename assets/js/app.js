@@ -2183,13 +2183,13 @@ class NegarApp {
                           if (cover) {
                 const img = document.createElement("img");
                                 img.src = cover;
-                                img.style.cssText = "width:100%;max-width:100%;max-height:90px;object-fit:cover;border-radius:4px;display:block";
+                                img.style.cssText = "width:100%;max-width:100%;max-height:80px;object-fit:cover;border-radius:4px;display:block";
                                 img.alt = "cover";
                 const note = document.createElement("span");
-                note.style.cssText = "color:#00ff9d;font-size:0.75rem;display:block;margin-top:4px;position:relative;z-index:1";
+                note.style.cssText = "color:#00ff9d;font-size:0.75rem;display:block;margin-top:4px;position:relative;z-index:1;background:rgba(0,0,0,0.5);padding:2px 6px;border-radius:3px;width:fit-content";
                 note.textContent = "✓ آپلود شده";
                 const changeLink = document.createElement("span");
-                changeLink.style.cssText = "color:#4fc3f7;font-size:0.75rem;cursor:pointer;text-decoration:underline;display:block;position:relative;z-index:1";
+                changeLink.style.cssText = "color:#4fc3f7;font-size:0.75rem;cursor:pointer;text-decoration:underline;display:block;position:relative;z-index:1;background:rgba(0,0,0,0.5);padding:2px 6px;border-radius:3px;width:fit-content";
                 changeLink.textContent = "تغییر تصویر";
                 changeLink.addEventListener("click", () => coverInput.click());
                 coverContent.appendChild(img);
@@ -2197,7 +2197,7 @@ class NegarApp {
                 coverContent.appendChild(changeLink);
               } else {
                 const msg = document.createElement("span");
-                msg.style.cssText = "color:#4fc3f7;font-size:0.75rem;cursor:pointer;text-decoration:underline;display:block;position:relative;z-index:1";
+                msg.style.cssText = "color:#4fc3f7;font-size:0.75rem;cursor:pointer;text-decoration:underline;display:block;position:relative;z-index:1;background:rgba(0,0,0,0.5);padding:2px 6px;border-radius:3px;width:fit-content";
                 msg.textContent = "آپلود کاور جدید";
                 msg.addEventListener("click", () => coverInput.click());
                 coverContent.appendChild(msg);
@@ -2215,14 +2215,14 @@ class NegarApp {
                   if (label) coverContent.appendChild(label);
                   const img = document.createElement("img");
                   img.src = ev.target.result;
-                  img.style.cssText = "width:100%;max-width:100%;max-height:90px;object-fit:cover;border-radius:4px;display:block";
+                  img.style.cssText = "width:100%;max-width:100%;max-height:80px;object-fit:cover;border-radius:4px;display:block";
                   img.alt = "cover";
                   img.className = "cover-preview-img";
                   const note = document.createElement("span");
-                  note.style.cssText = "color:#00ff9d;font-size:0.75rem;display:block;margin-top:4px;position:relative;z-index:1";
+                  note.style.cssText = "color:#00ff9d;font-size:0.75rem;display:block;margin-top:4px;position:relative;z-index:1;background:rgba(0,0,0,0.5);padding:2px 6px;border-radius:3px;width:fit-content";
                   note.textContent = "✓ آپلود شده";
                   const changeLink = document.createElement("span");
-                  changeLink.style.cssText = "color:#4fc3f7;font-size:0.75rem;cursor:pointer;text-decoration:underline;display:block;position:relative;z-index:1";
+                  changeLink.style.cssText = "color:#4fc3f7;font-size:0.75rem;cursor:pointer;text-decoration:underline;display:block;position:relative;z-index:1;background:rgba(0,0,0,0.5);padding:2px 6px;border-radius:3px;width:fit-content";
                   changeLink.textContent = "تغییر تصویر";
                   changeLink.addEventListener("click", () => coverInput.click());
                   coverContent.appendChild(img);
