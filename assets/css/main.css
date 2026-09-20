@@ -6235,6 +6235,15 @@ html.reading-mode img {
   background: var(--paper);
 }
 
+.cover-zone-label {
+  display: block;
+  cursor: pointer;
+}
+
+.cover-zone-content {
+  display: contents;
+}
+
 .wrap {
   max-width: 1180px;
   margin: 0 auto;

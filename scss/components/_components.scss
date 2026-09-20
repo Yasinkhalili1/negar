@@ -2554,3 +2554,14 @@ html.reading-mode {
   &:last-child { border-bottom: none; }
   &:hover { background: var(--paper); }
 }
+
+
+// ═══════ Cover Zone Label/Content ═══
+.cover-zone-label {
+  display: block;
+  cursor: pointer;
+}
+
+.cover-zone-content {
+  display: contents;
+}
