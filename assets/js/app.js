@@ -676,10 +676,6 @@ class EditorManager {
   _bindCoverZone() {
     const zone = document.getElementById("coverZone");
     if (!zone) return;
-    zone.addEventListener("click", (e) => {
-      if (e.target.closest("[data-action='remove-cover']")) return;
-      document.getElementById("coverInput").click();
-    });
     const inp = document.getElementById("coverInput");
     if (!inp) return;
     inp.addEventListener("change", () => {
@@ -2153,7 +2149,6 @@ class NegarApp {
         coverZone.innerHTML = '<p style="color:var(--muted);font-size:0.85rem">بدون تصویر</p><br><span style="color:#00ff9d;font-size:0.75rem">برای تغییر کلیک کن</span>';
       }
       // Always set up upload handlers (overwrite old ones)
-      coverZone.onclick = () => coverInput.click();
       coverInput.onchange = () => {
         const file = coverInput.files[0];
         if (!file) return;

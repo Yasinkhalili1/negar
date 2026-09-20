@@ -239,7 +239,7 @@
       <div class="editor">
         <!-- آپلود تصویر کاور -->
         <div class="cover-upload" id="coverUploadArea">
-          <input type="file" id="coverInput" accept="image/*" style="position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;z-index:10;cursor:pointer;" />
+          <label for="coverInput" class="cover-zone"><input type="file" id="coverInput" accept="image/*" hidden /></label>
           <div class="cover-zone" id="coverZone" data-action="upload-cover">
             <div class="cover-zone-placeholder" id="coverPlaceholder">
               <i class="fa-solid fa-image" style="font-size: 2rem; color: var(--muted)"></i>
@@ -442,10 +442,10 @@
             <div class="publish-edit-item">
               <div class="publish-edit-label">تصویر کاور</div>
               <div class="publish-edit-value" id="pcCover">
-                <div class="cover-zone-small" id="pcCoverZone">
+                <label for="pcCoverInput" class="cover-zone-small" id="pcCoverZone">
                   <p>در حال بارگذاری...</p>
                 </div>
-                <input type="file" id="pcCoverInput" accept="image/*" style="position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;z-index:10;cursor:pointer;" />
+                <input type="file" id="pcCoverInput" accept="image/*" hidden /></label>
               </div>
             </div>
             <div class="publish-edit-item">
