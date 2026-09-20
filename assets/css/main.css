@@ -3846,6 +3846,9 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
   cursor: pointer;
   transition: border-color 0.3s;
   min-height: 300px;
+  max-width: 520px;
+  margin: 0 auto;
+  display: block;
 }
 .cover-zone:hover {
   border-color: var(--gold);
