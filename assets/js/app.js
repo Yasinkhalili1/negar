@@ -562,6 +562,8 @@ class EditorManager {
     document.getElementById("artBody").value = "";
     this.tags = [];
     this._updateTagList();
+    document.getElementById("coverPreview").style.display = "none";
+    document.getElementById("coverPlaceholder").style.display = "";
   }
   load(article) {
     document.getElementById("artTitle").value = article.title;
@@ -569,6 +571,11 @@ class EditorManager {
     this.tags = article.tags || [];
     this._updateTagList();
     this._updateCharCounters();
+    if (article.cover) {
+      document.getElementById("coverPreviewImg").src = article.cover;
+      document.getElementById("coverPreview").style.display = "";
+      document.getElementById("coverPlaceholder").style.display = "none";
+    }
   }
   getData() {
     const safe = (id) => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
@@ -609,6 +616,15 @@ class EditorManager {
     if (tc) tc.textContent = title + "/120";
     if (tp) tp.style.width = Math.min((title / 120) * 100, 100) + "%";
     if (tp) tp.style.background = title > 100 ? "#ff4444" : "var(--gold)";
+  }
+  setCover(src) {
+    document.getElementById("coverPreviewImg").src = src;
+    document.getElementById("coverPreview").style.display = "";
+    document.getElementById("coverPlaceholder").style.display = "none";
+  }
+  removeCover() {
+    document.getElementById("coverPreview").style.display = "none";
+    document.getElementById("coverPlaceholder").style.display = "";
   }
   insertAround(pre, post) {
     const ta = document.getElementById("artBody");
@@ -658,8 +674,27 @@ class EditorManager {
       });
     }
   }
+  _bindCoverZone() {
+    const zone = document.getElementById("coverZone");
+    if (!zone) return;
+    zone.addEventListener("click", (e) => {
+      if (e.target.closest("[data-action='remove-cover']")) return;
+      document.getElementById("coverInput").click();
+    });
+    const inp = document.getElementById("coverInput");
+    if (!inp) return;
+    inp.addEventListener("change", () => {
+      const file = inp.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        this.setCover(ev.target.result);
+        this._coverData = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
 }
-
 
 // ===== Markdown Parser =====
 function mdToHtml(src) {
@@ -1124,7 +1159,32 @@ class NegarApp {
     if (this.editor._bindCharCounters) this.editor._bindCharCounters();
     // ورودی تگ
     if (this.editor._bindTagInput) this.editor._bindTagInput();
+    // منطقه کاور
+    if (this.editor._bindCoverZone) this.editor._bindCoverZone();
     // تگل اسلگ
+    // دکمه حذف کاور
+    const removeBtn = document.querySelector('[data-action="remove-cover"]');
+    if (removeBtn) {
+      removeBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        this.editor.removeCover();
+        this._coverData = null;
+      });
+    }
+    // آپلود کاور
+    const coverInput = document.getElementById("coverInput");
+    if (coverInput) {
+      coverInput.addEventListener("change", () => {
+        const file = coverInput.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          this._coverData = ev.target.result;
+          this.editor.setCover(ev.target.result);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
   }
 
   /** کلیک‌های سراسری (delegation روی body) + ناوبری + اکشن‌ها */
@@ -1366,6 +1426,26 @@ class NegarApp {
   }
 
   /** پیش‌نمایش زنده مارک‌داون */
+
+  /** آپلود کاور مقاله */
+  _bindCoverUpload() {
+    const coverInput = document.getElementById("coverInput");
+    const coverPreview = document.getElementById("coverPreview");
+    this._coverData = null;
+    if (!coverInput || !coverPreview) return;
+    coverInput.addEventListener("change", () => {
+      const file = coverInput.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this._coverData = e.target.result;
+        coverPreview.innerHTML =
+          '<img src="' + e.target.result + '" alt="cover" />';
+        coverPreview.classList.add("show");
+      };
+      reader.readAsDataURL(file);
+    });
+  }
 
   _go(view, silent) {
     document
@@ -2207,9 +2287,14 @@ class NegarApp {
     this._persistArticles();
   }
 
-  /** پاک‌سازی فرم ادیتور بعد از انتشار */
+  /** پاک‌سازی فرم ادیتور و کاور بعد از انتشار */
   _resetEditor() {
     this._coverData = null;
+    const cv = document.getElementById("coverPreview");
+    if (cv) {
+      cv.classList.remove("show");
+      cv.innerHTML = "";
+    }
     this.editor.open();
   }
 }
