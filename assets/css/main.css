@@ -4511,6 +4511,7 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
   align-items: center;
   justify-content: center;
   min-height: 80px;
+  max-width: 100%;
   border: 2px dashed var(--line);
   border-radius: 12px;
   cursor: pointer;
