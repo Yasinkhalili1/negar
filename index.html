@@ -239,8 +239,7 @@
       <div class="editor">
         <!-- آپلود تصویر کاور -->
         <div class="cover-upload" id="coverUploadArea">
-          <label for="coverInput" class="cover-zone">
-          <input type="file" id="coverInput" accept="image/*" hidden />
+          <label for="coverInput" class="cover-zone"><input type="file" id="coverInput" accept="image/*" hidden /></label>
           <div class="cover-zone" id="coverZone" data-action="upload-cover">
             <div class="cover-zone-placeholder" id="coverPlaceholder">
               <i class="fa-solid fa-image" style="font-size: 2rem; color: var(--muted)"></i>
@@ -251,8 +250,7 @@
               <img id="coverPreviewImg" alt="کاور" />
               <button class="cover-remove-btn" data-action="remove-cover">حذف</button>
             </div>
-          </label>
-        </div>
+          </div>
         </div>
 
         <!-- عنوان -->
@@ -444,11 +442,15 @@
             <div class="publish-edit-item">
               <div class="publish-edit-label">تصویر کاور</div>
               <div class="publish-edit-value" id="pcCover">
-                <label for="pcCoverInput" class="cover-zone-small" id="pcCoverZone">
-                  <input type="file" id="pcCoverInput" accept="image/*" hidden />
-                  <p>در حال بارگذاری...</p>
-                </label>
-              </div>
+                              <div class="cover-zone-small" id="pcCoverZone">
+                                                <div class="cover-zone-content">
+                                                  <label for="pcCoverInput" class="cover-zone-label">
+                                                    <input type="file" id="pcCoverInput" accept="image/*" hidden />
+                                                    <p>در حال بارگذاری...</p>
+                                                  </label>
+                                                </div>
+                                              </div>
+                            </div>
             </div>
             <div class="publish-edit-item">
               <div class="publish-edit-label">عنوان</div>

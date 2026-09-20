@@ -676,6 +676,10 @@ class EditorManager {
   _bindCoverZone() {
     const zone = document.getElementById("coverZone");
     if (!zone) return;
+    zone.addEventListener("click", () => {
+      if (event.target.closest("[data-action='remove-cover']")) return;
+      document.getElementById("coverInput").click();
+    });
     const inp = document.getElementById("coverInput");
     if (!inp) return;
     inp.addEventListener("change", () => {
@@ -2141,15 +2145,16 @@ class NegarApp {
 
     // پر کردن کاور
     const coverZone = document.getElementById("pcCoverZone");
-    const coverInput = document.getElementById("pcCoverInput");
-    if (coverZone && coverInput) {
-      if (cover) {
-        coverZone.innerHTML = '<img src="' + cover + '" style="max-height:80px;border-radius:4px" alt="cover" /><br><span style="color:#00ff9d;font-size:0.75rem">✓ آپلود شده</span>';
-      } else {
-        coverZone.innerHTML = '<p style="color:var(--muted);font-size:0.85rem">بدون تصویر</p><br><span style="color:#00ff9d;font-size:0.75rem">برای تغییر کلیک کن</span>';
-      }
-      // Always set up upload handlers (overwrite old ones)
-      coverInput.onchange = () => {
+        const coverInput = document.getElementById("pcCoverInput");
+        const coverContent = coverZone ? coverZone.querySelector(".cover-zone-content") || coverZone : null;
+        if (coverZone && coverInput && coverContent) {
+          if (cover) {
+            coverContent.innerHTML = '<img src="' + cover + '" style="max-height:80px;border-radius:4px" alt="cover" /><br><span style="color:#00ff9d;font-size:0.75rem">✓ آپلود شده</span>';
+          } else {
+            coverContent.innerHTML = '<p style="color:var(--muted);font-size:0.85rem">بدون تصویر</p><br><span style="color:#00ff9d;font-size:0.75rem">برای تغییر کلیک کن</span>';
+          }
+          // Always set up upload handlers (overwrite old ones)
+          coverInput.onchange = () => {
         const file = coverInput.files[0];
         if (!file) return;
         const reader = new FileReader();
