@@ -2183,7 +2183,7 @@ class NegarApp {
                           if (cover) {
                 const img = document.createElement("img");
                                 img.src = cover;
-                                img.style.cssText = "width:100%;max-width:100%;max-height:80px;object-fit:cover;border-radius:4px;display:block";
+                                img.style.cssText = "width:100%;max-width:100%;max-height:110px;object-fit:cover;border-radius:4px;display:block";
                                 img.alt = "cover";
                 const note = document.createElement("span");
                 note.style.cssText = "color:#00ff9d;font-size:0.75rem;display:block;margin-top:4px";
@@ -2215,7 +2215,7 @@ class NegarApp {
                   if (label) coverContent.appendChild(label);
                   const img = document.createElement("img");
                   img.src = ev.target.result;
-                  img.style.cssText = "width:100%;max-width:100%;max-height:80px;object-fit:cover;border-radius:4px;display:block";
+                  img.style.cssText = "width:100%;max-width:100%;max-height:110px;object-fit:cover;border-radius:4px;display:block";
                   img.alt = "cover";
                   img.className = "cover-preview-img";
                   const note = document.createElement("span");

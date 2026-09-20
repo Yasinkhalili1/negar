@@ -4512,16 +4512,16 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100px;
+  min-height: 120px;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
-  overflow: hidden;
   border: 2px dashed var(--line);
   border-radius: 12px;
   cursor: pointer;
   transition: border-color 0.2s;
   gap: 4px;
+  flex-shrink: 0;
 }
 .cover-zone-small:hover {
   border-color: var(--accent);
@@ -4529,6 +4529,7 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
 .cover-zone-small img {
   width: 100%;
   max-width: 100%;
+  max-height: 110px;
   height: auto;
   object-fit: cover;
   border-radius: 6px;
