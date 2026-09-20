@@ -2175,23 +2175,26 @@ class NegarApp {
         const coverInput = document.getElementById("pcCoverInput");
         const coverContent = coverZone ? coverZone.querySelector(".cover-zone-content") || coverZone : null;
         if (coverZone && coverInput && coverContent) {
-          if (cover) {
-            coverContent.innerHTML = '<img src="' + cover + '" style="max-height:80px;border-radius:4px" alt="cover" /><br><span style="color:#00ff9d;font-size:0.75rem">✓ آپلود شده</span>';
-          } else {
-            coverContent.innerHTML = '<p style="color:var(--muted);font-size:0.85rem">بدون تصویر</p><br><span style="color:#00ff9d;font-size:0.75rem">برای تغییر کلیک کن</span>';
-          }
-          // Always set up upload handlers (overwrite old ones)
-          coverInput.onchange = () => {
-                  const file = coverInput.files[0];
-                  if (!file) return;
-                  const reader = new FileReader();
-                  reader.onload = (ev) => {
-                    this._pendingPublishCover = ev.target.result;
-                    coverContent.innerHTML = '<img src="' + ev.target.result + '" style="max-height:80px;border-radius:4px" alt="cover" /><br><span style="color:#00ff9d;font-size:0.75rem">✓ آپلود شده</span>';
+                  const showCover = (url) => {
+                    coverContent.innerHTML = '<img src="' + url + '" style="max-height:80px;border-radius:4px" alt="cover" /><br><span style="color:#00ff9d;font-size:0.75rem">✓ آپلود شده · <span style="cursor:pointer;text-decoration:underline" onclick="document.getElementById(\'pcCoverInput\').click()">تغییر</span></span>';
                   };
-                  reader.readAsDataURL(file);
-                };
-    }
+                  if (cover) {
+                    showCover(cover);
+                  } else {
+                    coverContent.innerHTML = '<p style="color:var(--muted);font-size:0.85rem">بدون تصویر</p><br><span style="color:#00ff9d;font-size:0.75rem;cursor:pointer;text-decoration:underline" onclick="document.getElementById(\'pcCoverInput\').click()">آپلود کاور</span>';
+                  }
+                  // Always set up upload handlers (overwrite old ones)
+                  coverInput.onchange = () => {
+                    const file = coverInput.files[0];
+                    if (!file) return;
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                      this._pendingPublishCover = ev.target.result;
+                      showCover(ev.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                  };
+                }
 
     // ذخیره داده اصلی برای تأیید
     this._pendingPublishData = data;
