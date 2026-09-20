@@ -1161,7 +1161,6 @@ class NegarApp {
     this._bindGlobalClicks();
     this._bindFilters();
     this._bindSearchSort();
-    this._bindPreview();
     // cover handled by _bindEditorInteractions
     this._bindEditorInteractions();
   }
@@ -1440,21 +1439,6 @@ class NegarApp {
   }
 
   /** پیش‌نمایش زنده مارک‌داون */
-  _bindPreview() {
-    const previewToggle = document.getElementById("previewToggle");
-    const editorPreview = document.getElementById("editorPreview");
-    const artBody = document.getElementById("artBody");
-    if (!previewToggle || !editorPreview || !artBody) return;
-    artBody.addEventListener("input", () => {
-      if (previewToggle.checked)
-        editorPreview.innerHTML = mdToHtml(artBody.value);
-    });
-    previewToggle.addEventListener("change", () => {
-      editorPreview.classList.toggle("open", previewToggle.checked);
-      if (previewToggle.checked)
-        editorPreview.innerHTML = mdToHtml(artBody.value);
-    });
-  }
 
   /** آپلود کاور مقاله */
   _bindCoverUpload() {
