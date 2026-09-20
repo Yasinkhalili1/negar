@@ -1173,7 +1173,7 @@ class NegarApp {
 
   /** باز/بسته کردن کشوی دسته‌بندی */
   _bindCategoryDropdown() {
-    const trigger = document.getElementById("catTrigger");
+    const trigger = document.getElementById("categoryInput");
     const wrap = document.getElementById("categoryDropdownWrap");
     const dropdown = document.getElementById("categoryDropdown");
     if (!trigger || !wrap || !dropdown) return;
@@ -2182,15 +2182,15 @@ class NegarApp {
           }
           // Always set up upload handlers (overwrite old ones)
           coverInput.onchange = () => {
-        const file = coverInput.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = (ev) => {
-          this._pendingPublishCover = ev.target.result;
-          coverZone.innerHTML = '<img src="' + ev.target.result + '" style="max-height:80px;border-radius:4px" alt="cover" /><br><span style="color:#00ff9d;font-size:0.75rem">✓ آپلود شده</span>';
-        };
-        reader.readAsDataURL(file);
-      };
+                  const file = coverInput.files[0];
+                  if (!file) return;
+                  const reader = new FileReader();
+                  reader.onload = (ev) => {
+                    this._pendingPublishCover = ev.target.result;
+                    coverContent.innerHTML = '<img src="' + ev.target.result + '" style="max-height:80px;border-radius:4px" alt="cover" /><br><span style="color:#00ff9d;font-size:0.75rem">✓ آپلود شده</span>';
+                  };
+                  reader.readAsDataURL(file);
+                };
     }
 
     // ذخیره داده اصلی برای تأیید
