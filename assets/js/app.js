@@ -560,9 +560,6 @@ class EditorManager {
   open() {
     document.getElementById("artTitle").value = "";
     document.getElementById("artBody").value = "";
-    document.getElementById("artDescription").value = "";
-    document.getElementById("artTagInput").value = "";
-    document.getElementById("artSlug").value = "";
     this.tags = [];
     this._updateTagList();
     document.getElementById("coverPreview").style.display = "none";
@@ -571,9 +568,7 @@ class EditorManager {
   load(article) {
     document.getElementById("artTitle").value = article.title;
     document.getElementById("artBody").value = article.body;
-    document.getElementById("artDescription").value = article.description || "";
     this.tags = article.tags || [];
-    if (article.slug) document.getElementById("artSlug").value = article.slug;
     this._updateTagList();
     this._updateCharCounters();
     if (article.cover) {
@@ -587,10 +582,10 @@ class EditorManager {
     return {
       title: safe('artTitle'),
       body: safe('artBody'),
-      tag: safe('artTagInput'),
-      description: safe('artDescription'),
-      tags: this.tags,
-      slug: safe('pcSlug'),  // slug from publish panel now
+      tag: '',  // now entered in publish modal
+      description: '',  // now entered in publish modal
+      tags: [],  // now entered in publish modal
+      slug: safe('pcSlug'),  // from publish panel
     };
   }
   addTag(tag) {
@@ -616,18 +611,11 @@ class EditorManager {
   }
   _updateCharCounters() {
     const title = document.getElementById("artTitle").value.length;
-    const desc = document.getElementById("artDescription").value.length;
     const tc = document.getElementById("titleCounter");
-    const dc = document.getElementById("descCounter");
     const tp = document.getElementById("titleProgressBar");
-    const dp = document.getElementById("descProgressBar");
     if (tc) tc.textContent = title + "/120";
-    if (dc) dc.textContent = desc + "/140";
     if (tp) tp.style.width = Math.min((title / 120) * 100, 100) + "%";
-    if (dp) dp.style.width = Math.min((desc / 140) * 100, 100) + "%";
-    // Change color when near limit
     if (tp) tp.style.background = title > 100 ? "#ff4444" : "var(--gold)";
-    if (dp) dp.style.background = desc > 110 ? "#ff4444" : "var(--gold)";
   }
   setCover(src) {
     document.getElementById("coverPreviewImg").src = src;
@@ -662,7 +650,6 @@ class EditorManager {
   }
   _bindCharCounters() {
     document.getElementById("artTitle").addEventListener("input", () => this._updateCharCounters());
-    document.getElementById("artDescription").addEventListener("input", () => this._updateCharCounters());
   }
   _bindTagInput() {
     const inp = document.getElementById("artTagInput");
