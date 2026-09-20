@@ -1674,7 +1674,8 @@ class NegarApp {
         ? '<i class="fa-solid fa-bookmark"></i> ذخیره شده'
         : '<i class="fa-regular fa-bookmark"></i> ذخیره';
     }
-    this._render(); // رفرش کتابخانه
+    this._render();
+    this._renderLib(); // رفرش کتابخانه
   }
 
   /** باز کردن صفحه چاپ/PDF مرورگر */
