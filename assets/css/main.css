@@ -3841,7 +3841,7 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
   position: relative;
   border: 2px dashed var(--line);
   border-radius: 12px;
-  padding: 20px;
+  padding: 32px;
   text-align: center;
   cursor: pointer;
   transition: border-color 0.3s;
