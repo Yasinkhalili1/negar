@@ -1006,7 +1006,11 @@ class NotificationManager {
   }
 }
 
+// ═══════ Categories ═══════
+const CATEGORIES = ['تکنولوژی', 'ادبیات', 'سبک زندگی', 'کسب‌وکار', 'سلامت', 'هنر'];
+
 class NegarApp {
+
   constructor() {
     this.toast = new Toast("#toast");
     this.auth = new AuthManager(this.toast);
@@ -1145,6 +1149,7 @@ class NegarApp {
   /** اتصال همه رویدادها (ورود، ناوبری، کارت‌ها، ادیتور، تم) */
   _bindEvents() {
     this._bindGlobalClicks();
+    this._bindCategoryDropdown();
     this._bindFilters();
     this._bindSearchSort();
     // cover handled by _bindEditorInteractions
@@ -2202,15 +2207,14 @@ class NegarApp {
     const tagsEl = document.getElementById("pcTags");
     const tagStr = tagsEl ? tagsEl.value.trim() : "";
     const tags = tagStr ? tagStr.split(",").map(t => t.trim()).filter(t => t) : [];
-    if (tags.length === 0) { this.toast.show("حداقل یک تگ اضافه کنید"); return; }
+    if ((tags.length === 0) && !this._selectedCategory) { this.toast.show("حداقل یک تگ اضافه کنید"); return; }
 
     const data = {
       title: this._pendingPublishData.title || title,
       body: this._pendingPublishData.body || "",
-      tag: tags.length > 0 ? tags[0] : (this._pendingPublishData.tag || "عمومی"),
-      tags: tags.length > 0 ? tags : (this._pendingPublishData.tags || []),
+      tag: this._selectedCategory || (tags.length > 0 ? tags[0] : (this._pendingPublishData.tag || "عمومی")),
+      tags: (tags.length > 0 ? tags : []).concat(this._selectedCategory ? [this._selectedCategory] : []).concat(this._pendingPublishData.tags || []).filter((v, i, a) => a.indexOf(v) === i),
       description: desc || this._pendingPublishData.description || "",
-      slug: this._pendingPublishData.slug || "",
     };
 
     const cover = this._pendingPublishCover || this._pendingPublishOriginalCover || null;

@@ -459,11 +459,24 @@
             <div class="publish-edit-item">
               <div class="publish-edit-label">تگ‌ها <span class="color-gray-700 fs-2">(حداکثر ۵)</span></div>
               <input class="publish-edit-input" id="pcTags" type="text" placeholder="تگ جدا شده با ویرگول" maxlength="200" />
+            <div class="publish-edit-item">
+              <div class="publish-edit-label">دسته‌بندی</div>
+              <div class="category-dropdown-wrap" id="categoryDropdownWrap">
+                <input class="publish-edit-input" id="categoryInput" type="text" placeholder="روی اینجا بزنید یا تگ وارد کنید" readonly autocomplete="off" />
+                <div class="category-dropdown" id="categoryDropdown">
+                  <div class="cat-item" data-cat="تکنولوژی">تکنولوژی</div>
+                  <div class="cat-item" data-cat="ادبیات">ادبیات</div>
+                  <div class="cat-item" data-cat="سبک زندگی">سبک زندگی</div>
+                  <div class="cat-item" data-cat="کسب‌وکار">کسب‌وکار</div>
+                  <div class="cat-item" data-cat="سلامت">سلامت</div>
+                  <div class="cat-item" data-cat="هنر">هنر</div>
+                </div>
+              </div>
+            </div>
             </div>
           </div>
           <div class="publish-actions" style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;">
             <button class="btn-negar btn-ghost-negar" data-action="close-publish-panel">بازگشت</button>
-            <button class="btn-negar btn-primary-negar" data-action="confirm-publish">تأیید انتشار</button>
           </div>
         </div>
       </div>
