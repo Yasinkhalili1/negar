@@ -585,7 +585,6 @@ class EditorManager {
       tag: '',  // now entered in publish modal
       description: '',  // now entered in publish modal
       tags: [],  // now entered in publish modal
-      slug: safe('pcSlug'),  // from publish panel
     };
   }
   addTag(tag) {
@@ -2149,14 +2148,9 @@ class NegarApp {
     const titleEl = document.getElementById("pcTitle");
     const descEl = document.getElementById("pcDesc");
     const tagsEl = document.getElementById("pcTags");
-    const slugEl = document.getElementById("pcSlug");
-    const coverZone = document.getElementById("pcCoverZone");
-    const coverInput = document.getElementById("pcCoverInput");
 
     if (titleEl) titleEl.value = data.title || "";
     if (descEl) descEl.value = data.description || "";
-    if (tagsEl) tagsEl.value = (data.tags && data.tags.length > 0) ? data.tags.join(", ") : "";
-    if (slugEl) slugEl.value = data.slug || "";
 
     // پر کردن کاور
     if (coverZone) {
@@ -2210,16 +2204,13 @@ class NegarApp {
     const tags = tagStr ? tagStr.split(",").map(t => t.trim()).filter(t => t) : [];
     if (tags.length === 0) { this.toast.show("حداقل یک تگ اضافه کنید"); return; }
 
-    const slugEl = document.getElementById("pcSlug");
-    const slug = slugEl ? slugEl.value.trim() : "";
-
     const data = {
       title: this._pendingPublishData.title || title,
       body: this._pendingPublishData.body || "",
       tag: tags.length > 0 ? tags[0] : (this._pendingPublishData.tag || "عمومی"),
       tags: tags.length > 0 ? tags : (this._pendingPublishData.tags || []),
       description: desc || this._pendingPublishData.description || "",
-      slug: slug || this._pendingPublishData.slug || "",
+      slug: this._pendingPublishData.slug || "",
     };
 
     const cover = this._pendingPublishCover || this._pendingPublishOriginalCover || null;
