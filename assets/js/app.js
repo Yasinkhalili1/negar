@@ -583,13 +583,14 @@ class EditorManager {
     }
   }
   getData() {
+    const safe = (id) => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
     return {
-      title: document.getElementById("artTitle").value.trim(),
-      body: document.getElementById("artBody").value.trim(),
-      tag: document.tags && this.tags.length > 0 ? this.tags[0] : document.getElementById("artTagInput").value.trim(),
-      description: document.getElementById("artDescription").value.trim(),
+      title: safe('artTitle'),
+      body: safe('artBody'),
+      tag: safe('artTagInput'),
+      description: safe('artDescription'),
       tags: this.tags,
-      slug: document.getElementById("artSlug").value.trim(),
+      slug: safe('pcSlug'),  // slug from publish panel now
     };
   }
   addTag(tag) {
