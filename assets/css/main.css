@@ -4892,16 +4892,17 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
 }
 .related-card .related-cover {
   height: 140px;
-  display: grid;
-  place-items: center;
+  position: relative;
+  overflow: hidden;
   font-size: 2.2rem;
   background: linear-gradient(135deg, var(--paper-2), var(--surface));
   border-bottom: 1px solid var(--line);
   margin-bottom: 12px;
 }
 .related-card .related-cover img {
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
   object-fit: cover;
 }
 .related-card .related-body {
