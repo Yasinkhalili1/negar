@@ -553,9 +553,8 @@ class FeedRenderer {
 
 // ===== Editor Manager =====
 class EditorManager {
-  constructor(toast, app) {
+  constructor(toast) {
     this.toast = toast;
-    this.app = app;
     this.tags = [];
   }
   open() {
@@ -1027,7 +1026,7 @@ class NegarApp {
     this.saves = new SaveManager();
     this.likes = new LikeManager();
     this.comments = new CommentStore();
-    this.editor = new EditorManager(this.toast, this);
+    this.editor = new EditorManager(this.toast);
     this.notif = new NotificationManager();
     this.feeds = {
       home: new FeedRenderer("homeFeed"),
@@ -1318,7 +1317,7 @@ class NegarApp {
         this.auth.logout();
         break;
       case "publish":
-        this.app._publish();
+        this._publish();
         break;
       case "confirm-publish":
         this._confirmPublish();
