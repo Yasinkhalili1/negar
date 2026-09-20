@@ -2172,29 +2172,63 @@ class NegarApp {
 
     // پر کردن کاور
     const coverZone = document.getElementById("pcCoverZone");
-        const coverInput = document.getElementById("pcCoverInput");
-        const coverContent = coverZone ? coverZone.querySelector(".cover-zone-label") || coverZone : null;
-        if (coverZone && coverInput && coverContent) {
-                  const showCover = (url) => {
-                    coverContent.innerHTML = '<img src="' + url + '" style="max-height:80px;border-radius:4px" alt="cover" /><br><span style="color:#00ff9d;font-size:0.75rem">✓ آپلود شده · <span style="cursor:pointer;text-decoration:underline" onclick="document.getElementById(\'pcCoverInput\').click()">تغییر</span></span>';
-                  };
-                  if (cover) {
-                    showCover(cover);
-                  } else {
-                    coverContent.innerHTML = '<p style="color:var(--muted);font-size:0.85rem">بدون تصویر</p><br><span style="color:#00ff9d;font-size:0.75rem;cursor:pointer;text-decoration:underline" onclick="document.getElementById(\'pcCoverInput\').click()">آپلود کاور</span>';
-                  }
-                  // Always set up upload handlers (overwrite old ones)
-                  coverInput.onchange = () => {
-                    const file = coverInput.files[0];
-                    if (!file) return;
-                    const reader = new FileReader();
-                    reader.onload = (ev) => {
-                      this._pendingPublishCover = ev.target.result;
-                      showCover(ev.target.result);
-                    };
-                    reader.readAsDataURL(file);
-                  };
-                }
+            const coverInput = document.getElementById("pcCoverInput");
+            const coverContent = coverZone ? coverZone.querySelector(".cover-zone-content") || coverZone : null;
+            if (coverZone && coverInput && coverContent) {
+              // Remove any previous preview
+              const prevPreview = coverContent.querySelector(".cover-preview-img");
+              if (prevPreview) prevPreview.remove();
+
+              if (cover) {
+                const img = document.createElement("img");
+                img.src = cover;
+                img.style.cssText = "max-height:80px;border-radius:4px";
+                img.alt = "cover";
+                const note = document.createElement("span");
+                note.style.cssText = "color:#00ff9d;font-size:0.75rem;display:block;margin-top:4px";
+                note.textContent = "✓ آپلود شده";
+                const changeLink = document.createElement("span");
+                changeLink.style.cssText = "color:#4fc3f7;font-size:0.75rem;cursor:pointer;text-decoration:underline;display:block";
+                changeLink.textContent = "تغییر تصویر";
+                changeLink.addEventListener("click", () => coverInput.click());
+                coverContent.appendChild(img);
+                coverContent.appendChild(note);
+                coverContent.appendChild(changeLink);
+              } else {
+                const msg = document.createElement("span");
+                msg.style.cssText = "color:#4fc3f7;font-size:0.75rem;cursor:pointer;text-decoration:underline;display:block";
+                msg.textContent = "آپلود کاور جدید";
+                msg.addEventListener("click", () => coverInput.click());
+                coverContent.appendChild(msg);
+              }
+
+              coverInput.onchange = () => {
+                const file = coverInput.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                  this._pendingPublishCover = ev.target.result;
+                  const pImg = coverContent.querySelector(".cover-preview-img");
+                  if (pImg) pImg.remove();
+                  const img = document.createElement("img");
+                  img.src = ev.target.result;
+                  img.style.cssText = "max-height:80px;border-radius:4px";
+                  img.alt = "cover";
+                  img.className = "cover-preview-img";
+                  const note = document.createElement("span");
+                  note.style.cssText = "color:#00ff9d;font-size:0.75rem;display:block;margin-top:4px";
+                  note.textContent = "✓ آپلود شده";
+                  const changeLink = document.createElement("span");
+                  changeLink.style.cssText = "color:#4fc3f7;font-size:0.75rem;cursor:pointer;text-decoration:underline;display:block";
+                  changeLink.textContent = "تغییر تصویر";
+                  changeLink.addEventListener("click", () => coverInput.click());
+                  coverContent.appendChild(img);
+                  coverContent.appendChild(note);
+                  coverContent.appendChild(changeLink);
+                };
+                reader.readAsDataURL(file);
+              };
+            }
 
     // ذخیره داده اصلی برای تأیید
     this._pendingPublishData = data;
