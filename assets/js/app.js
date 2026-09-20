@@ -1171,6 +1171,34 @@ class NegarApp {
     }
   }
 
+  /** باز/بسته کردن کشوی دسته‌بندی */
+  _bindCategoryDropdown() {
+    const trigger = document.getElementById("catTrigger");
+    const wrap = document.getElementById("categoryDropdownWrap");
+    const dropdown = document.getElementById("categoryDropdown");
+    if (!trigger || !wrap || !dropdown) return;
+    trigger.addEventListener("click", (e) => {
+      e.stopPropagation();
+      wrap.classList.toggle("open");
+    });
+    dropdown.querySelectorAll(".cat-item").forEach((item) => {
+      item.addEventListener("click", () => {
+        const cat = item.dataset.cat;
+        trigger.textContent = cat;
+        wrap.classList.remove("open");
+        const activeView = document.querySelector(".view.active");
+        const activeGroup = activeView ? activeView.querySelector("[data-filter-group]") : null;
+        const chip = activeGroup ? activeGroup.querySelector(`.chip[data-tag="${cat}"]`) : null;
+        if (chip) {
+          activeGroup.querySelectorAll(".chip").forEach((c) => c.classList.remove("active"));
+          chip.classList.add("active");
+          this._render();
+        }
+      });
+    });
+    document.addEventListener("click", () => wrap.classList.remove("open"));
+  }
+
   /** کلیک‌های سراسری (delegation روی body) + ناوبری + اکشن‌ها */
   _bindGlobalClicks() {
     document.body.addEventListener("click", (e) => {
