@@ -3839,6 +3839,7 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
 }
 
 .cover-zone {
+  position: relative;
   border: 2px dashed var(--line);
   border-radius: 12px;
   padding: 20px;
@@ -4500,6 +4501,7 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
 }
 
 .cover-zone-small {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
