@@ -3845,6 +3845,7 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
   text-align: center;
   cursor: pointer;
   transition: border-color 0.3s;
+  min-height: 300px;
 }
 .cover-zone:hover {
   border-color: var(--gold);
@@ -3988,13 +3989,13 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
 }
 
 .editor {
-  max-width: 760px;
+  max-width: 900px;
   margin: 0 auto;
   padding: 30px 22px 80px;
 }
 @media (min-width: 1200px) {
   .editor {
-    max-width: 900px;
+    max-width: 1000px;
     padding: 36px 40px 80px;
   }
 }
