@@ -2173,7 +2173,7 @@ class NegarApp {
     // پر کردن کاور
     const coverZone = document.getElementById("pcCoverZone");
         const coverInput = document.getElementById("pcCoverInput");
-        const coverContent = coverZone ? coverZone.querySelector(".cover-zone-content") || coverZone : null;
+        const coverContent = coverZone ? coverZone.querySelector(".cover-zone-label") || coverZone : null;
         if (coverZone && coverInput && coverContent) {
                   const showCover = (url) => {
                     coverContent.innerHTML = '<img src="' + url + '" style="max-height:80px;border-radius:4px" alt="cover" /><br><span style="color:#00ff9d;font-size:0.75rem">✓ آپلود شده · <span style="cursor:pointer;text-decoration:underline" onclick="document.getElementById(\'pcCoverInput\').click()">تغییر</span></span>';
