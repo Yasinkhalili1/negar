@@ -2144,35 +2144,26 @@ class NegarApp {
     if (descEl) descEl.value = data.description || "";
 
     // پر کردن کاور
-    if (coverZone) {
-      const coverInput = document.getElementById('pcCoverInput');
-      if (!coverInput) return;
-      // Clone zone + input to clear old listeners
-      const newInput = coverInput.cloneNode(true);
-      coverInput.parentNode.replaceChild(newInput, coverInput);
-      const newZone = coverZone.cloneNode(true);
-      coverZone.parentNode.replaceChild(newZone, coverZone);
-      // Update references
-      const zone = newZone;
-      const input = newInput;
-      
+    const coverZone = document.getElementById("pcCoverZone");
+    const coverInput = document.getElementById("pcCoverInput");
+    if (coverZone && coverInput) {
       if (cover) {
-        zone.innerHTML = '<img src="' + cover + '" style="max-height:80px;border-radius:4px" alt="cover" /><br><span style="color:#00ff9d;font-size:0.75rem">✓ آپلود شده</span>';
+        coverZone.innerHTML = '<img src="' + cover + '" style="max-height:80px;border-radius:4px" alt="cover" /><br><span style="color:#00ff9d;font-size:0.75rem">✓ آپلود شده</span>';
       } else {
-        zone.innerHTML = '<p style="color:var(--muted);font-size:0.85rem">بدون تصویر</p><br><span style="color:#00ff9d;font-size:0.75rem">برای تغییر کلیک کن</span>';
+        coverZone.innerHTML = '<p style="color:var(--muted);font-size:0.85rem">بدون تصویر</p><br><span style="color:#00ff9d;font-size:0.75rem">برای تغییر کلیک کن</span>';
       }
-      // Always add upload handlers
-      zone.addEventListener('click', () => input.click());
-      input.addEventListener('change', () => {
-        const file = input.files[0];
+      // Always set up upload handlers (overwrite old ones)
+      coverZone.onclick = () => coverInput.click();
+      coverInput.onchange = () => {
+        const file = coverInput.files[0];
         if (!file) return;
         const reader = new FileReader();
         reader.onload = (ev) => {
           this._pendingPublishCover = ev.target.result;
-          zone.innerHTML = '<img src="' + ev.target.result + '" style="max-height:80px;border-radius:4px" alt="cover" /><br><span style="color:#00ff9d;font-size:0.75rem">✓ آپلود شده</span>';
+          coverZone.innerHTML = '<img src="' + ev.target.result + '" style="max-height:80px;border-radius:4px" alt="cover" /><br><span style="color:#00ff9d;font-size:0.75rem">✓ آپلود شده</span>';
         };
         reader.readAsDataURL(file);
-      });
+      };
     }
 
     // ذخیره داده اصلی برای تأیید
