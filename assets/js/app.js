@@ -2181,9 +2181,9 @@ class NegarApp {
 
               if (cover) {
                 const img = document.createElement("img");
-                img.src = cover;
-                img.style.cssText = "max-height:80px;border-radius:4px";
-                img.alt = "cover";
+                                img.src = cover;
+                                img.style.cssText = "max-width:100%;max-height:80px;object-fit:cover;border-radius:4px;display:block";
+                                img.alt = "cover";
                 const note = document.createElement("span");
                 note.style.cssText = "color:#00ff9d;font-size:0.75rem;display:block;margin-top:4px";
                 note.textContent = "✓ آپلود شده";
@@ -2212,7 +2212,7 @@ class NegarApp {
                   if (pImg) pImg.remove();
                   const img = document.createElement("img");
                   img.src = ev.target.result;
-                  img.style.cssText = "max-height:80px;border-radius:4px";
+                  img.style.cssText = "max-width:100%;max-height:80px;object-fit:cover;border-radius:4px;display:block";
                   img.alt = "cover";
                   img.className = "cover-preview-img";
                   const note = document.createElement("span");
