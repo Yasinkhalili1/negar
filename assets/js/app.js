@@ -2283,19 +2283,6 @@ class NegarApp {
   }
 
   /** باز و بسته کردن منوی حساب کاربری — وقتی بیرون کلیک بشه بسته می‌شه */
-  _toggleAccountMenu(e) {
-    const menu = document.getElementById("accountMenu");
-    if (!menu) return;
-    const wrap = menu.closest(".account-menu-wrap");
-    // اگه کلیک روی دکمه gear یا داخل منو بود → toggle
-    if (e && wrap === e.target.closest(".account-menu-wrap")) {
-      menu.classList.toggle("open");
-      return;
-    }
-    // اگه کلیک بیرون بود → ببند
-    menu.classList.remove("open");
-  }
-
   /** نمایش صفحه پروفایل */
   _updateArticle(data, cover) {
     const existing = this.articles.find((x) => x.id === this._editingId);
