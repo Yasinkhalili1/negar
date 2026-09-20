@@ -4424,6 +4424,8 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
   width: 90%;
   box-shadow: 0 18px 50px rgba(33, 32, 44, 0.14);
   position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 .auth-card h2, .auth-card .h2 {
   font-size: 1.4rem;
@@ -4511,7 +4513,9 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
   align-items: center;
   justify-content: center;
   min-height: 80px;
+  width: 100%;
   max-width: 100%;
+  box-sizing: border-box;
   border: 2px dashed var(--line);
   border-radius: 12px;
   cursor: pointer;
