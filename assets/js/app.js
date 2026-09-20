@@ -1185,6 +1185,7 @@ class NegarApp {
       item.addEventListener("click", () => {
         const cat = item.dataset.cat;
         trigger.textContent = cat;
+        this._selectedCategory = cat;
         wrap.classList.remove("open");
         const activeView = document.querySelector(".view.active");
         const activeGroup = activeView ? activeView.querySelector("[data-filter-group]") : null;
