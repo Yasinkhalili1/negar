@@ -675,9 +675,11 @@ class EditorManager {
   }
   _bindCoverZone() {
     const zone = document.getElementById("coverZone");
-    if (!zone) return;
+    if (!zone) { console.log('_bindCoverZone: zone null'); return; }
+    console.log('_bindCoverZone: zone found');
     zone.addEventListener("click", (e) => {
       if (e.target.closest("[data-action='remove-cover']")) return;
+      console.log('_bindCoverZone: click triggered, calling coverInput.click()');
       document.getElementById("coverInput").click();
     });
     const inp = document.getElementById("coverInput");
