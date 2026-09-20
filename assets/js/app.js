@@ -674,16 +674,10 @@ class EditorManager {
     }
   }
   _bindCoverZone() {
-    const zone = document.getElementById("coverZone");
-    if (!zone) return;
-    zone.addEventListener("click", () => {
-      if (event.target.closest("[data-action='remove-cover']")) return;
-      document.getElementById("coverInput").click();
-    });
-    const inp = document.getElementById("coverInput");
-    if (!inp) return;
-    inp.addEventListener("change", () => {
-      const file = inp.files[0];
+      const inp = document.getElementById("coverInput");
+      if (!inp) return;
+      inp.addEventListener("change", () => {
+        const file = inp.files[0];
       if (!file) return;
       const reader = new FileReader();
       reader.onload = (ev) => {
