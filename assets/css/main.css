@@ -3621,7 +3621,7 @@ img {
 }
 .card-negar .cover {
   background: linear-gradient(135deg, var(--lapis), var(--gold));
-  min-height: 160px;
+  min-height: 180px;
   position: relative;
   overflow: hidden;
   font-size: 3rem;
@@ -3845,7 +3845,7 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
   text-align: center;
   cursor: pointer;
   transition: border-color 0.3s;
-  min-height: 160px;
+  min-height: 180px;
   max-width: 100%;
   margin: 0 auto;
   display: block;
@@ -4512,7 +4512,7 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 160px;
+  height: 180px;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
@@ -4677,7 +4677,7 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
   display: flex;
   align-items: flex-end;
   gap: 8px;
-  height: 160px;
+  height: 180px;
   padding: 0 4px;
   border-bottom: 2px solid var(--line);
 }
@@ -4695,7 +4695,7 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
   display: flex;
   align-items: flex-end;
   gap: 4px;
-  height: 160px;
+  height: 180px;
   width: 100%;
   justify-content: center;
 }
@@ -5923,7 +5923,7 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
     font-size: 1.45rem;
   }
   .card-negar .cover {
-    min-height: 160px;
+    min-height: 180px;
   }
 }
 .btn-negar {
