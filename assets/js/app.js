@@ -1476,55 +1476,59 @@ class NegarApp {
   }
 
   _render() {
-    const filtered = this._getFiltered();
-    const visible = filtered.slice(0, this.displayedCount);
-    const hasMore = filtered.length > this.displayedCount;
-    this.feeds.home.render(visible, hasMore);
-    this.feeds.explore.render(visible); // filtered.slice applied
-    // کتابخانه — مقالات ذخیره‌شده (فقط برای کاربر لاگین‌شده)
-    if (this.feeds.lib && this.feeds.lib.container) {
-      if (!this.auth.isLoggedIn()) {
-        this.feeds.lib.container.innerHTML =
-          '<p style="text-align:center;color:var(--muted);padding:40px 0">برای دیدن کتابخانه‌ات وارد شو  <br><br><button class="btn-negar btn-primary-negar" data-action="open-login">ورود</button></p>';
-      } else {
-        const savedList = this.articles.filter((a) => this.saves.isSaved(a.id));
-        if (savedList.length) {
-          this.feeds.lib.render(savedList);
-        } else {
+    try {
+      const filtered = this._getFiltered();
+      const visible = filtered.slice(0, this.displayedCount);
+      const hasMore = filtered.length > this.displayedCount;
+      this.feeds.home.render(visible, hasMore);
+      this.feeds.explore.render(visible); // filtered.slice applied
+      // کتابخانه — مقالات ذخیره‌شده (فقط برای کاربر لاگین‌شده)
+      if (this.feeds.lib && this.feeds.lib.container) {
+        if (!this.auth.isLoggedIn()) {
           this.feeds.lib.container.innerHTML =
-            '<div style="text-align:center;color:var(--muted);padding:40px 0">' +
-            "<p>هنوز مقاله‌ای ذخیره نکردی</p>" +
-            '<button class="btn-negar btn-primary-negar" data-action="load-sample" style="margin-top:12px">بارگذاری مقالات نمونه</button>' +
-            "</div>";
+            '<p style="text-align:center;color:var(--muted);padding:40px 0">برای دیدن کتابخانه‌ات وارد شو  <br><br><button class="btn-negar btn-primary-negar" data-action="open-login">ورود</button></p>';
+        } else {
+          const savedList = this.articles.filter((a) => this.saves.isSaved(a.id));
+          if (savedList.length) {
+            this.feeds.lib.render(savedList);
+          } else {
+            this.feeds.lib.container.innerHTML =
+              '<div style="text-align:center;color:var(--muted);padding:40px 0">' +
+              "<p>هنوز مقاله‌ای ذخیره نکردی</p>" +
+              '<button class="btn-negar btn-primary-negar" data-action="load-sample" style="margin-top:12px">بارگذاری مقالات نمونه</button>' +
+              "</div>";
+          }
         }
       }
-    }
-    this.feeds.home.renderTrending(this.articles, "#trending");
-    this.feeds.explore.renderTrending(this.articles, "#trending2");
-    // چالش هفته + نویسنده ماه توی سایدبار — فقط وقتی نگار پلاس فعال باشه
-    if (this.community && this.community.isPlus) {
-      const cb = document.getElementById("challengeBox");
-      if (cb) {
-        cb.style.display = "";
-        cb.innerHTML =
-          this.community.challengeHtml() + this.community.authorOfMonthHtml();
+      this.feeds.home.renderTrending(this.articles, "#trending");
+      this.feeds.explore.renderTrending(this.articles, "#trending2");
+      // چالش هفته + نویسنده ماه توی سایدبار — فقط وقتی نگار پلاس فعال باشه
+      if (this.community && this.community.isPlus) {
+        const cb = document.getElementById("challengeBox");
+        if (cb) {
+          cb.style.display = "";
+          cb.innerHTML =
+            this.community.challengeHtml() + this.community.authorOfMonthHtml();
+        }
+      } else {
+        const cb = document.getElementById("challengeBox");
+        if (cb) {
+          cb.innerHTML = "";
+          cb.style.display = "none";
+        }
       }
-    } else {
-      const cb = document.getElementById("challengeBox");
-      if (cb) {
-        cb.innerHTML = "";
-        cb.style.display = "none";
+      // آپدیت متن دکمه دموی پلاس — فعال/غیرفعال
+      const plusBtn = document.querySelector('[data-action="toggle-plus"]');
+      if (plusBtn) {
+        const plusOn = this.community && this.community.isPlus;
+        plusBtn.textContent = plusOn
+          ? "غیرفعال‌سازی دموی پلاس"
+          : "فعال‌سازی دموی پلاس";
+        plusBtn.classList.toggle("btn-ghost-negar", !plusOn);
+        plusBtn.classList.toggle("btn-danger-negar", plusOn);
       }
-    }
-    // آپدیت متن دکمه دموی پلاس — فعال/غیرفعال
-    const plusBtn = document.querySelector('[data-action="toggle-plus"]');
-    if (plusBtn) {
-      const plusOn = this.community && this.community.isPlus;
-      plusBtn.textContent = plusOn
-        ? "غیرفعال‌سازی دموی پلاس"
-        : "فعال‌سازی دموی پلاس";
-      plusBtn.classList.toggle("btn-ghost-negar", !plusOn);
-      plusBtn.classList.toggle("btn-danger-negar", plusOn);
+    } catch(e) {
+      console.error("[NEGAR] _render error:", e);
     }
   }
 
