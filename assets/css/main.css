@@ -4512,10 +4512,11 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 80px;
+  height: 100px;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+  overflow: hidden;
   border: 2px dashed var(--line);
   border-radius: 12px;
   cursor: pointer;
