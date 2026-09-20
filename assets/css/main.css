@@ -3861,7 +3861,7 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
 }
 .cover-zone img {
   max-width: 100%;
-  max-height: 220px;
+  max-height: 400px;
   border-radius: 12px;
   object-fit: cover;
 }
