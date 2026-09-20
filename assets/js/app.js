@@ -1663,7 +1663,7 @@ class NegarApp {
       this.auth.open("login");
       return;
     }
-    const on = this.saves.toggle(id);
+    const on = this.saves.toggle(Number(id));
     this.toast.show(on ? "ذخیره شد" : "از ذخیره حذف شد");
     // به‌روزرسانی دکمه ذخیره در صفحه مقاله
     const saveBtn = document.querySelector(
