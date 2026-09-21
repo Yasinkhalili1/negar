@@ -1322,8 +1322,6 @@ class NegarApp {
       case "confirm-publish":
         this._confirmPublish();
         break;
-        this._loadSampleArticles();
-        break;
       case "print":
         this._printArticle(id);
         break;
