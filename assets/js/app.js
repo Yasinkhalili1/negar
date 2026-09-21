@@ -221,7 +221,7 @@ class Article {
     const descHtml = this.description
       ? `<p class="excerpt">${esc(this.description)}</p>`
       : `<p class="excerpt">${esc(this.excerpt())}</p>`;
-    return `<article class="card-negar" data-action="open-article" data-id="${this.id}">
+    return `<article class="card-negar reveal" data-action="open-article" data-id="${this.id}">
       ${coverHtml}
       <div class="body">
         <span class="tag ${tagClass}">${esc(this.tag)}</span>
@@ -1517,7 +1517,7 @@ class NegarApp {
           this.feeds.lib.container.innerHTML =
             '<p style="text-align:center;color:var(--muted);padding:40px 0">برای دیدن کتابخانه‌ات وارد شو  <br><br><button class="btn-negar btn-primary-negar" data-action="open-login">ورود</button></p>';
         } else {
-          const savedList = this.articles.filter((a) => this.saves.isSaved(a.id)); console.log("[LIB] saved:", this.saves.saved, "isLoggedIn:", this.auth.isLoggedIn(), "len:", savedList.length);
+          const savedList = this.articles.filter((a) => this.saves.isSaved(a.id));
           if (savedList.length) {
             this.feeds.lib.render(savedList);
           } else {
@@ -1991,7 +1991,7 @@ class NegarApp {
         '<p style="text-align:center;color:var(--muted);padding:40px 0">هنوز مقاله‌ای ذخیره نکردی</p>';
       return;
     }
-    el.innerHTML = savedArticles.map; console.log("[LIB] renderLib called, articles:", savedArticles.length, "saved:", this.saves.saved); el.innerHTML = savedArticles.map((a) => a.toCard()).join("");
+    el.innerHTML = savedArticles.map((a) => a.toCard()).join("");
   }
 
   /** ذخیره اطلاعات پروفایل */
