@@ -1524,7 +1524,7 @@ class NegarApp {
             this.feeds.lib.container.innerHTML =
               '<div style="text-align:center;color:var(--muted);padding:40px 0">' +
               "<p>هنوز مقاله‌ای ذخیره نکردی</p>" +
-              '<button class="btn-negar btn-primary-negar" data-action="load-sample" style="margin-top:12px">بارگذاری مقالات نمونه</button>' +
+
               "</div>";
           }
         }
