@@ -1,4 +1,4 @@
-console.log("[APP] loaded v36");
+const NL = String.fromCharCode(10);
 /**
  * ═══════════════════════════════════════════════════
  *  نگار — اپلیکیشن اصلی وبلاگ فارسی
@@ -120,6 +120,7 @@ class Article {
     emoji = "",
     date = null,
     cover = null,
+    avatar = "",
     description = "",
   }) {
   Object.assign(this, {
@@ -133,6 +134,7 @@ class Article {
       emoji,
       date: date || new Date().toISOString(),
       cover,
+      avatar,
       description,
   });
   }
@@ -229,7 +231,7 @@ class Article {
         <h3>${esc(this.title)}</h3>
         ${descHtml}
         <div class="meta">
-          <span class="author" data-action="open-author"><span class="a-ava">${esc(this.author[0])}</span>${esc(this.author)}</span>
+          <span class="author" data-action="open-author"><span class="a-ava">${this.avatar ? `<img src="${esc(this.avatar)}" alt="${esc(this.author)}" class="a-avatar-img" />` : esc(this.author[0])}</span>${esc(this.author)}</span>
           <span class="sep"></span><span><i class="fa-regular fa-eye"></i> ${this.reads.toLocaleString("fa-IR")}</span>
           <span class="sep"></span><span>${this.isLikedByMe() ? '<i class="fa-solid fa-heart"></i>' : '<i class="fa-regular fa-heart"></i>'} ${this.likes}</span>
           <span class="sep"></span><span><i class="fa-regular fa-clock"></i> ${this.readingTime()} دقیقه</span>
@@ -258,9 +260,7 @@ class Article {
     return `<span class="a-tag">${esc(this.tag)}</span>
       <h1>${esc(this.title)}</h1>
       <div class="a-meta">
-        <span class="a-ava">${esc(this.author[0])}</span>
-        <div>
-          <div class="who">${esc(this.author)}</div>
+        <span class="a-ava">${this.avatar ? `<img src="${esc(this.avatar)}" alt="${esc(this.author)}" class="a-avatar-img" />` : esc(this.author[0])}</span>
           <div> ${this.reads.toLocaleString("fa-IR")} · <i class="fa-solid fa-heart"></i> ${this.likes} · <i class="fa-solid fa-hourglass-start"></i> ${this.readingTime()} دقیقه${this.date ? ` · <i class="fa-regular fa-calendar-days"></i> ${this.getDateLabel()}` : ""}</div>
         </div>
       </div>
@@ -1041,7 +1041,7 @@ class NegarApp {
       const raw = localStorage.getItem(this.STORAGE_KEY);
       if (!raw) return [];
       const arr = JSON.parse(raw);
-      return arr.map((a) => { const art = new Article(a); art.cover = resolveCover(art); return art; });
+      return arr.map((a) => { const art = new Article(a); if (!art.cover) art.cover = resolveCover(art); return art; });
     } catch (e) {
       console.warn("خطا در بارگذاری مقالات", e);
       return [];
@@ -1073,7 +1073,7 @@ class NegarApp {
     _seedArticles() {
         // مقالات نمونه از فایل articlesData.js بارگذاری می‌شوند
         if (typeof SEED_ARTICLES !== "undefined") {
-          return SEED_ARTICLES.map(a => { const art = new Article(a); art.cover = resolveCover(art); return art; });
+          return SEED_ARTICLES.map(a => { const art = new Article(a); if (!art.cover) art.cover = resolveCover(art); return art; });
         }
         // fallback خالی
         return [];
@@ -1901,6 +1901,7 @@ class NegarApp {
           </table>
         </div>
       `
+      : ""
       }
       <div class="section-head" style="margin-top:30px"><h2>مقالات من</h2></div>
       <div class="feed">${myArticles.length ? myArticles.map((a) => a.toCard()).join("") : ""}</div>`;
@@ -2108,7 +2109,7 @@ class NegarApp {
     }
     const data = this.editor.getData();
     if (!this._validate(data)) return;
-    const cover = this._coverData || null;
+    const cover = (this.editor && this.editor._coverData) || null;
 
     // نمایش پنل تأیید انتشار — متوقف می‌شه و منتظر تأیید می‌مونه
     if (!this._showPublishPanel(data, cover)) return;
@@ -2270,6 +2271,7 @@ class NegarApp {
       existing.body = data.body;
       existing.tag = data.tag;
       existing.description = data.description;
+      if (this.auth.user.avatar) existing.avatar = this.auth.user.avatar;
       if (cover) existing.cover = cover;
       this.toast.show("ویرایش ذخیره شد");
     }
@@ -2287,6 +2289,7 @@ class NegarApp {
         reads: 0,
         likes: 0,
         cover,
+        avatar: this.auth.user.avatar || "",
       }),
     );
     // ثبت رگه نویسندگی + تگ چالش (اگه ادیتور با چالش باز شده بود)

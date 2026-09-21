@@ -4191,6 +4191,20 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
   font-weight: 700;
   font-size: 1rem;
 }
+.a-avatar-img {
+  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.meta .a-avatar-img {
+  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .article-page .a-meta .who {
   color: var(--ink);
   font-weight: 700;
