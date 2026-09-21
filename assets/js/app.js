@@ -1,3 +1,12 @@
+/**
+ * ═══════════════════════════════════════════════════
+ *  نگار — اپلیکیشن اصلی وبلاگ فارسی
+ *  version: 2.0
+ *  dependencies: Font Awesome, Vazirmatn font
+ *  storage: localStorage برای ذخیره داده‌ها
+ * ═══════════════════════════════════════════════════
+ */
+
 "use strict";
 
 // ─────────────────────────────────────────────────
@@ -59,6 +68,15 @@ function resolveCover(article) {
 
 /** کلاس Toast — نمایش پیام کوتاه به کاربر */
 class Toast {
+  /**
+   * @param {string} selector — CSS سلکتور المان toast
+   */
+  constructor(selector) {
+    this.el = document.querySelector(selector);
+  }
+  /**
+   * نمایش پیام به مدت TOAST_DURATION میلی‌ثانیه
+   * @param {string} msg — متن پیام
    */
   show(msg) {
     this.el.textContent = msg;
@@ -77,6 +95,15 @@ class Toast {
 
 /** کلاس Article — نمایش یک مقاله با تمام ویژگی‌ها */
 class Article {
+  /**
+   * @param {Object} data - اطلاعات مقاله
+   * @param {number} data.id - شناسه یکتا
+   * @param {string} data.tag - دسته‌بندی مقاله
+   * @param {string} data.title - عنوان مقاله
+   * @param {string} data.body - متن مقاله (Markdown)
+   * @param {string} data.author - نام نویسنده
+   * @param {number} [data.reads=0] - تعداد بازدید
+   * @param {number} [data.likes=0] - تعداد لایک
    * @param {string} [data.emoji=''] - ایموجی مقاله (خالی)
    * @param {string} [data.date=null] - تاریخ ایجاد
    * @param {string} [data.cover=null] - آدرس تصویر کاور
@@ -209,6 +236,15 @@ class Article {
         </div>
       </div></article>`;
   }
+  /**
+   * بررسی دسترسی ویرایش/حذف — فقط نویسنده مقاله یا ادمین می‌تونه
+   * @returns {boolean}
+   */
+  canManage() {
+    const app = window.app;
+    if (!app || !app.auth || !app.auth.isLoggedIn()) return false;
+    const u = app.auth.user;
+    // ادمین یا نویسنده
     return u.username === "admin" || u.display_name === this.author;
   }
 
@@ -253,6 +289,15 @@ class Article {
 
 /** کلاس AuthManager — ورود، ثبت‌نام، خروج و نمایش آواتار کاربر */
 class AuthManager {
+  /**
+   * @param {Toast} toast — نمونه Toast برای نمایش پیام
+   */
+  constructor(toast) {
+    this.toast = toast;
+    this.user = this._load();
+    this.mode = "login"; // حالت فعلی مودال: login یا register
+    this.modal = document.getElementById("authModal");
+    this.area = document.getElementById("authArea");
     this._bindEvents();
     this.renderArea();
   }
@@ -1010,16 +1055,16 @@ class NegarApp {
     }
   }
 
-    const author = this.auth.isLoggedIn()
-      ? this.auth.user.display_name
-      : "مهمان";
-    this.articles = this._seedArticlesFor(author);
-    this._persistArticles();
-    this.nextId = Math.max(0, ...this.articles.map((a) => a.id)) + 1;
-    this._render();
-    this.toast.show("مقالات نمونه برای " + author + " بارگذاری شد");
-  }
 
+  /**
+   * مقالات نمونه با نویسنده مشخص
+   * @param {string} author - اسم نویسنده که روی همه مقالات می‌نشینه
+   */
+  _seedArticlesFor(author) {
+    const seed = this._seedArticles();
+    return seed.map((a) => {
+      a.author = author;
+      if (this.auth.isLoggedIn()) a.ownerId = this.auth.user.id;
       return a;
     });
   }
