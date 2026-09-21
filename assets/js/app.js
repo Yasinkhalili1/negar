@@ -1517,7 +1517,7 @@ class NegarApp {
           this.feeds.lib.container.innerHTML =
             '<p style="text-align:center;color:var(--muted);padding:40px 0">برای دیدن کتابخانه‌ات وارد شو  <br><br><button class="btn-negar btn-primary-negar" data-action="open-login">ورود</button></p>';
         } else {
-          const savedList = this.articles.filter((a) => this.saves.isSaved(a.id));
+          const savedList = this.articles.filter((a) => this.saves.isSaved(a.id)); console.log("[LIB] saved:", this.saves.saved, "isLoggedIn:", this.auth.isLoggedIn(), "len:", savedList.length);
           if (savedList.length) {
             this.feeds.lib.render(savedList);
           } else {
