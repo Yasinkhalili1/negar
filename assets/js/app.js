@@ -2341,7 +2341,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .forEach((k) => localStorage.removeItem(k));
       // حذف پارامتر از آدرس تا دوباره اجرا نشه
       history.replaceState(null, "", location.pathname + location.hash);
-      console.log("✅ همه داده‌های نگار پاک شد");
+      
     } catch (e) {
       console.warn("خطا در ریست", e);
     }
