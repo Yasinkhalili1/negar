@@ -1322,7 +1322,6 @@ class NegarApp {
       case "confirm-publish":
         this._confirmPublish();
         break;
-      case "load-sample":
         this._loadSampleArticles();
         break;
       case "print":
@@ -1921,7 +1920,6 @@ class NegarApp {
           </table>
         </div>
       `
-          : '<div style="text-align:center;color:var(--muted);padding:40px 0"><p>هنوز مقاله‌ای ننوشتی</p><button class="btn-negar btn-primary-negar" data-action="load-sample" style="margin-top:12px">بارگذاری مقالات نمونه</button></div>'
       }
       <div class="section-head" style="margin-top:30px"><h2>مقالات من</h2></div>
       <div class="feed">${myArticles.length ? myArticles.map((a) => a.toCard()).join("") : ""}</div>`;
