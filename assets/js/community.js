@@ -243,16 +243,14 @@ class CommunityManager {
     this.isPlus = !this.isPlus;
     this._savePlus();
     this.app.toast.show(
-      this.isPlus
-        ? "نگار پلاس فعال شد — همه امکانات بازه! 💎"
-        : "پلاس غیرفعال شد",
+      this.isPlus ? "نگار پلاس فعال شد — همه امکانات بازه!" : "پلاس غیرفعال شد",
     );
     this.app._render();
   }
   /** نمایش بج پلاس کنار اسم */
   plusBadge() {
     return this.isPlus
-      ? `<span class="plus-badge" title="نگار پلاس">💎</span>`
+      ? `<span class="plus-badge" title="نگار پلاس"></span>`
       : "";
   }
 
@@ -289,7 +287,7 @@ class CommunityManager {
     this._saveReading();
     document.documentElement.classList.toggle("reading-mode", this.readingMode);
     this.app.toast.show(
-      this.readingMode ? "حالت مطالعه شب فعال شد 🌙" : "حالت مطالعه غیرفعال شد",
+      this.readingMode ? "حالت مطالعه شب فعال شد" : "حالت مطالعه غیرفعال شد",
     );
   }
   initReadingMode() {
