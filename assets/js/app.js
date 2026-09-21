@@ -1991,7 +1991,7 @@ class NegarApp {
         '<p style="text-align:center;color:var(--muted);padding:40px 0">هنوز مقاله‌ای ذخیره نکردی</p>';
       return;
     }
-    el.innerHTML = savedArticles.map((a) => a.toCard()).join("");
+    el.innerHTML = savedArticles.map; console.log("[LIB] renderLib called, articles:", savedArticles.length, "saved:", this.saves.saved); el.innerHTML = savedArticles.map((a) => a.toCard()).join("");
   }
 
   /** ذخیره اطلاعات پروفایل */
