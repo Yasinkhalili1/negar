@@ -6350,9 +6350,21 @@ html.reading-mode img {
 
 footer {
   background: linear-gradient(180deg, var(--paper-2), var(--paper));
-  border-top: 1px solid var(--line);
+  border-top: 2px solid var(--gold);
   padding: 52px 22px 30px;
   margin-top: 40px;
+  position: relative;
+}
+
+footer::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0.5;
 }
 
 .foot-inner {
@@ -6430,12 +6442,6 @@ footer a:hover {
   margin: 0 4px;
   vertical-align: middle;
 }
-.foot-bottom {
-  gap: 6px;
-  color: var(--muted);
-  font-size: 0.85rem;
-}
-
 .view {
   display: none;
 }
