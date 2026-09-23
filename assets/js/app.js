@@ -157,7 +157,7 @@ class Article {
     return Math.max(1, Math.round(words / WORDS_PER_MINUTE));
   }
   /** تولید خلاصه مقاله حداکثر len کاراکتر */
-  excerpt(len = 120) {
+  excerpt(len = 80) {
     return (
       this.body
         .replace(/[#>*\-]/g, "")
