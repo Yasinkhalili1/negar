@@ -26,7 +26,8 @@
     <header class="navbar-negar">
       <div class="nav-inner">
         <a class="logo" href="#" data-action="go-home"
-          ><img class="logo-img" src="public/image/negar.png" alt="نگار" /></a>
+          ><img class="logo-img" src="public/image/negar.png" alt="نگار"
+        /></a>
         <button class="hamburger" id="hamburgerBtn" aria-label="منوی ناوبری">
           <span class="bar"></span>
         </button>
@@ -115,7 +116,6 @@
           </div>
         </div>
         <div class="hero-art">
-          
           <div class="float-chip a">
             <span class="dot"></span> جامعه‌ی نویسندگان
           </div>
@@ -183,9 +183,15 @@
               نگار پلاس
             </h4>
             <p>ابزارهای نویسندگی حرفه‌ای.</p>
-            <button class="btn-negar btn-ghost-negar" data-action="toggle-plus" style="width:100%;margin-top:8px">فعال‌سازی دموی پلاس</button>
+            <button
+              class="btn-negar btn-ghost-negar"
+              data-action="toggle-plus"
+              style="width: 100%; margin-top: 8px"
+            >
+              فعال‌سازی دموی پلاس
+            </button>
           </div>
-          <div class="box" id="challengeBox" style="display:none">
+          <div class="box" id="challengeBox" style="display: none">
             <!-- چالش هفته -->
           </div>
         </aside>
@@ -223,7 +229,6 @@
         </aside>
       </div>
     </section>
-
     <!-- ===== Library ===== -->
     <section id="lib" class="view">
       <div class="wrap">
@@ -240,18 +245,29 @@
         <!-- آپلود تصویر کاور -->
         <div class="cover-upload" id="coverUploadArea">
           <label for="coverInput" class="cover-zone">
-                    <input type="file" id="coverInput" accept="image/*" hidden />
-                    <div class="cover-zone" id="coverZone" data-action="upload-cover">
-                      <div class="cover-zone-placeholder" id="coverPlaceholder">
-                        <i class="fa-solid fa-image" style="font-size: 2rem; color: var(--muted)"></i>
-                        <p class="color-gray-700 mt-2">شما هنوز تصویری آپلود نکرده‌اید.</p>
-                      </div>
-                      <div class="cover-preview" id="coverPreview" style="display: none;">
-                        <img id="coverPreviewImg" alt="کاور" />
-                        <button class="cover-remove-btn" data-action="remove-cover">حذف</button>
-                      </div>
-                    </div>
-                  </label>
+            <input type="file" id="coverInput" accept="image/*" hidden />
+            <div class="cover-zone" id="coverZone" data-action="upload-cover">
+              <div class="cover-zone-placeholder" id="coverPlaceholder">
+                <i
+                  class="fa-solid fa-image"
+                  style="font-size: 2rem; color: var(--muted)"
+                ></i>
+                <p class="color-gray-700 mt-2">
+                  شما هنوز تصویری آپلود نکرده‌اید.
+                </p>
+              </div>
+              <div
+                class="cover-preview"
+                id="coverPreview"
+                style="display: none"
+              >
+                <img id="coverPreviewImg" alt="کاور" />
+                <button class="cover-remove-btn" data-action="remove-cover">
+                  حذف
+                </button>
+              </div>
+            </div>
+          </label>
         </div>
 
         <!-- عنوان -->
@@ -261,8 +277,17 @@
             <span class="char-counter" id="titleCounter">0/120</span>
           </div>
           <div class="input-wrapper">
-            <input class="title-input" id="artTitle" placeholder="عنوان را اینجا وارد کنید" maxlength="120" type="text" autocomplete="off" />
-            <div class="char-progress" id="titleProgress"><div class="char-progress-bar" id="titleProgressBar"></div></div>
+            <input
+              class="title-input"
+              id="artTitle"
+              placeholder="عنوان را اینجا وارد کنید"
+              maxlength="120"
+              type="text"
+              autocomplete="off"
+            />
+            <div class="char-progress" id="titleProgress">
+              <div class="char-progress-bar" id="titleProgressBar"></div>
+            </div>
           </div>
         </section>
 
@@ -278,16 +303,23 @@
 
         <!-- محتوا -->
         <div class="editor-area" id="editorArea">
-          <textarea class="editor-content" id="artBody" placeholder="اینجا بنویس..."></textarea>
+          <textarea
+            class="editor-content"
+            id="artBody"
+            placeholder="اینجا بنویس..."
+          ></textarea>
         </div>
-
 
         <!-- انتشار -->
         <div class="editor-foot">
           <span style="color: var(--muted); font-size: 0.9rem"></span>
           <div style="display: flex; gap: 10px">
-            <button class="btn-negar btn-ghost-negar" data-action="go-home">انصراف</button>
-            <button class="btn-negar btn-primary-negar" data-action="publish">انتشار</button>
+            <button class="btn-negar btn-ghost-negar" data-action="go-home">
+              انصراف
+            </button>
+            <button class="btn-negar btn-primary-negar" data-action="publish">
+              انتشار
+            </button>
           </div>
         </div>
       </div>
@@ -318,9 +350,12 @@
       <div class="foot-inner">
         <div class="foot-brand">
           <a class="logo" href="#" data-action="go-home"
-            ><img class="logo-img logo-footer" src="public/image/negar.png" alt="نگار" /></a
-          >
-          <p>خانه‌ی نویسندگان فارسی‌زبان. بنویس، بخوان، تکامل بده.</p>
+            ><img
+              class="logo-img logo-footer"
+              src="public/image/negar.png"
+              alt="نگار"
+          /></a>
+          <p>خانه‌ی نویسندگان فارسی‌زبان</p>
           <div class="foot-social">
             <a href="#" class="soc" title="تلگرام" aria-label="تلگرام"
               ><span> <i class="fa-brands fa-telegram"></i> </span
@@ -432,59 +467,135 @@
     <div id="toast"></div>
     <script src="assets/js/articlesData.js?v=2"></script>
     <script src="assets/js/community.js"></script>
-    <script>window.__coverFiles={1:'.jpg',2:'.jpg',3:'.jpg',4:'.webp',5:'.jpg',6:'.webp',7:'.webp',8:'.webp',9:'.jpg',10:'.jpg',11:'.jpg',12:'.webp',13:'.webp',14:'.jpg',15:'.jpg',16:'.jpg',17:'.jpg',18:'.jpg',19:'.webp',20:'.jpg',21:'.jpeg',22:'.jpg',23:'.jpg',24:'.webp'};</script>
+    <script>
+      window.__coverFiles = {
+        1: ".jpg",
+        2: ".jpg",
+        3: ".jpg",
+        4: ".webp",
+        5: ".jpg",
+        6: ".webp",
+        7: ".webp",
+        8: ".webp",
+        9: ".jpg",
+        10: ".jpg",
+        11: ".jpg",
+        12: ".webp",
+        13: ".webp",
+        14: ".jpg",
+        15: ".jpg",
+        16: ".jpg",
+        17: ".jpg",
+        18: ".jpg",
+        19: ".webp",
+        20: ".jpg",
+        21: ".jpeg",
+        22: ".jpg",
+        23: ".jpg",
+        24: ".webp",
+      };
+    </script>
     <script src="assets/js/app.js?v=51"></script>
-  <!-- پنل تأیید انتشار -->
-      <div class="publish-panel-overlay" id="publishPanel">
-        <div class="auth-card">
-          <button class="close-x" data-action="close-publish-panel">✕</button>
-          <h2>بررسی قبل از انتشار</h2>
-          <div class="publish-edit-list">
-            <div class="publish-edit-item">
-              <div class="publish-edit-label">تصویر کاور</div>
-              <div class="publish-edit-value" id="pcCover">
-                              <div class="cover-zone-small" id="pcCoverZone">
-                                                <div class="cover-zone-content">
-                                                  <label for="pcCoverInput" class="cover-zone-label">
-                                                    <input type="file" id="pcCoverInput" accept="image/*" hidden />
-                                                    <p>در حال بارگذاری...</p>
-                                                  </label>
-                                                </div>
-                                              </div>
-                            </div>
-            </div>
-            <div class="publish-edit-item">
-              <div class="publish-edit-label">عنوان</div>
-              <input class="publish-edit-input" id="pcTitle" type="text" maxlength="120" autocomplete="off" />
-            </div>
-            <div class="publish-edit-item">
-              <div class="publish-edit-label">توضیحات</div>
-              <textarea class="publish-edit-textarea" id="pcDesc" rows="3" maxlength="140"></textarea>
-            </div>
-            <div class="publish-edit-item">
-              <div class="publish-edit-label">تگ‌ها <span class="color-gray-700 fs-2">(حداکثر ۵)</span></div>
-              <input class="publish-edit-input" id="pcTags" type="text" placeholder="تگ جدا شده با ویرگول" maxlength="200" />
-            </div>
-            <div class="publish-edit-item">
-              <div class="publish-edit-label">دسته‌بندی</div>
-              <div class="category-dropdown-wrap" id="categoryDropdownWrap">
-                <input class="publish-edit-input" id="categoryInput" type="text" placeholder="روی اینجا بزنید یا تگ وارد کنید" readonly autocomplete="off" />
-                <div class="category-dropdown" id="categoryDropdown">
-                  <div class="cat-item" data-cat="تکنولوژی">تکنولوژی</div>
-                  <div class="cat-item" data-cat="ادبیات">ادبیات</div>
-                  <div class="cat-item" data-cat="سبک زندگی">سبک زندگی</div>
-                  <div class="cat-item" data-cat="کسب‌وکار">کسب‌وکار</div>
-                  <div class="cat-item" data-cat="سلامت">سلامت</div>
-                  <div class="cat-item" data-cat="هنر">هنر</div>
+    <!-- پنل تأیید انتشار -->
+    <div class="publish-panel-overlay" id="publishPanel">
+      <div class="auth-card">
+        <button class="close-x" data-action="close-publish-panel">✕</button>
+        <h2>بررسی قبل از انتشار</h2>
+        <div class="publish-edit-list">
+          <div class="publish-edit-item">
+            <div class="publish-edit-label">تصویر کاور</div>
+            <div class="publish-edit-value" id="pcCover">
+              <div class="cover-zone-small" id="pcCoverZone">
+                <div class="cover-zone-content">
+                  <label for="pcCoverInput" class="cover-zone-label">
+                    <input
+                      type="file"
+                      id="pcCoverInput"
+                      accept="image/*"
+                      hidden
+                    />
+                    <p>در حال بارگذاری...</p>
+                  </label>
                 </div>
               </div>
             </div>
           </div>
-          <div class="publish-actions" style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;">
-            <button class="btn-negar btn-ghost-negar" data-action="close-publish-panel">بازگشت</button>
-            <button class="btn-negar btn-primary-negar" data-action="confirm-publish">انتشار</button>
+          <div class="publish-edit-item">
+            <div class="publish-edit-label">عنوان</div>
+            <input
+              class="publish-edit-input"
+              id="pcTitle"
+              type="text"
+              maxlength="120"
+              autocomplete="off"
+            />
+          </div>
+          <div class="publish-edit-item">
+            <div class="publish-edit-label">توضیحات</div>
+            <textarea
+              class="publish-edit-textarea"
+              id="pcDesc"
+              rows="3"
+              maxlength="140"
+            ></textarea>
+          </div>
+          <div class="publish-edit-item">
+            <div class="publish-edit-label">
+              تگ‌ها <span class="color-gray-700 fs-2">(حداکثر ۵)</span>
+            </div>
+            <input
+              class="publish-edit-input"
+              id="pcTags"
+              type="text"
+              placeholder="تگ جدا شده با ویرگول"
+              maxlength="200"
+            />
+          </div>
+          <div class="publish-edit-item">
+            <div class="publish-edit-label">دسته‌بندی</div>
+            <div class="category-dropdown-wrap" id="categoryDropdownWrap">
+              <input
+                class="publish-edit-input"
+                id="categoryInput"
+                type="text"
+                placeholder="روی اینجا بزنید یا تگ وارد کنید"
+                readonly
+                autocomplete="off"
+              />
+              <div class="category-dropdown" id="categoryDropdown">
+                <div class="cat-item" data-cat="تکنولوژی">تکنولوژی</div>
+                <div class="cat-item" data-cat="ادبیات">ادبیات</div>
+                <div class="cat-item" data-cat="سبک زندگی">سبک زندگی</div>
+                <div class="cat-item" data-cat="کسب‌وکار">کسب‌وکار</div>
+                <div class="cat-item" data-cat="سلامت">سلامت</div>
+                <div class="cat-item" data-cat="هنر">هنر</div>
+              </div>
+            </div>
           </div>
         </div>
+        <div
+          class="publish-actions"
+          style="
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+          "
+        >
+          <button
+            class="btn-negar btn-ghost-negar"
+            data-action="close-publish-panel"
+          >
+            بازگشت
+          </button>
+          <button
+            class="btn-negar btn-primary-negar"
+            data-action="confirm-publish"
+          >
+            انتشار
+          </button>
+        </div>
       </div>
-</body>
+    </div>
+  </body>
 </html>
