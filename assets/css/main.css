@@ -3102,9 +3102,9 @@ img {
   display: block;
 }
 .navbar-negar .logo .logo-footer {
-  width: auto;
+  width: 120px;
   height: auto;
-  max-width: 50%;
+  max-width: 100%;
 }
 .navbar-negar .logo .mark {
   width: 38px;
