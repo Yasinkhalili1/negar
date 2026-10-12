@@ -467,7 +467,10 @@ aside {
 
 // ═══════ Editor ═══════
 .cover-upload {
-  margin-bottom: 20px;
+  // عریض‌تر از ستون متن ادیتور، وسط صفحه با فاصله از لبه‌ها
+  width: calc(100% - 48px);
+  max-width: 1100px;
+  margin: 20px auto 24px;
   .cover-label {
     display: block;
     font-size: 0.9rem;
