@@ -4018,6 +4018,9 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
 
 .cover-zone {
   position: relative;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
   border: 2px dashed var(--line);
   border-radius: 12px;
   padding: 20px;
@@ -4026,7 +4029,7 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
   transition: border-color 0.3s;
 }
 .cover-zone:hover {
-  border-color: var(--gold);
+  border-color: #4fc3f7;
 }
 .cover-zone .cover-zone-placeholder i {
   display: block;
@@ -4039,10 +4042,14 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
   display: inline-block;
 }
 .cover-zone img {
+  width: 100%;
   max-width: 100%;
   max-height: 300px;
   border-radius: 12px;
   object-fit: cover;
+}
+.cover-zone .cover-preview {
+  width: 100%;
 }
 .cover-zone .cover-remove-btn {
   margin-top: 8px;
@@ -4645,6 +4652,25 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
   letter-spacing: 0.5px;
 }
 
+.publish-panel-overlay .auth-card {
+  padding: 18px 20px;
+  width: min(380px, 100%);
+}
+.publish-panel-overlay .auth-card h2, .publish-panel-overlay .auth-card .h2 {
+  font-size: 1.15rem;
+  margin-bottom: 2px;
+}
+.publish-panel-overlay .auth-card .publish-edit-list {
+  gap: 10px;
+}
+.publish-panel-overlay .auth-card .publish-edit-item {
+  gap: 4px;
+}
+.publish-panel-overlay .auth-card .cover-zone-small {
+  min-height: 52px;
+  width: 100%;
+}
+
 .publish-edit-input {
   width: 100%;
   padding: 10px 14px;
@@ -4680,6 +4706,8 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
 
 .cover-zone-small {
   position: relative;
+  width: 100%;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -4696,6 +4724,8 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
 }
 .cover-zone-small img {
   border-radius: 6px;
+  width: 100%;
+  object-fit: cover;
 }
 
 .publish-actions {
@@ -6378,7 +6408,7 @@ html.reading-mode img {
 
 .category-dropdown {
   position: absolute;
-  top: 100%;
+  bottom: calc(100% + 6px);
   left: 0;
   right: 0;
   background: var(--paper-2);
@@ -6393,7 +6423,7 @@ html.reading-mode img {
 }
 
 .category-dropdown.show {
-  max-height: 300px;
+  max-height: min(300px, 40vh);
   overflow-y: auto;
   opacity: 1;
 }

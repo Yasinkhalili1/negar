@@ -15,7 +15,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
-    <link rel="stylesheet" href="assets/css/main.css?v=27" />
+    <link rel="stylesheet" href="assets/css/main.css?v=31" />
     <link rel="icon" href="public/image/negar.png" />
   </head>
   <body>
@@ -198,11 +198,6 @@
               نگار پلاس
             </h4>
             <p>ابزارهای نویسندگی حرفه‌ای.</p>
-            <ul class="promo-list">
-              <li><i class="fa-solid fa-check"></i> خروجی متن مقاله (MD)</li>
-              <li><i class="fa-solid fa-check"></i> آمار پیشرفته داشبورد</li>
-              <li><i class="fa-solid fa-check"></i> تم اختصاصی پروفایل</li>
-            </ul>
             <button
               class="btn-negar btn-ghost-negar"
               data-action="toggle-plus"
@@ -264,7 +259,7 @@
       <div class="editor">
         <!-- آپلود تصویر کاور -->
         <div class="cover-upload" id="coverUploadArea">
-          <label for="coverInput" class="cover-zone">
+          <label for="coverInput">
             <input type="file" id="coverInput" accept="image/*" hidden />
             <div class="cover-zone" id="coverZone" data-action="upload-cover">
               <div class="cover-zone-placeholder" id="coverPlaceholder">
@@ -486,7 +481,7 @@
     </button>
     <div id="toast"></div>
     <script src="assets/js/articlesData.js?v=2"></script>
-    <script src="assets/js/community.js"></script>
+    <script src="assets/js/community.js?v=1"></script>
     <script>
       window.__coverFiles = {
         1: ".jpg",
@@ -515,7 +510,7 @@
         24: ".webp",
       };
     </script>
-    <script src="assets/js/app.js?v=53"></script>
+    <script src="assets/js/app.js?v=55"></script>
     <!-- پنل تأیید انتشار -->
     <div class="publish-panel-overlay" id="publishPanel">
       <div class="auth-card">
@@ -560,18 +555,6 @@
             ></textarea>
           </div>
           <div class="publish-edit-item">
-            <div class="publish-edit-label">
-              تگ‌ها <span class="color-gray-700 fs-2">(حداکثر ۵)</span>
-            </div>
-            <input
-              class="publish-edit-input"
-              id="pcTags"
-              type="text"
-              placeholder="تگ جدا شده با ویرگول"
-              maxlength="200"
-            />
-          </div>
-          <div class="publish-edit-item">
             <div class="publish-edit-label">دسته‌بندی</div>
             <div class="category-dropdown-wrap" id="categoryDropdownWrap">
               <input
@@ -599,7 +582,7 @@
             display: flex;
             gap: 10px;
             justify-content: flex-end;
-            margin-top: 20px;
+            margin-top: 12px;
           "
         >
           <button

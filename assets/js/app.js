@@ -1161,16 +1161,18 @@ class NegarApp {
     const wrap = document.getElementById("categoryDropdownWrap");
     const dropdown = document.getElementById("categoryDropdown");
     if (!trigger || !wrap || !dropdown) return;
-    trigger.addEventListener("click", (e) => {
+    // کلیک روی هر جای wrap (اینپوت یا پدینگ دورش) منو رو باز/بسته میکنه
+    wrap.addEventListener("click", (e) => {
+      if (e.target.closest(".category-dropdown")) return; // کلیک روی خود آیتم‌ها
       e.stopPropagation();
-      wrap.classList.toggle("open");
+      dropdown.classList.toggle("show");
     });
     dropdown.querySelectorAll(".cat-item").forEach((item) => {
       item.addEventListener("click", () => {
         const cat = item.dataset.cat;
-        trigger.textContent = cat;
+        trigger.value = cat;
         this._selectedCategory = cat;
-        wrap.classList.remove("open");
+        dropdown.classList.remove("show");
         const activeView = document.querySelector(".view.active");
         const activeGroup = activeView ? activeView.querySelector("[data-filter-group]") : null;
         const chip = activeGroup ? activeGroup.querySelector(`.chip[data-tag="${cat}"]`) : null;
@@ -1181,7 +1183,7 @@ class NegarApp {
         }
       });
     });
-    document.addEventListener("click", () => wrap.classList.remove("open"));
+    document.addEventListener("click", () => dropdown.classList.remove("show"));
   }
 
   /** کلیک‌های سراسری (delegation روی body) + ناوبری + اکشن‌ها */
@@ -1267,7 +1269,7 @@ class NegarApp {
         if (this.community) this.community.joinChallenge();
         break;
       case "toggle-follow":
-        if (this.community) this.community.toggleFollow(id);
+        if (this.community) this.community.toggleFollow(btn.dataset.id);
         this._render();
         break;
       case "toggle-plus":
@@ -1283,7 +1285,8 @@ class NegarApp {
         if (this.community) this.community.toggleReadingMode();
         break;
       case "save-profile-theme":
-        if (this.community) this.community.saveProfileTheme(id);
+        if (this.community)
+          this.community.saveProfileTheme(btn.dataset.id || "default");
         break;
       case "toggle-edit-profile":
         this._toggleEditProfile();

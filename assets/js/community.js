@@ -261,6 +261,9 @@ class CommunityManager {
       this.app.toast.show("تم پروفایل مخصوص نگار پلاسه");
       return;
     }
+    // اعتبارسنجی — فقط تم‌های تعریف‌شده
+    if (!["default", "ocean", "sunset", "forest"].includes(theme))
+      theme = "default";
     const u = this.app.auth.user;
     if (!u) return;
     u.profileTheme = theme;
