@@ -4008,6 +4008,9 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
 .cover-upload {
   margin-bottom: 20px;
 }
+.cover-upload label {
+  display: block;
+}
 .cover-upload .cover-label {
   display: block;
   font-size: 0.9rem;
@@ -4019,7 +4022,8 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
 .cover-zone {
   position: relative;
   display: block;
-  width: 100%;
+  width: calc(100% + 44px);
+  margin-inline: -22px;
   box-sizing: border-box;
   border: 2px dashed var(--line);
   border-radius: 12px;

@@ -468,6 +468,8 @@ aside {
 // ═══════ Editor ═══════
 .cover-upload {
   margin-bottom: 20px;
+  // لیبل inline هست — block می‌کنیم تا کادر خط‌چین داخلش کل عرض رو بگیره
+  label { display: block; }
   .cover-label {
     display: block;
     font-size: 0.9rem;
@@ -479,7 +481,9 @@ aside {
 .cover-zone {
   position: relative;
   display: block;
-  width: 100%;
+  // بیرون‌زدگی از پدینگ ۲۲px ادیتور — کادر با عرض کامل خودِ تگ .editor یکی میشه
+  width: calc(100% + 44px);
+  margin-inline: -22px;
   box-sizing: border-box;
   border: 2px dashed var(--line);
   border-radius: $radius-sm;
