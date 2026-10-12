@@ -6171,6 +6171,14 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
   background: #ff5cd2;
   transform: translateY(-1px);
 }
+.btn-negar.btn-danger-negar {
+  background: #c0392b;
+  color: #fff;
+}
+.btn-negar.btn-danger-negar:hover {
+  background: #e74c3c;
+  transform: translateY(-1px);
+}
 
 .challenge-card {
   background: linear-gradient(135deg, var(--surface, #f8f9fb), var(--paper-2, #eef3ff));

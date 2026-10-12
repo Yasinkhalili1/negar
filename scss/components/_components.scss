@@ -2565,6 +2565,14 @@ aside {
       transform: translateY(-1px);
     }
   }
+  &.btn-danger-negar {
+    background: $danger;
+    color: #fff;
+    &:hover {
+      background: #e74c3c;
+      transform: translateY(-1px);
+    }
+  }
 }
 
 // ═══════ چالش هفته + نویسنده ماه ═══════
