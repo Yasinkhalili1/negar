@@ -4006,7 +4006,7 @@ aside .box h3 .chip-icon, aside .box .h3 .chip-icon {
 }
 
 .cover-upload {
-  margin: 20px 0 24px;
+  margin-bottom: 20px;
 }
 .cover-upload .cover-label {
   display: block;
