@@ -271,6 +271,7 @@ class Article {
         <button class="btn-negar btn-ghost-negar" data-action="save" data-id="${this.id}">${this.isSavedByMe() ? '<i class="fa-solid fa-bookmark"></i> ذخیره شده' : '<i class="fa-regular fa-bookmark"></i> ذخیره'}</button>
         <button class="btn-negar btn-ghost-negar" data-action="share"><i class="fa-solid fa-share-nodes"></i> اشتراک</button>
                 <button class="btn-negar btn-ghost-negar" data-action="print" data-id="${this.id}"><i class="fa-solid fa-print"></i> چاپ / PDF</button>
+                <button class="btn-negar btn-ghost-negar" data-action="export" data-id="${this.id}"><i class="fa-solid fa-file-arrow-down"></i> خروجی متن</button>
                 ${manage}
       </div>
       <div class="comments-section">
@@ -1270,7 +1271,13 @@ class NegarApp {
         this._render();
         break;
       case "toggle-plus":
-        if (this.community) this.community.togglePlus();
+        if (this.community) {
+          this.community.togglePlus();
+          // اگه داشبورد بازه، باکس قفل بلافاصله باز/بسته بشه
+          const dashView = document.getElementById("dashboard");
+          if (dashView && dashView.classList.contains("active"))
+            this._openDashboard();
+        }
         break;
       case "toggle-reading":
         if (this.community) this.community.toggleReadingMode();
@@ -1307,6 +1314,9 @@ class NegarApp {
         break;
       case "print":
         this._printArticle(id);
+        break;
+      case "export":
+        this._exportArticle(id);
         break;
       case "like":
         this._like(id);
@@ -1678,6 +1688,31 @@ class NegarApp {
     window.print();
   }
 
+  /** خروجی متن مقاله به فایل مارک‌داون — ویژگی نگار پلاس */
+  _exportArticle(id) {
+    if (!this.community || !this.community.isPlus) {
+      this.toast.show("خروجی متن مخصوص نگار پلاسه — اول پلاس رو فعال کن");
+      return;
+    }
+    const a = this.articles.find((x) => x.id == id);
+    if (!a) return;
+    const md = `# ${a.title}\n\n> نویسنده: ${a.author} · ${a.tag} · ${a.getDateLabel()}\n\n${a.body}\n`;
+    const blob = new Blob(["\ufeff" + md], {
+      type: "text/markdown;charset=utf-8",
+    });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download =
+      (a.title || "negar-article").replace(/[\\/:*?"<>|]/g, "").slice(0, 60) +
+      ".md";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+    this.toast.show("فایل مقاله دانلود شد");
+  }
+
   _shareArticle() {
     if (!this.currentArticle) return;
     const a = this.currentArticle;
@@ -1878,6 +1913,7 @@ class NegarApp {
                 ${this.community ? this.community.streakHtml() : ""}
               </div>
       ${myArticles.length ? this._chartHtml(myArticles) : ""}
+      ${myArticles.length ? this._advStatsHtml(myArticles) : ""}
       ${
         myArticles.length
           ? `
@@ -1957,6 +1993,55 @@ class NegarApp {
           <span><i class="fa-regular fa-eye"></i> میانگین بازدید: ${avgReads.toLocaleString("fa-IR")}</span>
           <span><i class="fa-solid fa-fire"></i> پربازدیدترین: ${list[0] ? list.reduce((m, a) => (a.reads > m.reads ? a : m), list[0]).title.slice(0, 15) : "—"}</span>
         </div>
+      </div>`;
+  }
+
+  /** آمار پیشرفته (نگار پلاس) — نرخ تعامل، بهترین تگ و روز انتشار */
+  _advStatsHtml(list) {
+    if (!this.community || !this.community.isPlus) {
+      return `
+      <div class="locked-box">
+        <i class="fa-solid fa-lock locked-icon"></i>
+        <h3>آمار پیشرفته</h3>
+        <p>نرخ تعامل، بهترین تگ، بهترین روز انتشار و پیشنهاد محتوا — مخصوص نگار پلاس.</p>
+        <button class="btn-negar btn-gold-negar" data-action="toggle-plus">فعال‌سازی دموی پلاس</button>
+      </div>`;
+    }
+    const reads = list.reduce((s, a) => s + a.reads, 0);
+    const likes = list.reduce((s, a) => s + a.likes, 0);
+    const engagement = reads ? Math.round((likes / reads) * 100) : 0;
+    // تحلیل تگ‌ها — بر اساس کل بازدید
+    const byTag = {};
+    list.forEach((a) => {
+      const t = a.tag || "بدون تگ";
+      byTag[t] = byTag[t] || { r: 0, n: 0 };
+      byTag[t].r += a.reads;
+      byTag[t].n++;
+    });
+    const tags = Object.entries(byTag).sort((x, y) => y[1].r - x[1].r);
+    const bestTag = tags[0] ? tags[0][0] : "—";
+    // بهترین روز هفته بر اساس بازدید مقالات منتشرشده
+    const wd = new Array(7).fill(0);
+    list.forEach((a) => {
+      const d = new Date(a.date);
+      if (!isNaN(d)) wd[d.getDay()] += a.reads;
+    });
+    const wdNames = ["یکشنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنجشنبه", "جمعه", "شنبه"];
+    const bestDay = wd.some((v) => v > 0)
+      ? wdNames[wd.indexOf(Math.max(...wd))]
+      : "—";
+    const avgReads = Math.round(reads / list.length);
+    const top = list.reduce((m, a) => (a.reads > m.reads ? a : m), list[0]);
+    return `
+      <div class="dash-chart adv-panel">
+        <h3><i class="fa-solid fa-chart-line"></i> آمار پیشرفته <span class="plus-badge" title="نگار پلاس"></span></h3>
+        <div class="adv-grid">
+          <div class="adv-card"><span class="adv-num">${engagement.toLocaleString("fa-IR")}٪</span><span class="adv-label">نرخ تعامل (لایک/بازدید)</span></div>
+          <div class="adv-card"><span class="adv-num">${avgReads.toLocaleString("fa-IR")}</span><span class="adv-label">میانگین بازدید هر مقاله</span></div>
+          <div class="adv-card"><span class="adv-num">${esc(bestTag)}</span><span class="adv-label">تگ پربازدید</span></div>
+          <div class="adv-card"><span class="adv-num">${bestDay}</span><span class="adv-label">بهترین روز انتشار</span></div>
+        </div>
+        <p class="adv-tip"><i class="fa-solid fa-lightbulb"></i> مقاله‌ی «${esc(top.title.slice(0, 25))}» بیشترین بازدید رو داشته؛ ادامه‌ای در تگ «${esc(bestTag)}» بزنی احتمالاً بیشتر دیده میشه.</p>
       </div>`;
   }
 
@@ -2495,3 +2580,37 @@ window.addEventListener("popstate", () => {
     else app._go("home", true);
   }
 });
+
+// ── ویرایشگر تایپ‌شونده در hero صفحه‌ی اصلی ──
+(function heroTypewriter() {
+  const el = document.getElementById("heroTypewriter");
+  if (!el) return;
+  const phrases = [
+    "صدایت را بنویس، داستانت را بساز",
+    "هر نویسنده‌ای یک‌بار از صفحه‌ی سفید شروع کرده",
+    "نگار، خانه‌ی نویسندگان فارسی‌زبان",
+  ];
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    el.textContent = phrases[0];
+    return;
+  }
+  let phrase = 0;
+  let count = 0;
+  let deleting = false;
+  function tick() {
+    const text = phrases[phrase];
+    count += deleting ? -1 : 1;
+    el.textContent = text.slice(0, count);
+    let delay = deleting ? 24 : 52;
+    if (!deleting && count === text.length) {
+      deleting = true;
+      delay = 2000;
+    } else if (deleting && count === 0) {
+      deleting = false;
+      phrase = (phrase + 1) % phrases.length;
+      delay = 450;
+    }
+    setTimeout(tick, delay);
+  }
+  tick();
+})();
